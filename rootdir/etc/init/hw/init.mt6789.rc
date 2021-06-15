@@ -42,9 +42,6 @@ on early-init && property:ro.build.type=userdebug
 on init
     write /proc/bootprof "INIT:init"
 
-    # Support legacy paths
-    symlink /sdcard /mnt/sdcard
-
     # Param
     symlink /dev/block/by-name/param /dev/block/param
     symlink /dev/block/by-name/steady /dev/block/steady
@@ -53,7 +50,6 @@ on init
     # if primary storage is physical, set ro.vold.primary_physical to 1
     # setprop ro.vold.primary_physical 1
 
-    mkdir /mnt/cd-rom 0000 system system
 
 # change lk_env permission
     chown root system /proc/lk_env
@@ -163,9 +159,6 @@ on late-fs
 
 on post-fs
     write /proc/bootprof "INIT:post-fs"
-
-    # Support legacy paths
-    symlink /sdcard /storage/sdcard0
 
     #change permissions for mediaserver
     chown root media /proc/clkmgr/mipi_test
