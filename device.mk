@@ -235,6 +235,17 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.vulkan.deqp.level-2021-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.vulkan.deqp.level.xml \
     frameworks/native/data/etc/handheld_core_hardware.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/handheld_core_hardware.xml
 
+# Power
+PRODUCT_PACKAGES += \
+    android.hardware.power-V2-ndk.vendor \
+    android.hardware.power@1.3.vendor \
+    vendor.mediatek.hardware.mtkpower@1.2.vendor
+
+# Power | Dummy mtkperf lib
+PRODUCT_PACKAGES += \
+    libmtkperf_client_vendor \
+    libmtkperf_client
+
 # RIL
 PRODUCT_PACKAGES += \
     android.hardware.radio.config@1.3.vendor:64 \
