@@ -89,6 +89,10 @@ on property:init.svc.vendor.charger=running
     chmod 0660 /sys/power/wakeup_count
     write /sys/power/pm_freeze_timeout 2000
 
+# initialize powerHAL when boot is completed
+on property:sys.boot_completed=1
+    setprop vendor.mediatek.powerhal.init 1
+
 on fs
     # mount fstab
     mount_all --early
