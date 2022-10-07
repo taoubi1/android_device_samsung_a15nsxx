@@ -237,11 +237,15 @@ PRODUCT_COPY_FILES += \
 
 # Power
 PRODUCT_PACKAGES += \
-    android.hardware.power-V2-ndk.vendor \
-    android.hardware.power@1.3.vendor 
+    android.hardware.power-service.lineage-libperfmgr
 
 PRODUCT_PACKAGES += \
-    vendor.mediatek.hardware.mtkpower@1.2-service.stub
+    vendor.mediatek.hardware.mtkpower@1.2-service.stub \
+    vendor.mediatek.hardware.mtkpower@1.0.vendor \
+    vendor.mediatek.hardware.mtkpower@1.1.vendor
+
+PRODUCT_PACKAGES += \
+    android.hardware.power@1.3.vendor
 
 # Power | Dummy mtkperf lib
 PRODUCT_PACKAGES += \
@@ -278,7 +282,12 @@ PRODUCT_COPY_FILES += \
 
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
-    $(LOCAL_PATH)
+    $(LOCAL_PATH) \
+    hardware/mediatek \
+    hardware/mediatek/libmtkperf_client \
+    hardware/lineage/interfaces/power-libperfmgr \
+    hardware/google/interfaces \
+    hardware/google/pixel
 
 # Wi-Fi
 PRODUCT_PACKAGES += \
