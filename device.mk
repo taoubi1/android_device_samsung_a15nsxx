@@ -3,6 +3,10 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+# Init files
+PRODUCT_PACKAGES += \
+    fstab.mt6789_vendor_ramdisk
+
 # Overlays
 PRODUCT_PACKAGES += \
     FrameworkResOverlayRozen \
