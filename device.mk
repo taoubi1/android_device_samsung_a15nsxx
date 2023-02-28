@@ -3,6 +3,10 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+# Boot control HAL
+PRODUCT_PACKAGES += \
+    android.hardware.boot@1.2-mtkimpl.recovery
+
 # Init files
 PRODUCT_PACKAGES += \
     fstab.mt6789_vendor_ramdisk
@@ -20,7 +24,8 @@ PRODUCT_USE_DYNAMIC_PARTITIONS := true
 
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
-    $(LOCAL_PATH)
+    $(LOCAL_PATH) \
+    hardware/mediatek
 
 # Inherit the proprietary files
 $(call inherit-product, vendor/tecno/LH7n/LH7n-vendor.mk)
