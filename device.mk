@@ -9,6 +9,11 @@ PRODUCT_PACKAGES += \
     android.hardware.boot@1.2-mtkimpl \
     android.hardware.boot@1.2-mtkimpl.recovery
 
+# FastbootD
+PRODUCT_PACKAGES += \
+    android.hardware.fastboot@1.1-impl-mock \
+    fastbootd
+
 # Init files
 PRODUCT_PACKAGES += \
     fstab.mt6789_vendor_ramdisk
