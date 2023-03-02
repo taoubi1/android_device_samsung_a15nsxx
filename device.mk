@@ -5,6 +5,8 @@
 
 # Boot control HAL
 PRODUCT_PACKAGES += \
+    android.hardware.boot@1.2-service \
+    android.hardware.boot@1.2-mtkimpl \
     android.hardware.boot@1.2-mtkimpl.recovery
 
 # Init files
