@@ -9,6 +9,9 @@ PRODUCT_PACKAGES += \
     android.hardware.boot@1.2-impl:64 \
     android.hardware.boot@1.2-impl.recovery
 
+# Enforce generic ramdisk allow list
+$(call inherit-product, $(SRC_TARGET_DIR)/product/generic_ramdisk.mk)
+
 # FastbootD
 PRODUCT_PACKAGES += \
     android.hardware.fastboot@1.1-impl-mock \
