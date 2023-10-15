@@ -25,7 +25,8 @@ PRODUCT_PACKAGES += \
 
 # Init files
 PRODUCT_PACKAGES += \
-	fstab.mt6789.vendor_ramdisk
+	fstab.mt6789.vendor_ramdisk \
+	init.recovery.usb.rc
 
 # Overlays
 PRODUCT_PACKAGES += \
