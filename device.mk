@@ -106,6 +106,7 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hidl.base@1.0.vendor \
     android.hidl.allocator@1.0.vendor \
+    libhidltransport \
     libhidltransport.vendor \
     libhwbinder.vendor
 
