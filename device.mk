@@ -260,6 +260,13 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
 # Properties
 include $(LOCAL_PATH)/vendor_logtag.mk
 
+# Protobuf
+PRODUCT_PACKAGES += \
+    libprotobuf-cpp-full.vendor:64 \
+    libprotobuf-cpp-lite.vendor:64 \
+    libprotobuf-cpp-full-3.9.1-vendorcompat:64 \
+    libprotobuf-cpp-lite-3.9.1-vendorcompat:64
+
 # Radio
 PRODUCT_PACKAGES += \
     android.hardware.radio.config@1.3.vendor \
