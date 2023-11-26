@@ -7,6 +7,9 @@ DEVICE_PATH := device/samsung/a15nsxx
 KERNEL_PATH := $(DEVICE_PATH)-kernel
 CONFIGS_PATH := $(DEVICE_PATH)/configs
 
+# Force any prefer32 targets to be compiled as 64 bit.
+IGNORE_PREFER32_ON_DEVICE := true
+
 # Architecture
 TARGET_ARCH := arm64
 TARGET_ARCH_VARIANT := armv8-2a-dotprod
