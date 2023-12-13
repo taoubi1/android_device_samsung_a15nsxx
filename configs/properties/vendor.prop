@@ -87,6 +87,15 @@ ro.vendor.mtk_nn_baseline_support=1
 ro.vendor.mtk_nn_quant_preferred=1
 ro.vendor.mtk_nn_support=1
 
+# Media
+debug.mediatek.disp_decompress=1
+media.c2.dmabuf.padding=3072
+ro.vendor.jpeg_decode_sw_opt=1
+ro.vendor.mtk_config_max_dram_size=0x800000000
+ro.vendor.mtk_sec_video_path_support=1
+ro.vendor.mtk_video_hevc_enc_support=1
+vendor.mtk.vdec.waitkeyframeforplay=9
+
 # Radio
 persist.radio.multisim.config=dsds
 persist.vendor.md_c2k_cap_dep_check=0
@@ -125,6 +134,10 @@ ro.vendor.sim_me_lock_mode=3
 
 # Sensors
 ro.vendor.mtk.sensor.support=yes
+
+# SoC
+ro.soc.manufacturer=Mediatek
+ro.soc.model=MT6789V/CD
 
 # SurfaceFlinger
 ro.surface_flinger.primary_display_orientation=ORIENTATION_0
