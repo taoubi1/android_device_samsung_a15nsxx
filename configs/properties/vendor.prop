@@ -67,6 +67,12 @@ ro.vendor.smvr.p2batch.hd=4
 # Gatekeeper
 ro.hardware.gatekeeper=trustonic
 
+# GNSS
+ro.vendor.gps.chrdev=gps_drv_stp
+ro.vendor.mtk_agps_app=1
+ro.vendor.mtk_gps_support=1
+ro.vendor.mtk_log_hide_gps=1
+
 # IMS
 persist.vendor.mtk.volte.enable=1
 persist.vendor.mtk_ct_volte_support=3
