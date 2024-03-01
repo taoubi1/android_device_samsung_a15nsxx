@@ -7,6 +7,10 @@
 PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 
+PRODUCT_PACKAGES += \
+    create_pl_dev \
+    create_pl_dev.recovery
+
 # Audio
 $(call soong_config_set,android_hardware_audio,run_64bit,true)
 PRODUCT_PACKAGES += \
