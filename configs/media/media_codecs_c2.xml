@@ -140,6 +140,7 @@
             <Limit name="concurrent-instances" max="32" />
             <Limit name="performance-point-1280x720" value="120" />
             <Limit name="performance-point-1920x1088" value="60" />
+            <Limit name="performance-point-1920x1088" value="30" />
         </MediaCodec>
     </Decoders>
     <Encoders>
