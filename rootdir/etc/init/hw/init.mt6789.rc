@@ -1139,3 +1139,12 @@ on property:persist.vendor.swapfile_enable=false
 on property:persist.vendor.swapfile_enable=true && property:ro.vendor.memfusion2_2.support=false
     swapon_all /vendor/etc/fstab.enableswap
 #SPD: add for memfusion2_2 at 20230926 end
+    
+service vendor.hwcomposer-2-3 /vendor/bin/hw/android.hardware.graphics.composer@2.3-service
+    class hal animation
+    user system
+    group graphics drmrpc
+    capabilities SYS_NICE
+    onrestart restart surfaceflinger
+    task_profiles HighPerformance
+    override
