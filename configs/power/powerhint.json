@@ -170,24 +170,42 @@
     },
     {
       "Name": "PowerHALMainState",
-      "Path": "vendor.mediatek.powerhal.state",
+      "Path": "vendor.powerhal.state",
       "Values": ["SUSTAINED_PERFORMANCE", ""],
       "Type": "Property"
     },
     {
       "Name": "PowerHALAudioState",
-      "Path": "vendor.mediatek.powerhal.audio",
+      "Path": "vendor.powerhal.audio",
       "Values": ["AUDIO_STREAMING_LOW_LATENCY", ""],
       "Type": "Property"
     },
     {
       "Name": "PowerHALRenderingState",
-      "Path": "vendor.mediatek.powerhal.rendering",
+      "Path": "vendor.powerhal.rendering",
       "Values": ["EXPENSIVE_RENDERING", ""],
       "Type": "Property"
     }
   ],
   "Actions": [
+    {
+      "PowerHint": "AUDIO_STREAMING_LOW_LATENCY",
+      "Node": "PowerHALAudioState",
+      "Duration": 0,
+      "Value": "AUDIO_STREAMING_LOW_LATENCY"
+    },
+    {
+      "PowerHint": "AUDIO_STREAMING_LOW_LATENCY",
+      "Node": "CPULittleClusterMinFreq",
+      "Duration": 0,
+      "Value": "850000"
+    },
+    {
+      "PowerHint": "AUDIO_STREAMING_LOW_LATENCY",
+      "Node": "CPUBigClusterMinFreq",
+      "Duration": 0,
+      "Value": "998000"
+    },
     {
       "PowerHint": "SUSTAINED_PERFORMANCE",
       "Node": "PowerHALMainState",
