@@ -2,7 +2,7 @@
   "Nodes": [
     {
       "Name": "MemFreq",
-      "Path": "/sys/devices/platform/soc/1c00f000.dvfsrc/mtk-dvfsrc-devfreq/devfreq/mtk-dvfsrc-devfreq/userspace/set_freq",
+      "Path": "/sys/devices/platform/soc/10012000.dvfsrc/mtk-dvfsrc-devfreq/devfreq/mtk-dvfsrc-devfreq/userspace/set_freq",
       "Values": [
         "9999999999",
         "4266000000",
@@ -330,7 +330,7 @@
       "PowerHint": "FIXED_PERFORMANCE",
       "Node": "CPUSuperClusterMinFreq",
       "Duration": 0,
-      "Value": "9999999"
+      "Value": "2200000"
     },
     {
       "PowerHint": "FIXED_PERFORMANCE",
@@ -342,7 +342,7 @@
       "PowerHint": "FIXED_PERFORMANCE",
       "Node": "CPUEfficiencyClusterMinFreq",
       "Duration": 0,
-      "Value": "9999999"
+      "Value": "2000000"
     },
     {
       "PowerHint": "FIXED_PERFORMANCE",
