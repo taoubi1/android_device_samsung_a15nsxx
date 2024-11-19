@@ -308,7 +308,8 @@ PRODUCT_PACKAGES += \
 
 # vndservice
 PRODUCT_PACKAGES += \
-   vndservicemanager
+   vndservicemanager \
+   vndservice
     
 # Wi-Fi
 PRODUCT_PACKAGES += \
