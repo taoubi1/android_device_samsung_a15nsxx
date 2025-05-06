@@ -161,6 +161,7 @@ PRODUCT_ENFORCE_RRO_TARGETS := *
 PRODUCT_PACKAGES += \
     FrameworkResOverlayRozen \
     SystemUIResOverlayRozen \
+    TetheringResOverlayRozen \
     WifiResOverlayRozen
 
 # Keylayout
