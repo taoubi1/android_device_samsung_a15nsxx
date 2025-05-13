@@ -281,6 +281,16 @@
       "Path": "vendor.powerhal.rendering",
       "Values": ["EXPENSIVE_RENDERING", ""],
       "Type": "Property"
+    },
+    {
+      "Name": "DoubleTapToWake",
+      "Path": "/proc/gesture_function",
+      "Values": [
+        "cc0",
+        "cc1"
+      ],
+      "DefaultIndex": 0,
+      "ResetOnInit": true
     }
   ],
   "Actions": [
@@ -487,6 +497,12 @@
       "Node": "GPUBlockBoost",
       "Duration": 0,
       "Value": "50"
+    },
+    {
+      "PowerHint": "DOUBLE_TAP_TO_WAKE",
+      "Node": "DoubleTapToWake",
+      "Duration": 0,
+      "Value": "cc1"
     }
   ]
 }
