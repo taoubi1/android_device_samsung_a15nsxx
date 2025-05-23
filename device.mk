@@ -47,7 +47,7 @@ PRODUCT_PACKAGES += \
 
 # Boot control HAL
 PRODUCT_PACKAGES += \
-    android.hardware.boot-service.default:64 \
+    com.android.hardware.boot \
     android.hardware.boot-service.default_recovery:64
 
 # Display
