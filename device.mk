@@ -3,6 +3,11 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+# Overlays
+PRODUCT_PACKAGES += \
+    FrameworkResOverlayRozen \
+    SystemUIResOverlayRozen
+
 # Shipping API level
 PRODUCT_SHIPPING_API_LEVEL := 33
 
