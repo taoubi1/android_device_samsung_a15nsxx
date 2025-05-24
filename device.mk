@@ -170,7 +170,9 @@ PRODUCT_PACKAGES += \
     libflatbuffers-cpp.vendor
 
 PRODUCT_PACKAGES += \
-    libchrome.vendor
+    libchrome.vendor \
+    libminijail \
+    libminijail.vendor
 
 PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_google_audio.xml \
