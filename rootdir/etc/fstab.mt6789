@@ -6,33 +6,33 @@
 # 1 "<built-in>" 2
 # 1 "vendor/mediatek/proprietary/hardware/fstab/mt6789/fstab.in.mt6789" 2
 # 172 "vendor/mediatek/proprietary/hardware/fstab/mt6789/fstab.in.mt6789"
-system /system erofs ro wait,slotselect,avb=vbmeta_system,logical,first_stage_mount
+system /system erofs ro wait,avb=vbmeta_system,logical,first_stage_mount
 
 
-system /system ext4 ro wait,slotselect,avb=vbmeta_system,logical,first_stage_mount
-
-
-
-vendor /vendor erofs ro wait,slotselect,avb,logical,first_stage_mount
-
-
-product /product erofs ro wait,slotselect,avb,logical,first_stage_mount
-product /product ext4 ro wait,slotselect,avb,logical,first_stage_mount
+system /system ext4 ro wait,avb=vbmeta_system,logical,first_stage_mount
 
 
 
-system_ext /system_ext erofs ro wait,slotselect,avb,logical,first_stage_mount
-system_ext /system_ext ext4 ro wait,slotselect,avb,logical,first_stage_mount
+vendor /vendor erofs ro wait,avb,logical,first_stage_mount
+
+
+product /product erofs ro wait,avb,logical,first_stage_mount
+product /product ext4 ro wait,avb,logical,first_stage_mount
+
+
+
+system_ext /system_ext erofs ro wait,avb,logical,first_stage_mount
+system_ext /system_ext ext4 ro wait,avb,logical,first_stage_mount
 
 
 
 
 
 
-vendor_dlkm /vendor_dlkm ext4 ro wait,slotselect,avb,logical,first_stage_mount
+vendor_dlkm /vendor_dlkm ext4 ro wait,avb,logical,first_stage_mount
 
 
-odm_dlkm /odm_dlkm ext4 ro wait,slotselect,avb,logical,first_stage_mount
+odm_dlkm /odm_dlkm ext4 ro wait,avb,logical,first_stage_mount
 
 
 /dev/block/by-name/metadata /metadata ext4 noatime,nosuid,nodev,discard wait,check,formattable,first_stage_mount
@@ -79,14 +79,14 @@ odm_dlkm /odm_dlkm ext4 ro wait,slotselect,avb,logical,first_stage_mount
 
 
 
-/dev/block/by-name/boot /boot emmc defaults first_stage_mount,nofail,slotselect
+/dev/block/by-name/boot /boot emmc defaults first_stage_mount,nofail
 
 
 
 
 
-/dev/block/by-name/vbmeta_vendor /vbmeta_vendor emmc defaults first_stage_mount,nofail,slotselect
-/dev/block/by-name/vbmeta_system /vbmeta_system emmc defaults first_stage_mount,nofail,slotselect,avb=vbmeta
+/dev/block/by-name/vbmeta_vendor /vbmeta_vendor emmc defaults first_stage_mount,nofail
+/dev/block/by-name/vbmeta_system /vbmeta_system emmc defaults first_stage_mount,nofail,avb=vbmeta
 
 /dev/block/by-name/logo /logo emmc defaults defaults
 /dev/block/by-name/expdb /expdb emmc defaults defaults
