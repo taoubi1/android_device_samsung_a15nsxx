@@ -23,6 +23,7 @@
       "Name": "GpuPwrLevel",
       "Path": "/proc/gpufreqv2/fix_target_opp_index",
       "Values": [
+        "-1",
         "0",
         "1",
         "2",
