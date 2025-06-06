@@ -21,6 +21,7 @@ PRODUCT_PACKAGES += \
     android.hardware.soundtrigger@2.3-impl:64
 
 PRODUCT_PACKAGES += \
+    audio.primary.default:64 \
     audio.bluetooth.default:64 \
     audio.r_submix.default:64 \
     audio.usb.default:64
