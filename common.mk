@@ -7,8 +7,6 @@
 COMMON_PATH := device/tecno/mt6789-common
 
 # A/B
-$(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/vabc_features.mk)
-
 AB_OTA_UPDATER := true
 AB_OTA_PARTITIONS := \
     boot \
@@ -45,8 +43,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     create_pl_dev \
     create_pl_dev.recovery
-
-PRODUCT_VIRTUAL_AB_COMPRESSION_METHOD := lz4
 
 # Audio
 $(call soong_config_set,android_hardware_audio,run_64bit,true)
@@ -482,7 +478,7 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
    vndservicemanager \
    vndservice
-    
+
 # Wi-Fi
 PRODUCT_PACKAGES += \
     libwifi-hal-wrapper:64 \

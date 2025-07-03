@@ -130,9 +130,6 @@ service.sf.prime_shader_cache=0
 ro.surface_flinger.set_idle_timer_ms=3000
 ro.surface_flinger.set_touch_timer_ms=500
 
-# Enable virtual A/B compression
-ro.virtual_ab.compression.threads=true
-
 # Graphics
 debug.graphics.game_default_frame_rate.disabled=true
 debug.mediatek.appgamepq_compress=1
