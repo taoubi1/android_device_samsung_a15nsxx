@@ -1092,10 +1092,6 @@ on property:sys.boot_completed=1
 on property:persist.vendor.mediatek.fast_charging.support=*
     write /sys/devices/platform/charger/fast_chg_indicator ${persist.vendor.mediatek.fast_charging.support}
 
-# FPSGO FBT Game
-on boot
-    insmod /vendor/lib/modules/fpsgo.ko
-
 #SPD: add resmonitor and smartpanel bind small core by rui.fu 20230117 start
 service spd_cpu_set_sh /vendor/bin/init.spd_cpu_set.sh
     class main
