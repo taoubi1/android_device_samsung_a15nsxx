@@ -7,36 +7,7 @@
 COMMON_PATH := device/tecno/mt6789-common
 
 # A/B
-AB_OTA_UPDATER := true
-AB_OTA_PARTITIONS := \
-    boot \
-    product \
-    system \
-    system_ext \
-    vbmeta \
-    vbmeta_system \
-    vbmeta_vendor \
-    vendor \
-    vendor_boot \
-    vendor_dlkm
-
-AB_OTA_POSTINSTALL_CONFIG += \
-    RUN_POSTINSTALL_system=true \
-    POSTINSTALL_PATH_system=system/bin/otapreopt_script \
-    FILESYSTEM_TYPE_system=erofs \
-    POSTINSTALL_OPTIONAL_system=true
-
-AB_OTA_POSTINSTALL_CONFIG += \
-    RUN_POSTINSTALL_vendor=true \
-    POSTINSTALL_PATH_vendor=bin/checkpoint_gc \
-    FILESYSTEM_TYPE_vendor=erofs \
-    POSTINSTALL_OPTIONAL_vendor=true
-
-PRODUCT_PACKAGES += \
-    update_engine \
-    update_verifier \
-    otapreopt_script \
-    checkpoint_gc
+AB_OTA_UPDATER := false
 
 PRODUCT_PACKAGES += \
     create_pl_dev \
