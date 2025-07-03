@@ -39,4 +39,3 @@ getrlimit: 1
 newfstatat: 1
 fstat: 1
 fstatfs: 1
-flock: 1
