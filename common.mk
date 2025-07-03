@@ -10,7 +10,6 @@ COMMON_PATH := device/tecno/mt6789-common
 AB_OTA_UPDATER := true
 AB_OTA_PARTITIONS := \
     boot \
-    odm_dlkm \
     product \
     system \
     system_ext \
