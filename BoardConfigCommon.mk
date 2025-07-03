@@ -40,7 +40,6 @@ endif
 
 # Audio 
 BOARD_USES_ALSA_AUDIO := true
-AUDIO_FEATURE_ENABLED_DS2_DOLBY_DAP := true
 
 # Boot image
 BOARD_BOOT_HEADER_VERSION := 4
