@@ -76,15 +76,8 @@ odm_dlkm /odm_dlkm ext4 ro wait,avb,logical,first_stage_mount
 /dev/block/by-name/para /para emmc defaults defaults
 /dev/block/by-name/misc /misc emmc defaults defaults
 
-
-
-
 /dev/block/by-name/boot /boot emmc defaults first_stage_mount,nofail
-
-
-
-
-
+/dev/block/by-name/recovery /recovery emmc defaults first_stage_mount,nofail
 /dev/block/by-name/vbmeta_vendor /vbmeta_vendor emmc defaults first_stage_mount,nofail
 /dev/block/by-name/vbmeta_system /vbmeta_system emmc defaults first_stage_mount,nofail,avb=vbmeta
 
