@@ -384,10 +384,6 @@ PRODUCT_PACKAGES += \
    libstagefright_foundation-v33:64 \
    libutils-v32:64
 
-# Secure Element
-PRODUCT_PACKAGES += \
-    android.hardware.secure_element@1.2.vendor:64
-
 # Sensors
 PRODUCT_PACKAGES += \
     libsensorndkbridge:64 \
