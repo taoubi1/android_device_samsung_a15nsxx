@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+   <remote name="taoubi1"
+	    fetch="https://github.com/taoubi1"
+	    clone-depth="1" />
+
+ <!-- Device -->
+ <project path="device/samsung/a15nsxx" name="a15nsxx_device" remote="taoubi1" revision="lineage-22.2" />
+
+ <!-- Kernel -->
+ <project path="device/samsung/a15nsxx-kernel" name="a15nsxx-kernel" remote="taoubi1" revision="lineage-22.2" />
+
+ <!--Vendor -->
+ <project path="vendor/samsung/a15nsx" name="a15nsxx_vendor" remote="taoubi1" revision="lineage-22.2" />
+
+ <!-- Device Support stuffs -->
+ <project path="hardware/mediatek" name="android_hardware_mediatek" remote="taoubi1" revision="lineage-22.2" />
+ <project path="hardware/samsung" name="hardware_samsung" remote="taoubi1" revision="lineage-22.2" />
+ <project path="device/mediatek/sepolicy_vndr" name="android_device_mediatek_sepolicy_vndr" remote="taoubi1" revision="lineage-22.2"/>
+
+</manifest>
