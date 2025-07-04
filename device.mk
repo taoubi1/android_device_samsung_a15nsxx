@@ -4,10 +4,9 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-COMMON_PATH := device/tecno/mt6789-common
-
 # A/B
 AB_OTA_UPDATER := false
+$(call inherit-product, $(SRC_TARGET_DIR)/product/non_ab_device.mk)
 
 PRODUCT_PACKAGES += \
     create_pl_dev \
@@ -61,7 +60,22 @@ PRODUCT_COPY_FILES += \
 
 # AudioFX
 TARGET_EXCLUDES_AUDIOFX := true
-    
+
+# AAPT
+PRODUCT_AAPT_CONFIG := normal
+PRODUCT_AAPT_PREF_CONFIG := xxhdpi
+
+# Boot animation
+TARGET_SCREEN_HEIGHT := 2400
+TARGET_SCREEN_WIDTH := 1080
+
+# Shipping API level
+PRODUCT_SHIPPING_API_LEVEL := 34
+
+# Vibrator
+PRODUCT_PACKAGES += \
+    android.hardware.vibrator-service.samsung
+
 # Bluetooth
 PRODUCT_PACKAGES += \
     android.hardware.bluetooth@1.1.vendor:64
@@ -328,6 +342,8 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     android.hardware.radio.config@1.3.vendor:64 \
     android.hardware.radio@1.6.vendor:64 \
+    android.hardware.radio.deprecated@1.0.vendor:64 \
+    secril_config_svc \
     libprotobuf-cpp-full.vendor:64 \
     libprotobuf-cpp-lite.vendor:64 \
     libprotobuf-cpp-full-3.9.1-vendorcompat:64 \
@@ -446,4 +462,4 @@ PRODUCT_COPY_FILES += \
     $(call find-copy-subdir-files,*,$(LOCAL_PATH)/configs/wifi/,$(TARGET_COPY_OUT_VENDOR)/etc/wifi)
 
 # Inherit from the proprietary files makefile.
-$(call inherit-product, vendor/tecno/mt6789-common/mt6789-common-vendor.mk)
+$(call inherit-product, vendor/samsung/a15nsxx/a15nsxx-vendor.mk)
