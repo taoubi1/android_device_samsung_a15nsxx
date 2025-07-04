@@ -256,12 +256,12 @@ PRODUCT_PACKAGES += \
 # Overlays
 PRODUCT_ENFORCE_RRO_TARGETS := *
 PRODUCT_PACKAGES += \
-    FrameworksResCommon \
-    PowerOffAlarmOverlayCommon \
-    SettingsResOverlayCommon \
-    SystemUIResCommon \
-    TetheringResOverlayCommon \
-    WifiResOverlayCommon
+    SettingsProviderResTarget \
+    FrameworksResTarget \
+    SettingsResTarget \
+    SystemUIResTarget \
+    TelephonyResTarget \
+    WifiResTarget
 
 # Lineage-Specific Overlays
 PRODUCT_PACKAGES += \
