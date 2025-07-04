@@ -4,6 +4,10 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+DEVICE_PATH := device/samsung/a15nsxx
+KERNEL_PATH := device/samsung/a15nsxx-kernel
+
+
 # Board Info
 TARGET_BOARD_INFO_FILE := $(DEVICE_PATH)/board-info.txt
 
@@ -235,6 +239,3 @@ WIFI_HAL_INTERFACE_COMBINATIONS += ,{{{STA}, 1}, {{AP}, 1}}
 WIFI_HAL_INTERFACE_COMBINATIONS += ,{{{STA}, 1}, {{P2P}, 1}}
 WIFI_HAL_INTERFACE_COMBINATIONS += ,{{{STA}, 1}, {{NAN}, 1}}
 WIFI_HIDL_UNIFIED_SUPPLICANT_SERVICE_RC_ENTRY := true
-
-# Inherit proprietary blobs
-include vendor/tecno/mt6789-common/BoardConfigVendor.mk
