@@ -7,9 +7,18 @@
 DEVICE_PATH := device/samsung/a15nsxx
 KERNEL_PATH := device/samsung/a15nsxx-kernel
 
+# OTA assert
+TARGET_OTA_ASSERT_DEVICE := a15 a15nsxx
+
+# Display
+TARGET_SCREEN_DENSITY := 450
 
 # Board Info
 TARGET_BOARD_INFO_FILE := $(DEVICE_PATH)/board-info.txt
+
+# Bootloader
+TARGET_BOOTLOADER_BOARD_NAME := a15
+TARGET_NO_BOOTLOADER := true
 
 # Architecture
 TARGET_ARCH := arm64
