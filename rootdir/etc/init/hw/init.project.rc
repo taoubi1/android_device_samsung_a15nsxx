@@ -1,14 +1,14 @@
 import /vendor/etc/init/hw/init.mtkgki.rc
+import /vendor/etc/init/hw/init.sec.rc
 
 # MTK project .rc configure
+
+on early-init
+#	write /sys/class/udc/musb-hdrc/device/cmode 3
 
 on init
     mkdir /mnt/media_rw/usbotg 0700 media_rw media_rw
     mkdir /storage/usbotg 0700 root root
-
-    # Set gesture touch permissions
-    chown system system /proc/gesture_function
-    chmod 0660 /proc/gesture_function
 
 on post-fs-data
 
@@ -34,6 +34,14 @@ on post-fs-data
     chmod 0660 /dev/BU64745GWZAF
     chown system camera /dev/BU64745GWZAF
 
+    #Create TP_MFNR mount point
+    chown root system /vendor/etc/tp_mfnr/
+    chmod 0771 /vendor/etc/tp_mfnr/
+
+    #Create TP_SFNR mount point
+    chown root system /vendor/etc/tp_sfnr/
+    chmod 0771 /vendor/etc/tp_sfnr/
+
 #SMB
     chown system system /proc/smb/ScreenComm
     chmod 0660 /proc/smb/ScreenComm
@@ -41,44 +49,6 @@ on post-fs-data
     chmod 0660 /dev/spm
     chown system system /dev/spm
 
-    # BSP:modify for LRA XLWYEHLYEL-1 by hongwu.zhan 20221104 start
-    chown system system /sys/class/leds/vibrator_single/activate
-    chown system system /sys/class/leds/vibrator_single/activate_mode
-    chown system system /sys/class/leds/vibrator_single/awrw
-    chown system system /sys/class/leds/vibrator_single/brightness
-    chown system system /sys/class/leds/vibrator_single/bullet_nr
-    chown system system /sys/class/leds/vibrator_single/cali
-    chown system system /sys/class/leds/vibrator_single/cont
-    chown system system /sys/class/leds/vibrator_single/cont_brk_time
-    chown system system /sys/class/leds/vibrator_single/cont_drv_lvl
-    chown system system /sys/class/leds/vibrator_single/cont_drv_time
-    chown system system /sys/class/leds/vibrator_single/cont_wait_num
-    chown system system /sys/class/leds/vibrator_single/duration
-    chown system system /sys/class/leds/vibrator_single/f0
-    chown system system /sys/class/leds/vibrator_single/f0_save
-    chown system system /sys/class/leds/vibrator_single/gain
-    chown system system /sys/class/leds/vibrator_single/gun_type
-    chown system system /sys/class/leds/vibrator_single/haptic_audio
-    chown system system /sys/class/leds/vibrator_single/haptic_audio_time
-    chown system system /sys/class/leds/vibrator_single/index
-    chown system system /sys/class/leds/vibrator_single/loop
-    chown system system /sys/class/leds/vibrator_single/lra_resistance
-    chown system system /sys/class/leds/vibrator_single/max_brightness
-    chown system system /sys/class/leds/vibrator_single/osc_cali
-    chown system system /sys/class/leds/vibrator_single/osc_save
-    chown system system /sys/class/leds/vibrator_single/prctmode
-    chown system system /sys/class/leds/vibrator_single/ram_num
-    chown system system /sys/class/leds/vibrator_single/ram_update
-    chown system system /sys/class/leds/vibrator_single/ram_vbat_comp
-    chown system system /sys/class/leds/vibrator_single/reg
-    chown system system /sys/class/leds/vibrator_single/rtp
-    chown system system /sys/class/leds/vibrator_single/seq
-    chown system system /sys/class/leds/vibrator_single/state
-    chown system system /sys/class/leds/vibrator_single/trig
-    chown system system /sys/class/leds/vibrator_single/trigger
-    chown system system /sys/class/leds/vibrator_single/uevent
-    chown system system /sys/class/leds/vibrator_single/vbat_monitor
-    # BSP:modify for LRA XLWYEHLYEL-1 by hongwu.zhan 20221104 end
 
 on init
     # Refer to http://source.android.com/devices/tech/storage/index.html
@@ -101,4 +71,3 @@ on property:sys.boot_completed=1
     write /sys/kernel/tracing/instances/mmstat/buffer_size_kb 16
     write /sys/kernel/tracing/instances/mmstat/events/mmstat/enable 1
     write /sys/kernel/tracing/instances/mmstat/tracing_on 1
-

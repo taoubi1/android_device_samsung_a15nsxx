@@ -1,6 +1,7 @@
 # MTK connectivity .rc configure
-#NFBD:add for nfc by yunfei.wu 20211218
+
 on post-fs-data
+
 
 #
 # Connectivity related device nodes & configuration (begin)
@@ -13,14 +14,6 @@ on post-fs-data
 #/dev/ttyMT1 for GPS 3337 usage
     chmod 0660 /dev/ttyMT1
     chown system system /dev/ttyMT1
-
-# GPS
-    mkdir /data/vendor/gps 0770 gps system
-    mkdir /data/vendor/log 0770 gps system
-    mkdir /data/vendor/log/gps 0770 gps system
-
-# GPS EMI
-    chmod 0660 /dev/gps_emi
 
 # WiFi
     mkdir /data/vendor/wifi 0770 wifi wifi
@@ -41,20 +34,6 @@ on boot
 #
 # Connectivity related services (Begin)
 #
-# GPS
-service mnld /vendor/bin/mnld
-    class main
-    user gps
-    capabilities WAKE_ALARM
-    group gps inet misc sdcard_rw sdcard_r media_rw system radio wakelock
-    socket mnld stream 660 gps system
-
-# GPS Debug Process
-service lbs_dbg /system/bin/lbs_dbg
-    class main
-    user shell
-    group log system gps inet misc sdcard_rw sdcard_r media_rw radio
-    socket lbs_dbg stream 660 gps system
 
 on property:persist.vendor.em.dy.debug=1
     stop lbs_dbg

@@ -5,11 +5,15 @@ on early-init
     write /sys/class/devfreq/mtk-dvfsrc-devfreq/userspace/set_freq 5500000000
 
 on property:init.svc.vendor.charger=running
+
+
     write /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq 0
     write /sys/devices/system/cpu/cpufreq/policy6/scaling_min_freq 0
     write /sys/class/devfreq/mtk-dvfsrc-devfreq/userspace/set_freq 0
-    
-    # Keep one LITTLE and one big
+
+        # Keep one LITTLE and one big
+
+
     write /sys/devices/system/cpu/cpu1/online 0
     write /sys/devices/system/cpu/cpu2/online 0
     write /sys/devices/system/cpu/cpu3/online 0
@@ -18,46 +22,20 @@ on property:init.svc.vendor.charger=running
     write /sys/devices/system/cpu/cpu7/online 0
 
 on property:vendor.all.modules.ready=1
-    write /sys/devices/system/cpu/cpufreq/policy0/scaling_governor "schedutil"
-    write /sys/devices/system/cpu/cpufreq/policy0/schedutil/up_rate_limit_us 500
-    write /sys/devices/system/cpu/cpufreq/policy0/schedutil/down_rate_limit_us 1000
+    write /sys/devices/system/cpu/cpufreq/policy0/scaling_governor "sugov_ext"
+    write /sys/devices/system/cpu/cpufreq/policy0/sugov_ext/up_rate_limit_us 500
+    write /sys/devices/system/cpu/cpufreq/policy0/sugov_ext/down_rate_limit_us 20000
 
-    write /sys/devices/system/cpu/cpufreq/policy6/scaling_governor "schedutil"
-    write /sys/devices/system/cpu/cpufreq/policy6/schedutil/up_rate_limit_us 500
-    write /sys/devices/system/cpu/cpufreq/policy6/schedutil/down_rate_limit_us 1000
+    write /sys/devices/system/cpu/cpufreq/policy6/scaling_governor "sugov_ext"
+    write /sys/devices/system/cpu/cpufreq/policy6/sugov_ext/up_rate_limit_us 500
+    write /sys/devices/system/cpu/cpufreq/policy6/sugov_ext/down_rate_limit_us 20000
+    write /proc/sys/kernel/sched_util_clamp_min_rt_default 0
+
+
 
 on init
     write /sys/devices/platform/soc/11270000.ufshci/clkgate_enable 0
-    write /proc/sys/kernel/sched_util_clamp_min_rt_default 0
 
-    # update cpus for cpuset cgroup
-    write /dev/cpuset/foreground/cpus 0-7
-    write /dev/cpuset/background/cpus 0-3
-    write /dev/cpuset/system-background/cpus 0-3
-    write /dev/cpuset/top-app/cpus 0-7
-
-on post-fs-data
-    # ZRAM Setup
-    write /sys/block/zram0/comp_algorithm lz4
-    write /proc/sys/vm/page-cluster 0
-
-    # memory reserve tuning
-    write /proc/sys/vm/watermark_boost_factor 0
-    write /proc/sys/vm/min_free_kbytes 27386
-    write /proc/sys/vm/lowmem_reserve_ratio "0 0 0"
-
-    # khugepaged tuning
-    write /sys/kernel/mm/transparent_hugepage/enabled "never"
-    
-    # boot time fs tune
-    write /sys/block/mmcblk0/queue/iostats 0   
-    write /sys/block/mmcblk0/queue/nr_requests 256
-    write /sys/block/sda/queue/iostats 0
-    write /sys/block/sdb/queue/iostats 0
-    write /sys/block/sdc/queue/iostats 0
-    write /sys/block/sdc/queue/nr_requests 256
-
-on boot
     # boot perf. tune
     write /dev/cpuctl/system/cpu.uclamp.min 100
     write /dev/cpuctl/system/cpu.uclamp.latency_sensitive 1
@@ -71,82 +49,32 @@ on boot
     write /dev/cpuctl/background/cpu.uclamp.latency_sensitive 1
 
 on property:sys.boot_completed=1
-    # end boot time fs tune
-    write /sys/block/mmcblk0/queue/nr_requests 64
-    write /sys/block/sda/queue/nr_requests 64
-    write /sys/block/sdb/queue/nr_requests 64
-    write /sys/block/sdc/queue/nr_requests 64
-
-    # Enable ZRAM on boot_complete
-    swapon_all /vendor/etc/fstab.mt6789
-    write /proc/sys/vm/swappiness 60
-
     write /sys/devices/platform/soc/11270000.ufshci/clkgate_enable 1
+
+
     write /proc/sys/kernel/sched_migration_cost_ns 200000
+   write /proc/cpufreq/cpufreq_sched_disable 0
+
+    chown system system /dev/stune/foreground/schedtune.prefer_idle
+    chown system system /dev/stune/top-app/schedtune.prefer_idle
+    chown system system /dev/stune/rt/schedtune.prefer_idle
+    write /dev/stune/foreground/schedtune.prefer_idle 0
+    write /dev/stune/top-app/schedtune.prefer_idle 0
+    write /dev/stune/rt/schedtune.prefer_idle 0
+    write /dev/stune/top-app/schedtune.boost 1
+    write /proc/perfmgr/boost_ctrl/eas_ctrl/sched_big_task_rotation 1
 
     # restore boot perf. tune
     write /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq 0
     write /sys/devices/system/cpu/cpufreq/policy6/scaling_min_freq 0
     write /sys/class/devfreq/mtk-dvfsrc-devfreq/userspace/set_freq 0
-
-# Configure clamps for standard task groups.
-    # system-background
-    # cap the max utilisation for system-background tasks to save power.
-    write /dev/cpuctl/system/cpu.uclamp.max 40
     write /dev/cpuctl/system/cpu.uclamp.min 0
     write /dev/cpuctl/system/cpu.uclamp.latency_sensitive 0
-    write /dev/cpuctl/system-background/cpu.uclamp.max 40
     write /dev/cpuctl/system-background/cpu.uclamp.min 0
     write /dev/cpuctl/system-background/cpu.uclamp.latency_sensitive 0
-    
-    # foreground
-    write /dev/cpuctl/foreground/cpu.uclamp.max max
-    write /dev/cpuctl/foreground/cpu.uclamp.min 10
+    write /dev/cpuctl/foreground/cpu.uclamp.min 0
     write /dev/cpuctl/foreground/cpu.uclamp.latency_sensitive 0
-
-    # top-app
-    write /dev/cpuctl/top-app/cpu.uclamp.max max
-    write /dev/cpuctl/top-app/cpu.uclamp.min 10
-    write /dev/cpuctl/top-app/cpu.uclamp.latency_sensitive 1
-
-    # background
-    # cap the max utilisation for background tasks to save power.
-    write /dev/cpuctl/background/cpu.uclamp.max 50
+    write /dev/cpuctl/top-app/cpu.uclamp.min 0
+    write /dev/cpuctl/top-app/cpu.uclamp.latency_sensitive 0
     write /dev/cpuctl/background/cpu.uclamp.min 0
     write /dev/cpuctl/background/cpu.uclamp.latency_sensitive 0
-    
-    # nnapi-hal
-    write /dev/cpuctl/nnapi-hal/cpu.uclamp.max max
-    write /dev/cpuctl/nnapi-hal/cpu.uclamp.min 75
-    write /dev/cpuctl/nnapi-hal/cpu.uclamp.latency_sensitive 1
-    
-    # camera-daemon
-    write /dev/cpuctl/camera-daemon/cpu.uclamp.max max
-    write /dev/cpuctl/camera-daemon/cpu.uclamp.min 50
-    write /dev/cpuctl/camera-daemon/cpu.uclamp.latency_sensitive 1
-    
-    # Uclamp tuning
-    write /proc/sys/kernel/sched_util_clamp_min_rt_default 96
-    write /proc/sys/kernel/sched_util_clamp_min 128
-
-    # Enable PowerHAL hint processing
-    setprop vendor.powerhal.init 1
-
-service vendor.gralloc-4-0 /vendor/bin/hw/mt6789/android.hardware.graphics.allocator@4.0-service-mediatek.mt6789
-    class hal animation
-    interface android.hardware.graphics.allocator@4.0::IAllocator default
-    user system
-    group graphics drmrpc
-    capabilities SYS_NICE
-    onrestart restart surfaceflinger
-    task_profiles ProcessCapacityHigh HighPerformance
-    override
-
-service vendor.hwcomposer-2-3 /vendor/bin/hw/android.hardware.graphics.composer@2.3-service
-    class hal animation
-    user system
-    group graphics drmrpc
-    capabilities SYS_NICE
-    onrestart restart surfaceflinger
-    task_profiles ProcessCapacityHigh HighPerformance
-    override
