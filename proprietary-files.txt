@@ -409,7 +409,7 @@ vendor/bin/wmt_launcher
 vendor/bin/wmt_loader
 vendor/etc/init/init.wmt_drv.rc
 # Display
-vendor/bin/hw/mt6789/android.hardware.graphics.allocator@4.0-service-mediatek.mt6789;SYMLINK=vendor/bin/hw/android.hardware.graphics.allocator@4.0-service-mediatek.mt6789
+vendor/bin/hw/mt6789/android.hardware.graphics.allocator@4.0-service-mediatek.mt6789;SYMLINK=vendor/bin/hw/android.hardware.graphics.allocator@4.0-service-mediatek.mt6789;SYMLINK=vendor/bin/hw/android.hardware.graphics.allocator@4.0-service-mediatek
 vendor/etc/init/android.hardware.graphics.allocator@4.0-service-mediatek.rc
 vendor/etc/vintf/manifest/manifest_hwcomposer.xml
 vendor/etc/meow.cfg
@@ -548,8 +548,7 @@ vendor/lib/libvcodec_oal.so
 vendor/lib/libvcodec_utility_plat.mt6789.so
 vendor/lib64/libvpu.so
 # Media (C2)
-vendor/bin/hw/android.hardware.media.c2@1.2-mediatek-64b
-vendor/etc/init/android.hardware.media.c2@1.2-mediatek.rc
+vendor/bin/hw/android.hardware.media.c2@1.2-mediatek-64b;SYMLINK=vendor/bin/hw/android.hardware.media.c2@1.2-mediatek
 vendor/etc/mtk_platform_codecs_config.xml
 vendor/lib64/libcodec2_mtk_c2store.so
 vendor/lib64/libcodec2_mtk_vdec.so
@@ -772,17 +771,6 @@ vendor/etc/init/init.wlan_drv.rc
 vendor/etc/init/wlan_assistant.rc
 vendor/etc/wfd_source_capability.csv
 vendor/lib64/libwifi-hal.so:vendor/lib64/libwifi-hal-mtk.so
-vendor/bin/hw/mt6789/android.hardware.graphics.allocator@4.0-service-mediatek.mt6789;SYMLINK=vendor/bin/hw/android.hardware.graphics.allocator@4.0-service-mediatek.mt6789;SYMLINK=vendor/bin/hw/android.hardware.graphics.allocator@4.0-service-mediatek
-vendor/lib64/libaal_cust.so
--vendor/etc/vintf/manifest/manifest_android.hardware.drm@1.4-service.widevine.xml
--vendor/lib64/mediadrm/libwvdrmengine.so
--vendor/lib64/libwvhidl.so
-vendor/bin/hw/android.hardware.security.keymint-service.trustonic
-vendor/etc/init/android.hardware.security.keymint-service.trustonic.rc
--vendor/etc/vintf/manifest/android.hardware.security.keymint-service.trustonic.xml
--vendor/etc/vintf/manifest/android.hardware.security.secureclock-service.trustonic.xml
--vendor/etc/vintf/manifest/android.hardware.security.sharedsecret-service.trustonic.xml
-vendor/bin/hw/android.hardware.media.c2@1.2-mediatek-64b;SYMLINK=vendor/bin/hw/android.hardware.media.c2@1.2-mediatek
 vendor/lib64/libneuron_platform.so
 vendor/bin/ccci_fsd
 vendor/etc/init/init.cccifsd.rc
