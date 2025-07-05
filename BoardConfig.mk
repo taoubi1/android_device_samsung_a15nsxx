@@ -84,7 +84,7 @@ BOARD_MKBOOTIMG_ARGS := \
   --tags_offset $(BOARD_KERNEL_TAGS_OFFSET) \
   --second_offset $(BOARD_SECOND_OFFSET) \
   --dtb_offset $(BOARD_DTB_OFFSET) \
-  --dtb $(DEVICE_PATH)/prebuilt/dtb.img
+  --dtb $(KERNEL_PATH)/prebuilt/dtb.img
 
 # Recovery image config (header v2)
 BOARD_RECOVERY_HEADER_VERSION := 2
@@ -97,11 +97,11 @@ BOARD_RECOVERY_MKBOOTIMG_ARGS := \
   --tags_offset $(BOARD_KERNEL_TAGS_OFFSET) \
   --second_offset $(BOARD_SECOND_OFFSET) \
   --dtb_offset $(BOARD_DTB_OFFSET) \
-  --dtb $(DEVICE_PATH)/prebuilt/dtb.img
+  --dtb $(KERNEL_PATH)/prebuilt/dtb.img
 
 # Prebuilt kernel and DTBO
-TARGET_PREBUILT_DTB := $(DEVICE_PATH)/prebuilt/dtb.img
-BOARD_PREBUILT_DTBOIMAGE := $(DEVICE_PATH)/prebuilt/dtbo.img
+TARGET_PREBUILT_DTB := $(KERNEL_PATH)/prebuilt/dtb.img
+BOARD_PREBUILT_DTBOIMAGE := $(KERNEL_PATH)/prebuilt/dtbo.img
 
 LOCAL_KERNEL := $(KERNEL_PATH)/Image.gz
 PRODUCT_COPY_FILES += \
