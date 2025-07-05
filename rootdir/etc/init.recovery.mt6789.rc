@@ -1,6 +1,14 @@
 import /init.recovery.samsung.rc
 
 on init
+    # unlink /efs > /mnt/vendor/efs
+    rm /efs
+    mkdir /efs
+    mkdir /sec_efs
+
+    # to cut charging battery path
+    write /sys/class/power_supply/battery/siop_level 0
+
     setprop sys.usb.configfs 1
     setprop sys.usb.controller "musb-hdrc"
     setprop sys.usb.ffs.aio_compat 0
