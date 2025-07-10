@@ -23,6 +23,7 @@ odm /odm erofs ro wait,avb,logical,first_stage_mount
 odm /odm ext4 ro wait,avb,logical,first_stage_mount
 
 vendor_dlkm /vendor_dlkm erofs ro wait,avb,logical,first_stage_mount
+vendor_dlkm /vendor_dlkm ext4 ro wait,avb,logical,first_stage_mount
 
 /dev/block/by-name/metadata /metadata ext4 noatime,nosuid,nodev,noauto_da_alloc,discard,journal_checksum,data=ordered,errors=panic,sync	wait,check,formattable,first_stage_mount
 
@@ -46,13 +47,16 @@ vendor_dlkm /vendor_dlkm erofs ro wait,avb,logical,first_stage_mount
 /dev/block/by-name/proinfo /proinfo emmc defaults defaults
 /dev/block/by-name/lk1 /lk1 emmc defaults first_stage_mount,nofail
 /dev/block/by-name/para /para emmc defaults defaults
+
 /dev/block/by-name/misc /misc emmc defaults defaults,first_stage_mount
 
 /dev/block/by-name/recovery /recovery emmc defaults first_stage_mount,nofail
 /dev/block/by-name/boot /boot emmc defaults first_stage_mount,nofail
+/dev/block/by-name/vendor_boot /vendor_boot emmc defaults first_stage_mount,nofail
 
 /dev/block/by-name/vbmeta_vendor /vbmeta_vendor emmc defaults first_stage_mount,nofail
 /dev/block/by-name/vbmeta_system /vbmeta_system emmc defaults first_stage_mount,nofail,avb=vbmeta
+/dev/block/by-name/vbmeta /vbmeta emmc defaults defaults
 
 /dev/block/by-name/expdb /expdb emmc defaults defaults
 /dev/block/by-name/seccfg /seccfg emmc defaults defaults
@@ -60,7 +64,6 @@ vendor_dlkm /vendor_dlkm erofs ro wait,avb,logical,first_stage_mount
 /dev/block/by-name/tee1 /tee1 emmc defaults first_stage_mount,nofail
 
 /dev/block/by-name/tzar /tzar emmc defaults defaults
-
 
 /dev/block/by-name/scp1 /scp1 emmc defaults defaults
 
@@ -73,14 +76,11 @@ vendor_dlkm /vendor_dlkm erofs ro wait,avb,logical,first_stage_mount
 /dev/block/by-name/md1img /md1img emmc defaults defaults
 
 /dev/block/by-name/gz1 /gz1 emmc defaults defaults
-/dev/block/by-name/vendor_boot /vendor_boot emmc defaults first_stage_mount,nofail
 
 /dev/block/by-name/spmfw /spmfw emmc defaults defaults
 
 /dev/block/by-name/pi_img /pi_img emmc defaults defaults
 /dev/block/by-name/boot_para /boot_para emmc defaults defaults
 /dev/block/by-name/dtbo /dtbo emmc defaults defaults
-
-/dev/block/by-name/vbmeta /vbmeta emmc defaults defaults
 
 /dev/block/by-name/uh /uh emmc defaults defaults
