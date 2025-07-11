@@ -834,7 +834,7 @@ vendor/etc/init/android.hardware.security.keymint-service.rc
 vendor/etc/init/vendor.samsung.hardware.security.fkeymaster-service.rc
 vendor/etc/permissions/android.hardware.hardware_keystore.xml
 vendor/etc/permissions/android.hardware.keystore.app_attest_key.xml
--vendor/etc/vintf/manifest/vendor.samsung.hardware.security.fkeymaster-service.xml
+vendor/etc/vintf/manifest/vendor.samsung.hardware.security.fkeymaster-service.xml
 vendor/lib/libthha.so
 vendor/lib64/android.hardware.keymaster@3.0.so
 vendor/lib64/android.hardware.keymaster@4.0.so
@@ -1304,7 +1304,6 @@ vendor/bin/hw/vendor.samsung.hardware.biometrics.fingerprint@3.0-service
 vendor/etc/init/fingerprint_common.rc
 vendor/etc/init/init.fingerprint.rc
 vendor/etc/init/vendor.samsung.hardware.biometrics.fingerprint@3.0-service.rc
-vendor/etc/vintf/manifest/vendor.samsung.hardware.biometrics.fingerprint@3.0-service.xml
 vendor/etc/vintf/manifest/vendor.samsung.hardware.biometrics.fingerprint@3.0-service.xml
 vendor/lib/hw/fingerprint.default.so
 vendor/lib/android.hardware.biometrics.common-V1-ndk_platform.so
