@@ -9,6 +9,15 @@ PRODUCT_PACKAGES += \
     android.hardware.boot@1.2-impl:64 \
     android.hardware.boot@1.2-impl.recovery
 
+# Display
+PRODUCT_PACKAGES += \
+    android.hardware.graphics.composer@2.3-service \
+    android.hardware.memtrack-service.mediatek-mali
+PRODUCT_PACKAGES += \
+    android.hardware.graphics.allocator@4.0.vendor \
+    android.frameworks.sensorservice@1.0.vendor \
+    libdrm.vendor
+
 # Enforce generic ramdisk allow list
 $(call inherit-product, $(SRC_TARGET_DIR)/product/generic_ramdisk.mk)
 
