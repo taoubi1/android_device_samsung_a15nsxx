@@ -106,6 +106,13 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.keystore.app_attest_key.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.keystore.app_attest_key.xml
 
+# Keymint
+PRODUCT_PACKAGES += \
+    android.hardware.security.keymint-V1-ndk_platform.vendor:64 \
+    android.hardware.security.secureclock-V1-ndk_platform.vendor:64 \
+    android.hardware.security.sharedsecret-V1-ndk_platform.vendor:64 \
+    libcppbor_external.vendor:64
+
 # Project ID Quota
 $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
 
