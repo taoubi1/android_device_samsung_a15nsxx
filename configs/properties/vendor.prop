@@ -57,6 +57,9 @@ debug.mediatek.disp_decompress=1
 ro.vendor.smvr.p2batch.vga=8
 ro.vendor.smvr.p2batch.hd=4
 
+# Gatekeeper
+ro.hardware.gatekeeper=trustonic
+
 # SurfaceFlinger
 ro.surface_flinger.primary_display_orientation=ORIENTATION_0
 ro.surface_flinger.force_hwc_copy_for_virtual_displays=true

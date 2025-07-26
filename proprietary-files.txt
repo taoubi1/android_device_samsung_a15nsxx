@@ -352,6 +352,11 @@ vendor/firmware/soc_fm_v1_coeff.bin
 vendor/firmware/soc_fm_v1_patch.bin
 vendor/firmware/wifi.cfg
 
+# Gatekeeper
+vendor/lib64/hw/libMcGatekeeper.so;SYMLINK=vendor/lib64/hw/gatekeeper.trustonic.so
+vendor/lib64/hw/libSoftGatekeeper.so;SYMLINK=vendor/lib64/hw/gatekeeper.default.so
+vendor/lib64/libMcClient.so
+
 # NVRAM
 vendor/bin/hw/vendor.mediatek.hardware.nvram@1.1-service
 vendor/bin/nvram_daemon
