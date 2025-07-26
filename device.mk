@@ -3,6 +3,40 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+# Audio
+$(call soong_config_set,android_hardware_audio,run_64bit,true)
+PRODUCT_PACKAGES += \
+    android.hardware.audio@7.0-impl:64 \
+    android.hardware.audio.effect@7.0-impl:64 \
+    android.hardware.audio.service \
+    android.hardware.bluetooth.audio@2.1-impl:64 \
+    android.hardware.soundtrigger@2.3-impl:64
+
+PRODUCT_PACKAGES += \
+    audio.bluetooth.default:64 \
+    audio.r_submix.default:64 \
+    audio.usb.default:64
+
+PRODUCT_PACKAGES += \
+    libaudiofoundation.vendor:64 \
+    libbluetooth_audio_session:64 \
+    libalsautils:64 \
+    libnbaio_mono:64 \
+    libtinycompress:64 \
+    libdynproc:64 \
+    libhapticgenerator:64
+
+PRODUCT_COPY_FILES += \
+    $(call find-copy-subdir-files,*,$(LOCAL_PATH)/configs/audio/,$(TARGET_COPY_OUT_VENDOR)/etc)
+
+PRODUCT_COPY_FILES += \
+    frameworks/av/services/audiopolicy/config/a2dp_in_audio_policy_configuration_7_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/a2dp_in_audio_policy_configuration.xml \
+    frameworks/av/services/audiopolicy/config/bluetooth_audio_policy_configuration_7_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/bluetooth_audio_policy_configuration.xml \
+    frameworks/av/services/audiopolicy/config/r_submix_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/r_submix_audio_policy_configuration.xml
+
+PRODUCT_PACKAGES += \
+    MtkInCallService
+
 # Boot control HAL
 PRODUCT_PACKAGES += \
     android.hardware.boot@1.2-service \
