@@ -71,6 +71,9 @@ ro.hardware.gatekeeper=trustonic
 ro.crypto.volume.filenames_mode=aes-256-cts
 ro.hardware.kmsetkey=trustonic
 
+# Sensors
+ro.vendor.mtk.sensor.support=yes
+
 # SurfaceFlinger
 ro.surface_flinger.primary_display_orientation=ORIENTATION_0
 ro.surface_flinger.force_hwc_copy_for_virtual_displays=true
