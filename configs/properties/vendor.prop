@@ -13,6 +13,13 @@ ro.vendor.mtk_audio_tuning_tool_ver=V1
 ro.vendor.mtk_hifiaudio_support=1
 ro.config.vc_call_vol_steps=11
 
+# Bluetooth
+ro.vendor.bluetooth.a2dp_aac_vbr.is_disabled=true
+ro.vendor.bluetooth.bt_multidevice_perform=600
+ro.vendor.bt.platform=connac1x
+ro.vendor.mtk.bt_sap_enable=true
+vendor.bluetooth.ldac.abr=true
+
 # Display
 ro.hardware.egl=meow
 ro.hardware.vulkan=mali
