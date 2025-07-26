@@ -241,6 +241,15 @@ vendor/lib64/vendor.mediatek.hardware.pq@2.7.so
 vendor/lib64/vendor.mediatek.hardware.pq@2.8.so
 vendor/lib64/vendor.mediatek.hardware.pq@2.9.so
 
+# Fingerprint
+vendor/bin/hw/android.hardware.biometrics.fingerprint@2.1-service
+vendor/etc/init/android.hardware.biometrics.fingerprint@2.1-service.rc
+vendor/etc/init/vendor.fpsensor.rc
+vendor/etc/vintf/manifest/android.hardware.biometrics.fingerprint@2.1-service.xml
+vendor/lib64/hw/fpsensor_fingerprint.default.so
+vendor/lib64/libfp_ext_svc2.so
+vendor/lib64/vendor.fpsensor.hardware.fpsensorhidlsvc@2.0.so
+
 # Firmware
 vendor/firmware/BT_FW.cfg
 vendor/firmware/Conf_MultipleTest.ini
