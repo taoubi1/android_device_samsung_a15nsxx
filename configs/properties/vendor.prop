@@ -60,6 +60,10 @@ ro.vendor.smvr.p2batch.hd=4
 # Gatekeeper
 ro.hardware.gatekeeper=trustonic
 
+# Keymaster
+ro.crypto.volume.filenames_mode=aes-256-cts
+ro.hardware.kmsetkey=trustonic
+
 # SurfaceFlinger
 ro.surface_flinger.primary_display_orientation=ORIENTATION_0
 ro.surface_flinger.force_hwc_copy_for_virtual_displays=true
