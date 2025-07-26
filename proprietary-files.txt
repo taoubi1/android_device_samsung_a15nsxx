@@ -157,6 +157,11 @@ vendor/etc/audio_param/preset_ringtone.bin
 vendor/etc/audio_param/preset_voice.bin
 vendor/etc/audio_param/preset_voip.bin
 
+# Connectivity
+vendor/bin/wmt_launcher
+vendor/bin/wmt_loader
+vendor/etc/init/init.wmt_drv.rc
+
 # Display
 vendor/bin/hw/mt6789/android.hardware.graphics.allocator@4.0-service-mediatek.mt6789;SYMLINK=vendor/bin/hw/android.hardware.graphics.allocator@4.0-service-mediatek
 vendor/bin/hw/vendor.mediatek.hardware.pq@2.2-service
