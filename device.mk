@@ -49,6 +49,15 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     com.android.hardware.boot \
     android.hardware.boot-service.default_recovery:64
+
+# Camera
+PRODUCT_PACKAGES += \
+    android.hardware.camera.common@1.0.vendor:64 \
+    android.hardware.camera.device@3.6.vendor:64 \
+    android.hardware.camera.provider@2.6.vendor:64
+
+PRODUCT_PACKAGES += \
+    libdng_sdk.vendor        
     
 # Cgroup
 PRODUCT_COPY_FILES += \
