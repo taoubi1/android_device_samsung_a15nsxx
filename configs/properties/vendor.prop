@@ -55,6 +55,7 @@ vendor.mtk.camera.app.fd.video=1
 # Display
 ro.hardware.egl=meow
 ro.hardware.vulkan=mali
+ro.opengles.version=196610
 ro.vendor.composer_version=2.3
 ro.vendor.mtk_aod_support=1
 ro.hardware.hwcomposer=mtk_common
