@@ -1429,6 +1429,9 @@ vendor/lib64/libhfmanagerwrapper.so
 vendor/lib64/libksensor.so
 vendor/lib64/librgbwlightsensor.so
 
+# SoundTrigger
+vendor/lib64/hw/sound_trigger.primary.default.so:vendor/lib64/hw/sound_trigger.primary.mt6789.so
+
 # Tether Offload
 vendor/bin/hw/tetheroffloadservice
 vendor/bin/netdagent
