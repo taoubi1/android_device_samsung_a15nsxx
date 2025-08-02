@@ -107,10 +107,10 @@ PRODUCT_USE_DYNAMIC_PARTITIONS := true
 
 # DRM
 PRODUCT_PACKAGES += \
-    android.hardware.drm-service.clearkey
+    android.hardware.drm-service.clearkey:64
 
 PRODUCT_PACKAGES += \
-    android.hardware.drm@1.4.vendor
+    android.hardware.drm@1.4.vendor:64
 
 # FastbootD
 PRODUCT_PACKAGES += \
@@ -123,7 +123,7 @@ PRODUCT_PACKAGES += \
 
 # Gatekeeper
 PRODUCT_PACKAGES += \
-    android.hardware.gatekeeper@1.0-impl \
+    android.hardware.gatekeeper@1.0-impl:64 \
     android.hardware.gatekeeper@1.0-service
 
 # GNSS
@@ -191,14 +191,16 @@ PRODUCT_PACKAGES += \
     libcodec2_vndk.vendor:64 \
     libeffects:64 \
     libeffectsconfig.vendor:64 \
-    libavservices_minijail_vendor \
-    libstagefright_softomx_plugin.vendor \
-    libsfplugin_ccodec_utils.vendor \
-    libcodec2_soft_common.vendor \
-    libflatbuffers-cpp.vendor
+    libavservices_minijail_vendor:64 \
+    libstagefright_softomx_plugin.vendor:64 \
+    libsfplugin_ccodec_utils.vendor:64 \
+    libcodec2_soft_common.vendor:64 \
+    libflatbuffers-cpp.vendor:64
 
 PRODUCT_PACKAGES += \
-    libchrome.vendor
+    libchrome.vendor:64 \
+    libminijail:64 \
+    libminijail.vendor:64
 
 PRODUCT_COPY_FILES += \
     $(call find-copy-subdir-files,*,$(LOCAL_PATH)/configs/seccomp,$(TARGET_COPY_OUT_VENDOR)/etc/seccomp_policy) \
@@ -206,9 +208,9 @@ PRODUCT_COPY_FILES += \
 
 # Neural networks
 PRODUCT_PACKAGES += \
-    android.hardware.neuralnetworks@1.0.vendor \
-    android.hardware.neuralnetworks@1.3.vendor \
-    libtextclassifier_hash.vendor
+    android.hardware.neuralnetworks@1.0.vendor:64 \
+    android.hardware.neuralnetworks@1.3.vendor:64 \
+    libtextclassifier_hash.vendor:64
 
 # Permissions
 PRODUCT_COPY_FILES += \
@@ -252,17 +254,17 @@ PRODUCT_PACKAGES += \
     android.hardware.power-service.lineage-libperfmgr
 
 PRODUCT_PACKAGES += \
-    vendor.mediatek.hardware.mtkpower@1.2-service.stub \
-    vendor.mediatek.hardware.mtkpower@1.0.vendor \
-    vendor.mediatek.hardware.mtkpower@1.1.vendor
+    vendor.mediatek.hardware.mtkpower@1.2-service.stub:64 \
+    vendor.mediatek.hardware.mtkpower@1.0.vendor:64 \
+    vendor.mediatek.hardware.mtkpower@1.1.vendor:64
 
 PRODUCT_PACKAGES += \
-    android.hardware.power@1.3.vendor
+    android.hardware.power@1.3.vendor:64
 
 # Power | Dummy mtkperf lib
 PRODUCT_PACKAGES += \
-    libmtkperf_client_vendor \
-    libmtkperf_client
+    libmtkperf_client_vendor:64 \
+    libmtkperf_client:64 \
 
 # Power configurations
 PRODUCT_COPY_FILES += \
