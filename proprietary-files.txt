@@ -901,7 +901,6 @@ vendor/etc/AbnormalDisplayLog_dynamic.xml
 vendor/etc/VideoLog_dynamic.xml
 vendor/lib/egl/egl.cfg
 vendor/lib/mt6789/arm.graphics-V1-ndk_platform.so;SYMLINK=vendor/lib/arm.graphics-V1-ndk_platform.so
-vendor/lib/libladder.so
 vendor/lib/mt6789/libmtk_drvb.so;SYMLINK=vendor/lib/libmtk_drvb.so
 vendor/lib64/egl/libGLES_meow.so
 vendor/lib64/egl/libMEOW_data.so
