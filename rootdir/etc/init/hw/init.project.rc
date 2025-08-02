@@ -60,8 +60,3 @@ on property:sys.boot_completed=1
     write /sys/kernel/tracing/instances/mmstat/events/mmstat/enable 1
     write /sys/kernel/tracing/instances/mmstat/tracing_on 1
 
-#SPD: modify cpuctl cpu.shares by yifei.liu at 20240314 start
-    write /dev/cpuctl/top-app/cpu.shares 5120
-    write /dev/cpuctl/foreground/cpu.shares 4196
-#SPD: modify cpuctl cpu.shares by yifei.liu at 20240314 end
-
