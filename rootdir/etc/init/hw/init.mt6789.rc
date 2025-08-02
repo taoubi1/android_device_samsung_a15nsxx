@@ -7,9 +7,6 @@ import /vendor/etc/init/hw/init.project.rc
 import /system_ext/etc/init/hw/init.aee.rc
 import /FWUpgradeInit.rc
 import /vendor/etc/init/hw/init.aee.rc
-import ${ro.vendor.rc}init.volte.rc
-import ${ro.vendor.rc}init.mal.rc
-import ${ro.vendor.rc}${ro.vendor.init.sensor.rc}
 import ${ro.vendor.rc}init.cgroup.rc
 
 # init.modem.rc must be the LAST rc file because vold.post_fs_data_done is set in it
@@ -73,8 +70,7 @@ on late-init
 
 # mount different fs start
 
-on charger
-
+on property:init.svc.vendor.charger=running
     exec /system/bin/e2fsck -f -p /dev/block/by-name/cache
     mount ext4 /dev/block/by-name/cache /cache rw wait
     chmod 0660 /dev/spm
@@ -107,10 +103,6 @@ on charger
     chown system system /sys/class/leds/red/brightness
     chown system system /sys/class/leds/green/brightness
 
-    start vendor.light-default
-
-    # Stop bootprof
-    write /proc/bootprof "0"
 
 on early-fs
     write /proc/bootprof "INIT:early-fs"
@@ -128,10 +120,6 @@ on fs
     exec /system/bin/tune2fs -O has_journal -u 10010 -r 4096 /dev/block/by-name/userdata
     write /sys/kernel/tracing/trace_marker "E"
     write /proc/bootprof "INIT:Mount_END"
-
-on fs
-
-   mount iso9660 loop@/vendor/etc/iAmCdRom.iso /mnt/cd-rom ro
 
 on late-fs
     write /proc/bootprof "INIT:late-fs"
@@ -1156,7 +1144,6 @@ on post-fs-data
 
     chmod 0666 /dev/exm0
 
-
 	#Thermal
 	mkdir /data/vendor/.tp/ 0775 system system
 	mkdir /data/vendor/thermal/ 0775 system system
@@ -1491,40 +1478,6 @@ on property:sys.boot_completed=1 && property:ro.build.type=eng
 on property:sys.boot_completed=1 && property:ro.build.type=userdebug
     write /sys/class/secgpio_check/secgpio_check_all/gpioinit_call 1
 
-#service dpfd /vendor/bin/dpfd
-#	user root
-#	group system media
-
-#
-#  External Modme control related services
-#
-
-#
-#  Modem related services (Begin)
-#
-##Add by T.Zh for ppp daemon
-#service pppd /system/bin/pppd file /data/misc/ppp/ppp_options
-#    user root
-#    disabled
-#    oneshot
-#
-##
-#
-#  Modem related services (End)
-#
-
-#add for power-off alarm
-#service poad /vendor/bin/poad
-#    class main
-#    user system
-#    group system
-#    oneshot
-
-#service BGW /vendor/xbin/BGW
-#	user system
-#	group gps system radio
-#	class main
-
 # Battery info
 on property:persist.vendor.mediatek.fg.disable=1
     write /dev/gauge/FG_daemon_disable 1
@@ -1576,7 +1529,6 @@ on property:vendor.mtk.md1.status=reset
 # MTK fast charging support
 on property:persist.vendor.mediatek.fast_charging.support=*
     write /sys/devices/platform/charger/fast_chg_indicator ${persist.vendor.mediatek.fast_charging.support}
-
 
 
 # Pageboostd
