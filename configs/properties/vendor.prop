@@ -130,6 +130,7 @@ ro.vendor.mtk_nn_quant_preferred=1
 ro.vendor.mtk_nn_support=1
 
 # Media
+debug.stagefright.c2inputsurface=-1
 debug.mediatek.disp_decompress=1
 media.c2.dmabuf.padding=3072
 ro.vendor.jpeg_decode_sw_opt=1
