@@ -402,8 +402,10 @@ PRODUCT_PACKAGES += \
     libwifi-hal-wrapper \
     wpa_supplicant \
     hostapd \
-    android.hardware.wifi-service
-
+    android.hardware.wifi-service \
+    libkeystore-wifi-hidl:64 \
+    libkeystore-engine-wifi-hidl:64
+    
 PRODUCT_PACKAGES += \
     android.hardware.tetheroffload.config@1.0.vendor \
     android.hardware.tetheroffload.control@1.0.vendor \
