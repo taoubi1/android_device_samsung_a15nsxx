@@ -52,6 +52,23 @@ vendor.camera.mdp.cz.enable=1
 vendor.camera.mdp.dre.enable=1
 vendor.mtk.camera.app.fd.video=1
 
+# Charger
+ro.vendor.mtk_fast_charging_support=1
+
+# Connsys
+persist.vendor.connsys.chipid=-1
+persist.vendor.connsys.dynamic.dump=0
+persist.vendor.connsys.patch.version=-1
+ro.vendor.builtin_fm_antenna_support=1
+ro.vendor.connsys.dedicated.log=1
+ro.vendor.connsys.dedicated.log.port=bt,wifi,gps,mcu
+vendor.connsys.driver.ready=no
+
+# DRM
+drm.service.enabled=true
+ro.vendor.mtk_tee_gp_support=1
+ro.vendor.mtk_widevine_drm_l1_support=1
+
 # Display
 ro.hardware.egl=meow
 ro.hardware.vulkan=mali
