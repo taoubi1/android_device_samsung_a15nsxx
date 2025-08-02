@@ -27,7 +27,10 @@ PRODUCT_PACKAGES += \
     audio.usb.default:64
 
 PRODUCT_PACKAGES += \
-    libaudioroute.vendor \
+    audio_policy.stub:64 \
+    libopus.vendor:64 \
+    audioclient-types-aidl-cpp.vendor:64 \
+    libaudioroute.vendor:64 \
     libaudiofoundation.vendor:64 \
     libbluetooth_audio_session:64 \
     libalsautils:64 \
