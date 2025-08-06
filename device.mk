@@ -219,6 +219,19 @@ PRODUCT_PACKAGES += \
     android.hardware.neuralnetworks@1.3.vendor:64 \
     libtextclassifier_hash.vendor:64
 
+# Overlays
+PRODUCT_ENFORCE_RRO_TARGETS := *
+PRODUCT_PACKAGES += \
+    SettingsProviderResTarget \
+    FrameworksResTarget \
+    SettingsResTarget \
+    SystemUIResTarget \
+    WifiResTarget
+
+# Lineage-Specific Overlays
+PRODUCT_PACKAGES += \
+    ApertureOverlay
+
 # Permissions
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.audio.low_latency.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.audio.low_latency.xml \
