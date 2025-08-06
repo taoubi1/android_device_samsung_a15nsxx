@@ -1176,6 +1176,9 @@ vendor/lib64/sensors.grip.so
 vendor/lib64/sensors.inputvirtual.so
 vendor/lib64/sensors.sensorhub.so
 
+# SoundTrigger
+vendor/lib64/hw/sound_trigger.primary.default.so:vendor/lib64/hw/sound_trigger.primary.mt6789.so
+
 # TEE
 vendor/lib/libTEECommon.so
 vendor/lib/libgz_gp_client.so
