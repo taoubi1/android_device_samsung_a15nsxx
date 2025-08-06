@@ -252,6 +252,10 @@ PRODUCT_PACKAGES += \
     libmtkperf_client_vendor \
     libmtkperf_client
 
+# Power configurations
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/power/powerhint.json:$(TARGET_COPY_OUT_VENDOR)/etc/powerhint.json
+
 # RIL
 PRODUCT_PACKAGES += \
     android.hardware.radio.config@1.3.vendor:64 \
