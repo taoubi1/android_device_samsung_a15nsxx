@@ -46,6 +46,9 @@ PRODUCT_PACKAGES += \
     libreverbwrapper:64 \
     libprocessgroup.vendor:64
 
+PRODUCT_PACKAGES += \
+    MtkInCallService
+
 PRODUCT_COPY_FILES += \
     $(call find-copy-subdir-files,*,$(LOCAL_PATH)/configs/audio/,$(TARGET_COPY_OUT_VENDOR)/etc)
 
