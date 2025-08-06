@@ -81,6 +81,10 @@ PRODUCT_PACKAGES += \
     android.hardware.camera.device@3.6.vendor:64 \
     android.hardware.camera.provider@2.6.vendor:64
 
+# CAS
+PRODUCT_PACKAGES += \
+    android.hardware.cas@1.2-service-lazy
+    
 # Shipping API level
 PRODUCT_SHIPPING_API_LEVEL := 34
 
