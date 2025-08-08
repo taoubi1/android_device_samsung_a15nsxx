@@ -6,6 +6,9 @@
 DEVICE_PATH := device/samsung/a15nsxx
 CONFIGS_PATH := $(DEVICE_PATH)/configs
 
+# Display
+TARGET_SCREEN_DENSITY := 450
+
 # OTA assert
 TARGET_OTA_ASSERT_DEVICE := a15nsxx,a15
 
