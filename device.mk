@@ -82,6 +82,9 @@ PRODUCT_USE_DYNAMIC_PARTITIONS := true
 PRODUCT_PACKAGES += \
     android.hardware.drm-service.clearkey
 
+PRODUCT_PACKAGES += \
+    android.hardware.drm@1.4.vendor
+
 # Fingerprint
 PRODUCT_PACKAGES += \
     android.hardware.biometrics.fingerprint@2.1.vendor:64
