@@ -381,3 +381,17 @@ vendor/tee/00000000-4d54-4b5f-4246-44524d4b5052
 vendor/tee/00000000-4d54-4b5f-4246-534d454d5441
 vendor/tee/00000000-4d54-4b5f-4246-57564e544100
 vendor/tee/00000000-4d54-4b5f-4246-72706d627461
+
+
+# Thermal
+vendor/bin/thermal_core
+vendor/etc/init/init.thermal_core.rc
+vendor/etc/thermal/disable_skin_control.conf
+vendor/etc/thermal/disable_thermal.conf
+vendor/etc/thermal/disable_thermal_temp.conf
+vendor/etc/thermal/disable_throttling.conf
+vendor/etc/thermal/thermal.conf
+vendor/etc/thermal/thermal_mtbf.conf
+vendor/etc/thermal/thermal_policy_00.conf
+vendor/etc/thermal/thermal_policy_02.conf
+vendor/etc/thermal/thermal_policy_08.conf
