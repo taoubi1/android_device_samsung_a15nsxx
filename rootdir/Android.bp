@@ -1,0 +1,128 @@
+//
+// Copyright (C) 2023 The LineageOS Project
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+
+prebuilt_etc {
+    name: "init_connectivity.rc",
+    src: "etc/init/hw/init_connectivity.rc",
+    relative_install_path: "init/hw",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "fstab.mt6789",
+    src: "etc/fstab.mt6789",
+    vendor: true,
+    vendor_ramdisk_available: true,
+}
+
+prebuilt_etc {
+    name: "fstab.ramplus",
+    src: "etc/fstab.ramplus",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "init.sec.rc",
+    src: "etc/init/hw/init.sec.rc",
+    relative_install_path: "init/hw",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "init.mt6789.power.rc",
+    src: "etc/init/hw/init.mt6789.power.rc",
+    relative_install_path: "init/hw",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "init.connectivity.common.rc",
+    src: "etc/init/hw/init.connectivity.common.rc",
+    relative_install_path: "init/hw",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "init.connectivity.rc",
+    src: "etc/init/hw/init.connectivity.rc",
+    relative_install_path: "init/hw",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "init.insmod.mt6789.cfg",
+    src: "etc/init.insmod.mt6789.cfg",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "init.modem.rc",
+    src: "etc/init/hw/init.modem.rc",
+    relative_install_path: "init/hw",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "init.mt6789.rc",
+    src: "etc/init/hw/init.mt6789.rc",
+    relative_install_path: "init/hw",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "init.mt6789.usb.rc",
+    src: "etc/init/hw/init.mt6789.usb.rc",
+    relative_install_path: "init/hw",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "init.mtkgki.rc",
+    src: "etc/init/hw/init.mtkgki.rc",
+    relative_install_path: "init/hw",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "init.project.rc",
+    src: "etc/init/hw/init.project.rc",
+    relative_install_path: "init/hw",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "init.recovery.mt6789.rc",
+    src: "etc/init.recovery.mt6789.rc",
+    recovery: true,
+    relative_install_path: "init",
+}
+
+prebuilt_etc {
+    name: "init.recovery.samsung.rc",
+    src: "etc/init.recovery.samsung.rc",
+    recovery: true,
+    relative_install_path: "init",
+}
+
+prebuilt_etc {
+    name: "init.audio.samsung.rc",
+    src: "etc/init/hw/init.audio.samsung.rc",
+    relative_install_path: "init/hw",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "ueventd.mt6789.rc",
+    filename: "ueventd.rc",
+    src: "etc/ueventd.mt6789.rc",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.insmod.sh",
+    src: "bin/init.insmod.sh",
+    vendor: true,
+}

@@ -111,6 +111,28 @@ PRODUCT_PACKAGES += \
 # IMS
 $(call inherit-product, vendor/mediatek/ims/ims.mk)
 
+# Init files
+PRODUCT_PACKAGES += \
+    fstab.mt6789 \
+    fstab.mt6789.vendor_ramdisk \
+    fstab.ramplus \
+    init_connectivity.rc \
+    init.sec.rc \
+    init.connectivity.common.rc \
+    init.connectivity.rc \
+    init.insmod.sh \
+    init.insmod.mt6789.cfg \
+    init.modem.rc \
+    init.mt6789.power.rc \
+    init.mt6789.rc \
+    init.mt6789.usb.rc \
+    init.mtkgki.rc \
+    init.project.rc \
+    init.recovery.mt6789.rc \
+    init.recovery.samsung.rc \
+    init.audio.samsung.rc \
+    ueventd.mt6789.rc
+
 # Keymaster
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.keystore.app_attest_key.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.keystore.app_attest_key.xml
