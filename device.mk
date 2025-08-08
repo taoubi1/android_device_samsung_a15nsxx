@@ -98,6 +98,19 @@ PRODUCT_PACKAGES += \
     android.hardware.security.sharedsecret-V1-ndk_platform.vendor:64 \
     android.hardware.security.rkp-V3-ndk.vendor:64
 
+# Sensors
+PRODUCT_PACKAGES += \
+    libsensorndkbridge:64 \
+    android.hardware.sensors@1.0.vendor:64 \
+    android.hardware.sensors@2.1.vendor:64 \
+    android.frameworks.sensorservice@1.0:64 \
+    android.frameworks.sensorservice@1.0.vendor:64 \
+    android.hardware.sensors@2.1-service.multihal \
+    android.hardware.sensors@2.0-ScopedWakelock.vendor:64
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/sensors/hals.conf:$(TARGET_COPY_OUT_VENDOR)/etc/sensors/hals.conf
+
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
     $(LOCAL_PATH)
