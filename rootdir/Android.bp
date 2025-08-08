@@ -39,6 +39,13 @@ prebuilt_etc {
 }
 
 prebuilt_etc {
+    name: "init.logger-service.rc",
+    src: "etc/init/hw/init.logger-service.rc",
+    relative_install_path: "init/hw",
+    vendor: true,
+}
+
+prebuilt_etc {
     name: "init.connectivity.common.rc",
     src: "etc/init/hw/init.connectivity.common.rc",
     relative_install_path: "init/hw",

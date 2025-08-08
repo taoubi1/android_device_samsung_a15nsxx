@@ -1,16 +1,14 @@
- # MTK platform .rc configure
+# MTK platform .rc configure
 
-import ${ro.vendor.rc}init.connectivity.rc
-import ${ro.vendor.rc}init.mt6789.usb.rc
-import ${ro.vendor.rc}init.audio.samsung.rc
+import /vendor/etc/init/hw/init.connectivity.rc
+import /vendor/etc/init/hw/init.mt6789.usb.rc
+import /vendor/etc/init/hw/init.audio.samsung.rc
 import /vendor/etc/init/hw/init.project.rc
-import /system_ext/etc/init/hw/init.aee.rc
-import /FWUpgradeInit.rc
-import /vendor/etc/init/hw/init.aee.rc
-import ${ro.vendor.rc}init.cgroup.rc
+import /vendor/etc/init/hw/init.mt6789.power.rc
+import /vendor/etc/init/hw/init.logger-service.rc
 
 # init.modem.rc must be the LAST rc file because vold.post_fs_data_done is set in it
-import ${ro.vendor.rc}init.modem.rc
+import /vendor/etc/init/hw/init.modem.rc
 # *** DO NOT import the new rc file after this line ***
 
 on early-init
@@ -32,7 +30,6 @@ on init
 
     # if primary storage is physical, set ro.vold.primary_physical to 1
     # setprop ro.vold.primary_physical 1
-
 
 # change lk_env permission
     chown root system /proc/lk_env
@@ -92,14 +89,6 @@ on property:init.svc.vendor.charger=running
     chmod 0660 /sys/power/wakeup_count
     write /sys/power/pm_freeze_timeout 2000
 
-    start fuelgauged
-    start fuelgauged_nvram
-
-    chown system system /sys/class/leds/lcd-backlight/brightness
-    chown system system /sys/class/leds/red/brightness
-    chown system system /sys/class/leds/green/brightness
-
-
 on fs
     # mount fstab
     mount_all --early
@@ -154,7 +143,7 @@ on post-fs-data
     write /proc/sys/vm/page-cluster 0
     write /proc/sys/vm/swappiness 130
     write /sys/kernel/mm/swap/vma_ra_enabled false
-    swapon_all /vendor/etc/fstab.enableswap
+    swapon_all /vendor/etc/fstab.ramplus
 
     # boot time fs tune
     # write /sys/block/mmcblk0/queue/iostats 0
@@ -635,8 +624,6 @@ on post-fs-data
     #chmod 666 /dev/mali0
     #chown system graphics /dev/mali
 
-
-
     # Touch Panel
     # chmod 0664 /dev/touch
     chown root diag /sys/module/tpd_setting/parameters/tpd_calmat
@@ -844,7 +831,6 @@ on post-fs-data
     #HDMI
     chown media system /dev/hdmitx
     chmod 0664 /dev/hdmitx
-
 
     # JPEG
     chmod 0666 /proc/mtk_jpeg
@@ -1067,7 +1053,7 @@ on post-fs-data
     # Permission for Memboost
     chown cameraserver cameraserver /sys/kernel/mm/vmscan/mem_boost_mode
 
-   #change partition permission
+    # change partition permission
 
     chmod 0640 /mtd@sec_ro
     chown root system /mtd@sec_ro
@@ -1119,9 +1105,9 @@ on post-fs-data
 
     chmod 0666 /dev/exm0
 
-	#Thermal
-	mkdir /data/vendor/.tp/ 0775 system system
-	mkdir /data/vendor/thermal/ 0775 system system
+    #Thermal
+    mkdir /data/vendor/.tp/ 0775 system system
+    mkdir /data/vendor/thermal/ 0775 system system
 
     #MCUPM log
     chmod 0620 /sys/class/misc/mcupm/mcupm_mobile_log
@@ -1155,8 +1141,8 @@ on boot
     chmod 0660 /sys/devices/system/cpu/cpufreq/policy0/scaling_governor
     chown system system /sys/devices/system/cpu/cpufreq/policy4/scaling_governor
     chmod 0660 /sys/devices/system/cpu/cpufreq/policy4/scaling_governor
-    chown root   system /sys/kernel/debug/binder/transaction_log_enable
-    chown root   system /sys/kernel/debug/binder/perf_evalue
+    chown root system /sys/kernel/debug/binder/transaction_log_enable
+    chown root system /sys/kernel/debug/binder/perf_evalue
     chown system system /sys/devices/system/cpu/rq-stats/htasks_thresh
     chmod 0660 /sys/devices/system/cpu/rq-stats/htasks_thresh
     chown system system /sys/devices/system/cpu/rq-stats/avg_htasks_thresh
@@ -1165,8 +1151,8 @@ on boot
     chown system /sys/module/mlog/parameters/do_mlog
     chown system /sys/module/mlog/parameters/timer_intval
 
-    chown root   radio  /sys/class/leds/lcd-backlight/duty
-    chown root   radio  /sys/class/leds/lcd-backlight/div
+    chown root radio /sys/class/leds/lcd-backlight/duty
+    chown root radio /sys/class/leds/lcd-backlight/div
     chown system system /sys/class/leds/lcd-backlight/trigger
     chown system system /sys/class/leds/button-backlight/trigger
     chown system system /sys/class/leds/keyboard-backlight/trigger
@@ -1183,7 +1169,6 @@ on boot
     chown radio system /sys/power/tuxonice/do_hibernate
     chmod 0770 /sys/power/tuxonice
     chmod 0220 /sys/power/tuxonice/do_hibernate
-
 
 # Smartbook Handler Framework
     chown system system /sys/power/sb_state
@@ -1322,9 +1307,9 @@ on boot
     chown system radio /dev/ttyGS0
     chmod 660 /dev/ttyGS1
     chown system radio /dev/ttyGS1
+
 #Power Manager
     write /sys/power/pm_freeze_timeout 2000
-
 
  # Permissions for Touchscreen
     chown system radio /sys/class/sec/tsp/cmd
@@ -1436,73 +1421,12 @@ on property:sys.boot_completed=1
     write /proc/perfmgr/boost_ctrl/cpu_ctrl/boot_freq "-1 -1 -1 -1 -1 -1"
     write /sys/devices/platform/boot_dramboost/dramboost/dramboost 0
 
-
 on property:sys.boot_completed=1 && property:ro.build.type=eng
     write /sys/class/secgpio_check/secgpio_check_all/gpioinit_call 1
 
 on property:sys.boot_completed=1 && property:ro.build.type=userdebug
     write /sys/class/secgpio_check/secgpio_check_all/gpioinit_call 1
 
-# Battery info
-on property:persist.vendor.mediatek.fg.disable=1
-    write /dev/gauge/FG_daemon_disable 1
-
-on property:persist.vendor.mediatek.fg.force25c=1
-    write /dev/gauge/Battery_Temperature 25
-
-on property:persist.vendor.mediatek.fg.force25c=0
-    write /dev/gauge/Battery_Temperature 65535
-
-on property:persist.vendor.mediatek.fg.log.enable=1
-    write /dev/gauge/FG_daemon_log_level 7
-
-# add loghidl client
-service loghidlsysservice /system/bin/loghidlsysservice
-    class main
-    user shell
-    group system
-    disabled
-
-# add meta_tst for ATM
-service meta_tst /vendor/bin/meta_tst
-    class core
-    user system
-    group radio gps system wifi audio bluetooth media
-    capabilities NET_RAW NET_ADMIN
-    socket meta-atci stream 660 radio system
-    disabled
-    oneshot
-
-service factory_no_image /vendor/bin/factory
-    user root
-    group radio system wifi media gps audio bluetooth wakelock nfc
-    capabilities BLOCK_SUSPEND NET_RAW NET_ADMIN SYS_ADMIN SYS_BOOT
-    socket factory-atci stream 660 radio system
-    disabled
-    oneshot
-
-# start meta_tst for ATM
-on property:sys.boot_completed=1
-    start meta_tst
-    start loghidlvendorservice
-    start loghidlsysservice
-
 # reset mdmode when modem crash happens in ATM
 on property:vendor.mtk.md1.status=reset
     setprop persist.vendor.atm.mdmode normal
-
-# MTK fast charging support
-on property:persist.vendor.mediatek.fast_charging.support=*
-    write /sys/devices/platform/charger/fast_chg_indicator ${persist.vendor.mediatek.fast_charging.support}
-
-
-# Pageboostd
-on property:sys.boot_completed=1
-    start pageboostd
-
-service pageboostd /system/bin/pageboostd
-    class main
-    user system
-    group system mount radio net_bt sdcard_rw shell media media_rw
-    socket pageboostd seqpacket 0660 system system
-    disabled

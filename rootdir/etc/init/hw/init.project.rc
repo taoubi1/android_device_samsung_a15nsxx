@@ -3,9 +3,6 @@ import /vendor/etc/init/hw/init.sec.rc
 
 # MTK project .rc configure
 
-on early-init
-#	write /sys/class/udc/musb-hdrc/device/cmode 3
-
 on init
     mkdir /mnt/media_rw/usbotg 0700 media_rw media_rw
     mkdir /storage/usbotg 0700 root root
