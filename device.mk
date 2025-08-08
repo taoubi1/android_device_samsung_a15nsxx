@@ -96,6 +96,11 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.drm@1.4.vendor
 
+# FastbootD
+PRODUCT_PACKAGES += \
+    android.hardware.fastboot@1.1-impl-mock:64 \
+    fastbootd:64
+
 # Fingerprint
 PRODUCT_PACKAGES += \
     android.hardware.biometrics.fingerprint@2.1.vendor:64
