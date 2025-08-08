@@ -98,6 +98,21 @@ PRODUCT_PACKAGES += \
     android.hardware.security.sharedsecret-V1-ndk_platform.vendor:64 \
     android.hardware.security.rkp-V3-ndk.vendor:64
 
+# RIL
+PRODUCT_PACKAGES += \
+    android.hardware.radio.config@1.3.vendor:64 \
+    android.hardware.radio@1.6.vendor:64 \
+    android.hardware.radio.deprecated@1.0.vendor:64 \
+    secril_config_svc \
+    librilutils:64 \
+    vendor.samsung.hardware.radio@2.0.vendor:64 \
+    vendor.samsung.hardware.radio@2.1.vendor:64 \
+    vendor.samsung.hardware.radio@2.2.vendor:64
+
+# Radio
+PRODUCT_PACKAGES += \
+    android.hardware.broadcastradio@1.1-impl
+
 # Sensors
 PRODUCT_PACKAGES += \
     libsensorndkbridge:64 \
