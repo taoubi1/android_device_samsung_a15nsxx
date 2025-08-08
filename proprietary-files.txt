@@ -697,7 +697,7 @@ vendor/bin/wmt_loader
 vendor/etc/init/init.wmt_drv.rc
 
 # Display
-vendor/bin/hw/mt6789/android.hardware.graphics.allocator@4.0-service-mediatek.mt6789;SYMLINK=vendor/bin/hw/android.hardware.graphics.allocator@4.0-service-mediatek.mt6789
+vendor/bin/hw/mt6789/android.hardware.graphics.allocator@4.0-service-mediatek.mt6789;SYMLINK=vendor/bin/hw/android.hardware.graphics.allocator@4.0-service-mediatek.mt6789;SYMLINK=vendor/bin/hw/android.hardware.graphics.allocator@4.0-service-mediatek
 vendor/bin/hw/vendor.mediatek.hardware.pq@2.2-service
 vendor/etc/init/android.hardware.graphics.allocator@4.0-service-mediatek.rc
 vendor/etc/init/vendor.mediatek.hardware.pq@2.2-service.rc
@@ -1059,6 +1059,16 @@ vendor/lib64/vendor.mediatek.hardware.neuropilot.agent@1.0.so
 vendor/lib64/vendor.mediatek.hardware.neuropilot.agent@1.1.so
 vendor/lib64/vendor.mediatek.hardware.neuropilot.agent@1.2.so
 
+# NFC
+vendor/bin/hw/nxp.android.hardware.nfc@1.2-service
+vendor/etc/init/init.nfc.samsung.rc
+vendor/etc/init/nxp.android.hardware.nfc@1.2-service.rc
+vendor/etc/nfc/libnfc-nxp_RF.conf
+vendor/etc/vintf/manifest/nxp.android.hardware.nfc@1.2-service.xml
+vendor/etc/libnfc-nxp.conf
+vendor/lib64/nfc_nci_nxpsn.so
+vendor/lib64/vendor.samsung.hardware.nfc@2.0.so
+
 # NVRAM
 vendor/bin/hw/vendor.mediatek.hardware.nvram@1.1-service
 vendor/bin/nvram_daemon
@@ -1166,7 +1176,6 @@ vendor/lib64/vendor.samsung.hardware.radio.channel@2.0.so
 vendor/lib64/libVendorSemDataProps.so
 vendor/lib64/libVendorSemTelephonyProps.so
 vendor/lib64/libengmode_client.so
-vendor/lib64/libsecnativefeature.so
 
 # Sensors
 vendor/lib64/libhfmanager.so
@@ -1270,3 +1279,97 @@ vendor/etc/wlan_common_rc
 vendor/etc/wlan_vendor_rc
 vendor/lib64/libwifi-hal.so:vendor/lib64/libwifi-hal-mtk.so
 vendor/lib64/meta_wifi_data.so
+
+# Kernel init
+vendor/etc/init/init.fmradio_drv.rc
+
+# Input
+vendor/bin/hw/vendor.samsung.hardware.sysinput@1.3-service
+vendor/etc/init/vendor.samsung.hardware.sysinput@1.3-service.rc
+vendor/lib64/vendor.samsung.hardware.sysinput@1.0.so
+vendor/lib64/vendor.samsung.hardware.sysinput@1.1.so
+vendor/lib64/vendor.samsung.hardware.sysinput@1.2.so
+vendor/lib64/vendor.samsung.hardware.sysinput@1.3.so
+
+# Hyper
+vendor/bin/hw/vendor.samsung.hardware.hyper-service
+vendor/etc/hyper/config_chipset.json
+vendor/etc/hyper/config_hyper_permission.json
+vendor/etc/hyper/config_vendor.json
+vendor/etc/init/hyper-default-sec.rc
+vendor/etc/vintf/manifest/hyper-default-sec.xml
+vendor/lib64/libhyper.so
+vendor/lib64/libhypervintf.so
+vendor/lib64/vendor.samsung.hardware.hyper-V2-ndk_platform.so
+
+# Snap
+vendor/bin/hw/vendor.samsung.hardware.snap-service
+vendor/bin/snap_utility_64
+vendor/etc/init/snap_utility.rc
+vendor/etc/init/vendor.samsung.hardware.snap-lazy.rc
+vendor/etc/vintf/manifest/vendor.samsung.hardware.snap-default.xml
+vendor/etc/snap_gpu_kernel_64.bin
+vendor/lib64/libsnap_compute.so
+vendor/lib64/libsnap_compute_wrapper.so
+vendor/lib64/libsnap_vndk.so
+vendor/lib64/libsnaplite_native.so
+vendor/lib64/libsnaplite_wrapper.so
+vendor/lib64/libtvm_runtime.so
+vendor/lib64/libtvm_wrapper.so
+vendor/lib64/vendor.samsung.hardware.snap-V1-ndk_platform.so
+
+# Weaver
+vendor/etc/vintf/manifest/iweaver_v1_manifest.xml
+vendor/lib64/android.hardware.weaver@1.0.so
+
+# Vibration
+vendor/bin/hw/vendor.samsung.hardware.vibrator-service
+vendor/etc/init/vendor.samsung.hardware.vibrator-default.rc
+vendor/etc/vintf/manifest/vendor.samsung.hardware.vibrator-default.xml
+vendor/lib64/vendor.samsung.hardware.vibrator-V5-ndk_platform.so
+
+# Lights
+vendor/bin/hw/vendor.samsung.hardware.light-service
+vendor/lib64/android.hardware.light@2.0.so
+vendor/lib64/vendor.samsung.hardware.light-V1-ndk_platform.so
+vendor/etc/init/lights-default-sec.rc
+
+# plmn
+vendor/etc/locale/plmn_delta_eng.bin
+vendor/etc/locale/plmn_delta_zh-rCN.bin
+vendor/etc/locale/plmn_delta_zh-rHK.bin
+vendor/etc/locale/plmn_delta_zh-rTW.bin
+vendor/etc/plmn_delta.bin
+vendor/etc/plmn_delta_chn.bin
+vendor/etc/plmn_delta_hktw.bin
+
+# SAIV
+vendor/etc/saiv/gae/MeanFea.bin
+vendor/etc/saiv/gae/ParaFea.bin
+vendor/etc/saiv/gae/PmAgeFeatSelIdx.bin
+vendor/etc/saiv/gae/PmAgeModel.bin
+vendor/etc/saiv/gae/PmExpFeatSelIdx.bin
+vendor/etc/saiv/gae/PmExpModel.bin
+vendor/etc/saiv/gae/PmGenModel.bin
+vendor/etc/saiv/gae/PmGenderFeatSelIdx.bin
+vendor/etc/saiv/image_understanding/db/aic_classifier/aic_classifier_cnn.info
+vendor/etc/saiv/image_understanding/db/aic_classifier/aic_classifier_cnn_light.caffemodel
+vendor/etc/saiv/image_understanding/db/aic_detector/aic_detector_cnn.info
+vendor/etc/saiv/image_understanding/db/aic_detector/aic_detector_cnn_light.caffemodel
+
+# libsecnativefeature
+vendor/lib64/libsecnativefeature.so
+
+# Hermes
+vendor/bin/hw/vendor.samsung.hardware.security.hermes-service
+vendor/bin/hermesd
+vendor/etc/init/hermesd.rc
+vendor/etc/init/vendor.samsung.hardware.security.hermes.rc
+vendor/etc/vintf/manifest/vendor.samsung.hardware.security.hermes.xml
+vendor/lib64/libhermes.so
+vendor/lib64/libhermes_bdbridge.so
+vendor/lib64/libhermes_cred.so
+vendor/lib64/libhwvault.so
+vendor/lib64/libisosechw.so
+vendor/lib64/libshctrl.so
+vendor/lib64/vendor.samsung.hardware.security.hermes-V1-ndk_platform.so
