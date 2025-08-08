@@ -17,6 +17,9 @@ TARGET_PRODUCT_PROP += $(CONFIGS_PATH)/properties/product.prop
 TARGET_SYSTEM_PROP += $(CONFIGS_PATH)/properties/system.prop
 TARGET_VENDOR_PROP += $(CONFIGS_PATH)/properties/vendor.prop
 
+# Vendor Security Patch
+VENDOR_SECURITY_PATCH := 2025-05-01
+
 # VINTF
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := \
    $(CONFIGS_PATH)/vintf/device_framework_compatibility_matrix.xml
