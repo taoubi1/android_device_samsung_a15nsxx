@@ -281,6 +281,9 @@ vendor/firmware/txpowerctrl.cfg
 vendor/firmware/wifi.cfg
 vendor/firmware/zt7650m_a15.bin
 
+# Gatekeeper
+vendor/lib64/hw/gatekeeper.mt6789.so
+
 # NVRAM
 vendor/bin/hw/vendor.mediatek.hardware.nvram@1.1-service
 vendor/bin/nvram_daemon
