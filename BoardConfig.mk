@@ -6,6 +6,9 @@
 DEVICE_PATH := device/samsung/a15nsxx
 CONFIGS_PATH := $(DEVICE_PATH)/configs
 
+# OTA assert
+TARGET_OTA_ASSERT_DEVICE := a15nsxx,a15
+
 # Properties
 TARGET_PRODUCT_PROP += $(CONFIGS_PATH)/properties/product.prop
 TARGET_SYSTEM_PROP += $(CONFIGS_PATH)/properties/system.prop
