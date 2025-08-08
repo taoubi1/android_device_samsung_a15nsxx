@@ -101,6 +101,12 @@ PRODUCT_PACKAGES += \
     android.hardware.security.sharedsecret-V1-ndk_platform.vendor:64 \
     android.hardware.security.rkp-V3-ndk.vendor:64
 
+# Neural networks
+PRODUCT_PACKAGES += \
+    android.hardware.neuralnetworks@1.0.vendor \
+    android.hardware.neuralnetworks@1.3.vendor \
+    libtextclassifier_hash.vendor
+
 # RIL
 PRODUCT_PACKAGES += \
     android.hardware.radio.config@1.3.vendor:64 \
