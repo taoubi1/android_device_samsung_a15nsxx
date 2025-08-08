@@ -113,6 +113,12 @@ PRODUCT_PACKAGES += \
     android.hardware.gnss@2.1.vendor:64 \
     android.hardware.gnss-V1-ndk.vendor:64
 
+# Health
+PRODUCT_PACKAGES += \
+    android.hardware.health-service.mediatek \
+    android.hardware.health-service.mediatek-recovery \
+    charger_res_images_vendor
+
 # IMS
 $(call inherit-product, vendor/mediatek/ims/ims.mk)
 
