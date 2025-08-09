@@ -26,6 +26,7 @@ TARGET_2ND_CPU_VARIANT_RUNTIME := cortex-a55
 BOARD_BOOT_HEADER_VERSION := 4
 BOARD_RAMDISK_USE_LZ4 := true
 BOARD_KERNEL_SEPARATED_DTBO := true
+BOARD_INCLUDE_DTB_IN_BOOTIMG := true
 BOARD_KERNEL_CMDLINE += bootopt=64S3,32N2,64N2 loop.max_part=7
 
 BOARD_KERNEL_PAGESIZE := 4096
@@ -63,6 +64,21 @@ TARGET_NO_KERNEL_OVERRIDE := true
 LOCAL_KERNEL := $(KERNEL_PATH)/Image.gz
 PRODUCT_COPY_FILES += $(LOCAL_KERNEL):kernel
 
+# Kernel modules
+BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD := $(strip $(shell cat $(KERNEL_PATH)/ramdisk/modules.load))
+BOARD_VENDOR_RAMDISK_KERNEL_MODULES := $(addprefix $(KERNEL_PATH)/ramdisk/, $(BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD))
+
+# Also add recovery modules to vendor ramdisk
+BOARD_VENDOR_RAMDISK_RECOVERY_KERNEL_MODULES_LOAD := $(strip $(shell cat $(KERNEL_PATH)/ramdisk/modules.load.recovery))
+RECOVERY_MODULES := $(addprefix $(KERNEL_PATH)/ramdisk/, $(BOARD_VENDOR_RAMDISK_RECOVERY_KERNEL_MODULES_LOAD))
+
+# Prevent duplicated entries (to solve duplicated build rules problem)
+BOARD_VENDOR_RAMDISK_KERNEL_MODULES := $(sort $(BOARD_VENDOR_RAMDISK_KERNEL_MODULES) $(RECOVERY_MODULES))
+
+# Vendor modules (installed to vendor_dlkm)
+BOARD_VENDOR_KERNEL_MODULES_LOAD := $(strip $(shell cat $(KERNEL_PATH)/vendor_dlkm/modules.load))
+BOARD_VENDOR_KERNEL_MODULES := $(wildcard $(KERNEL_PATH)/vendor_dlkm/*.ko)
+
 # OTA assert
 TARGET_OTA_ASSERT_DEVICE := a15nsxx,a15
 
@@ -82,6 +98,9 @@ DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := \
    $(CONFIGS_PATH)/vintf/device_framework_compatibility_matrix.xml
 DEVICE_MANIFEST_FILE := $(CONFIGS_PATH)/vintf/manifest.xml
 DEVICE_MATRIX_FILE := $(CONFIGS_PATH)/vintf/compatibility_matrix.xml
+
+# Workaround to make lineage's soong generator work
+TARGET_KERNEL_SOURCE := $(KERNEL_PATH)/kernel-headers
 
 # Inherit the proprietary files
 include vendor/samsung/a15nsxx/BoardConfigVendor.mk
