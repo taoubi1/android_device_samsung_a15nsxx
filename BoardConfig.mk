@@ -7,6 +7,9 @@ DEVICE_PATH := device/samsung/a15nsxx
 KERNEL_PATH := $(DEVICE_PATH)-kernel
 CONFIGS_PATH := $(DEVICE_PATH)/configs
 
+# Enable 64-bit for non-zygote.
+ZYGOTE_FORCE_64 := true
+
 # Force any prefer32 targets to be compiled as 64 bit.
 IGNORE_PREFER32_ON_DEVICE := true
 
@@ -31,12 +34,17 @@ TARGET_2ND_CPU_ABI2 := armeabi
 TARGET_2ND_CPU_VARIANT := cortex-a55
 TARGET_2ND_CPU_VARIANT_RUNTIME := cortex-a55
 
+# Audio 
+BOARD_USES_ALSA_AUDIO := true
+
 # Boot image
 BOARD_BOOT_HEADER_VERSION := 4
 BOARD_RAMDISK_USE_LZ4 := true
 BOARD_KERNEL_SEPARATED_DTBO := true
 BOARD_INCLUDE_DTB_IN_BOOTIMG := true
 BOARD_KERNEL_CMDLINE += bootopt=64S3,32N2,64N2 loop.max_part=7
+BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
+BOARD_KERNEL_CMDLINE += androidboot.init_fatal_reboot_target=recovery
 
 BOARD_KERNEL_PAGESIZE := 4096
 BOARD_KERNEL_BASE := 0x3fff8000
@@ -74,6 +82,7 @@ TARGET_PREBUILT_DTB := $(KERNEL_PATH)/dtb.img
 TARGET_SCREEN_DENSITY := 450
 
 # Kernel
+TARGET_KERNEL_VERSION := 5.10
 TARGET_NO_KERNEL_OVERRIDE := true
 LOCAL_KERNEL := $(KERNEL_PATH)/Image.gz
 PRODUCT_COPY_FILES += $(LOCAL_KERNEL):kernel
@@ -104,7 +113,7 @@ BOARD_CACHEIMAGE_PARTITION_SIZE := 610631680
 BOARD_SUPER_PARTITION_SIZE := 11744051200
 BOARD_SUPER_PARTITION_GROUPS := samsung_dynamic_partitions
 
-BOARD_SAMSUNG_DYNAMIC_PARTITIONS_PARTITION_LIST := system system_ext vendor vendor_dlkm odm product
+BOARD_SAMSUNG_DYNAMIC_PARTITIONS_PARTITION_LIST := odm product system system_ext vendor vendor_dlkm
 BOARD_SAMSUNG_DYNAMIC_PARTITIONS_SIZE := 11739856896
 
 BOARD_EROFS_PCLUSTER_SIZE := 262144
@@ -141,8 +150,16 @@ TARGET_COPY_OUT_SYSTEM_EXT := system_ext
 TARGET_COPY_OUT_VENDOR := vendor
 TARGET_COPY_OUT_VENDOR_DLKM := vendor_dlkm
 
+BOARD_ROOT_EXTRA_FOLDERS := efs metadata
+
 # OTA assert
 TARGET_OTA_ASSERT_DEVICE := a15nsxx,a15
+
+# Use F2FS for /data
+BOARD_USERDATAIMAGE_FILE_SYSTEM_TYPE := f2fs
+
+# Enable F2FS compression support
+PRODUCT_FS_COMPRESSION := 1
 
 # Platform
 TARGET_BOARD_PLATFORM := mt6789
@@ -154,8 +171,11 @@ TARGET_VENDOR_PROP += $(CONFIGS_PATH)/properties/vendor.prop
 
 # Recovery
 BOARD_MOVE_GSI_AVB_KEYS_TO_VENDOR_BOOT := true
+TARGET_USERIMAGES_USE_F2FS := true
 BOARD_INCLUDE_RECOVERY_DTBO := true
+BOARD_SUPPRESS_SECURE_ERASE := true
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery.fstab
+BOARD_HAS_DOWNLOAD_MODE := true
 TARGET_RECOVERY_PIXEL_FORMAT := BGRA_8888
 
 # RIL
@@ -192,9 +212,14 @@ BOARD_AVB_VBMETA_SYSTEM_ROLLBACK_INDEX_LOCATION := 2
 
 # VINTF
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := \
-   $(CONFIGS_PATH)/vintf/device_framework_compatibility_matrix.xml
+   $(CONFIGS_PATH)/vintf/device_framework_compatibility_matrix.xml \
+   hardware/mediatek/vintf/mediatek_framework_compatibility_matrix.xml \
+   vendor/lineage/config/device_framework_matrix.xml
 DEVICE_MANIFEST_FILE := $(CONFIGS_PATH)/vintf/manifest.xml
 DEVICE_MATRIX_FILE := $(CONFIGS_PATH)/vintf/compatibility_matrix.xml
+
+# VNDK
+BOARD_VNDK_VERSION := current
 
 # Wi-Fi
 WPA_SUPPLICANT_VERSION := VER_0_8_X

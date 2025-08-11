@@ -33,7 +33,6 @@ PRODUCT_PACKAGES += \
     audio_policy.stub:64 \
     libopus.vendor:64 \
     audioclient-types-aidl-cpp.vendor:64 \
-    libaudioroute.vendor:64 \
     libaudiofoundation.vendor:64 \
     libbundlewrapper:64 \
     libbluetooth_audio_session:64 \
@@ -90,20 +89,20 @@ PRODUCT_PACKAGES += \
 # CAS
 PRODUCT_PACKAGES += \
     android.hardware.cas@1.2-service-lazy
-    
+
 # Shipping API level
 PRODUCT_SHIPPING_API_LEVEL := 34
 
 # Dalvik configs
 PRODUCT_VENDOR_PROPERTIES += \
-    dalvik.vm.heapstartsize=24m \
     dalvik.vm.heapgrowthlimit=256m \
     dalvik.vm.heapsize=512m \
-    dalvik.vm.heaptargetutilization=0.46 \
-    dalvik.vm.heapminfree=8m \
-    dalvik.vm.heapmaxfree=48m
+    dalvik.vm.heaptargetutilization=0.75 \
+    dalvik.vm.heapminfree=512k \
+    dalvik.vm.heapmaxfree=8m
 
 # Display
+# TODO: AIDL MTK MemTrack
 PRODUCT_PACKAGES += \
     android.hardware.graphics.composer@2.3-service \
     android.hardware.memtrack-service.mediatek-mali \
@@ -112,15 +111,14 @@ PRODUCT_PACKAGES += \
     libhwc2on1adapter:64 \
     libhwc2onfbadapter:64
 
-# Dynamic partitions
-PRODUCT_USE_DYNAMIC_PARTITIONS := true
-
 # DRM
 PRODUCT_PACKAGES += \
-    android.hardware.drm-service.clearkey:64
+    android.hardware.drm-service.clearkey:64 \
+    android.hardware.drm@1.4.vendor:64 \
+    libdrm.vendor:64
 
-PRODUCT_PACKAGES += \
-    android.hardware.drm@1.4.vendor:64
+# Dynamic partitions
+PRODUCT_USE_DYNAMIC_PARTITIONS := true
 
 # FastbootD
 PRODUCT_PACKAGES += \
@@ -150,13 +148,23 @@ PRODUCT_PACKAGES += \
     android.hardware.health-service.mediatek-recovery \
     charger_res_images_vendor
 
+# HIDL
+PRODUCT_PACKAGES += \
+    android.hidl.base@1.0:64 \
+    android.hidl.allocator@1.0:64 \
+    android.hidl.allocator@1.0.vendor:64 \
+    libhidltransport:64 \
+    libhidlmemory.vendor:64 \
+    libhidltransport.vendor:64 \
+    libhwbinder:64 \
+    libhwbinder.vendor:64
+
 # IMS
 $(call inherit-product, vendor/mediatek/ims/ims.mk)
 
 # Init files
 PRODUCT_PACKAGES += \
     fstab.mt6789 \
-    fstab.mt6789.vendor_ramdisk \
     fstab.ramplus \
     init_connectivity.rc \
     init.sec.rc \
@@ -189,7 +197,8 @@ PRODUCT_PACKAGES += \
     android.hardware.security.keymint-V1-ndk_platform.vendor:64 \
     android.hardware.security.secureclock-V1-ndk_platform.vendor:64 \
     android.hardware.security.sharedsecret-V1-ndk_platform.vendor:64 \
-    android.hardware.security.rkp-V3-ndk.vendor:64
+    android.hardware.security.rkp-V3-ndk.vendor:64 \
+    libcppbor_external.vendor:64
 
 # Media
 PRODUCT_PACKAGES += \
@@ -207,11 +216,6 @@ PRODUCT_PACKAGES += \
     libcodec2_soft_common.vendor:64 \
     libflatbuffers-cpp.vendor:64
 
-PRODUCT_PACKAGES += \
-    libchrome.vendor:64 \
-    libminijail:64 \
-    libminijail.vendor:64
-
 PRODUCT_COPY_FILES += \
     $(call find-copy-subdir-files,*,$(CONFIGS_PATH)/seccomp,$(TARGET_COPY_OUT_VENDOR)/etc/seccomp_policy) \
     $(call find-copy-subdir-files,*,$(CONFIGS_PATH)/media,$(TARGET_COPY_OUT_VENDOR)/etc)
@@ -221,6 +225,37 @@ PRODUCT_PACKAGES += \
     android.hardware.neuralnetworks@1.0.vendor:64 \
     android.hardware.neuralnetworks@1.3.vendor:64 \
     libtextclassifier_hash.vendor:64
+
+# NFC
+# Note: Samsung stock duplicates the same XML files into multiple SKU-specific permission folders
+# (sku_hce, sku_hceese, sku_hcesim, sku_hcesimese). This is intentional for NFC SKU compatibility.
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.nfc.hce.xml:$(TARGET_COPY_OUT_ODM)/etc/permissions/sku_hce/android.hardware.nfc.hce.xml \
+    frameworks/native/data/etc/android.hardware.nfc.hcef.xml:$(TARGET_COPY_OUT_ODM)/etc/permissions/sku_hce/android.hardware.nfc.hcef.xml \
+    frameworks/native/data/etc/android.hardware.nfc.xml:$(TARGET_COPY_OUT_ODM)/etc/permissions/sku_hce/android.hardware.nfc.xml \
+    frameworks/native/data/etc/android.hardware.nfc.ese.xml:$(TARGET_COPY_OUT_ODM)/etc/permissions/sku_hceese/android.hardware.nfc.ese.xml \
+    frameworks/native/data/etc/android.hardware.nfc.hce.xml:$(TARGET_COPY_OUT_ODM)/etc/permissions/sku_hceese/android.hardware.nfc.hce.xml \
+    frameworks/native/data/etc/android.hardware.nfc.hcef.xml:$(TARGET_COPY_OUT_ODM)/etc/permissions/sku_hceese/android.hardware.nfc.hcef.xml \
+    frameworks/native/data/etc/android.hardware.nfc.xml:$(TARGET_COPY_OUT_ODM)/etc/permissions/sku_hceese/android.hardware.nfc.xml \
+    frameworks/native/data/etc/android.hardware.nfc.hce.xml:$(TARGET_COPY_OUT_ODM)/etc/permissions/sku_hcesim/android.hardware.nfc.hce.xml \
+    frameworks/native/data/etc/android.hardware.nfc.hcef.xml:$(TARGET_COPY_OUT_ODM)/etc/permissions/sku_hcesim/android.hardware.nfc.hcef.xml \
+    frameworks/native/data/etc/android.hardware.nfc.uicc.xml:$(TARGET_COPY_OUT_ODM)/etc/permissions/sku_hcesim/android.hardware.nfc.uicc.xml \
+    frameworks/native/data/etc/android.hardware.nfc.xml:$(TARGET_COPY_OUT_ODM)/etc/permissions/sku_hcesim/android.hardware.nfc.xml \
+    frameworks/native/data/etc/android.hardware.nfc.ese.xml:$(TARGET_COPY_OUT_ODM)/etc/permissions/sku_hcesimese/android.hardware.nfc.ese.xml \
+    frameworks/native/data/etc/android.hardware.nfc.hce.xml:$(TARGET_COPY_OUT_ODM)/etc/permissions/sku_hcesimese/android.hardware.nfc.hce.xml \
+    frameworks/native/data/etc/android.hardware.nfc.hcef.xml:$(TARGET_COPY_OUT_ODM)/etc/permissions/sku_hcesimese/android.hardware.nfc.hcef.xml \
+    frameworks/native/data/etc/android.hardware.nfc.uicc.xml:$(TARGET_COPY_OUT_ODM)/etc/permissions/sku_hcesimese/android.hardware.nfc.uicc.xml \
+    frameworks/native/data/etc/android.hardware.nfc.xml:$(TARGET_COPY_OUT_ODM)/etc/permissions/sku_hcesimese/android.hardware.nfc.xml \
+    frameworks/native/data/etc/com.nxp.mifare.xml:$(TARGET_COPY_OUT_ODM)/etc/permissions/sku_hceese/com.nxp.mifare.xml \
+    frameworks/native/data/etc/com.nxp.mifare.xml:$(TARGET_COPY_OUT_ODM)/etc/permissions/sku_hcesimese/com.nxp.mifare.xml \
+    frameworks/native/data/etc/com.nxp.mifare.xml:$(TARGET_COPY_OUT_ODM)/etc/permissions/sku_hcesim/com.nxp.mifare.xml \
+    frameworks/native/data/etc/com.nxp.mifare.xml:$(TARGET_COPY_OUT_ODM)/etc/permissions/sku_hce/com.nxp.mifare.xml
+
+PRODUCT_PACKAGES += \
+    android.hardware.nfc@1.2-service \
+    com.android.nfc_extras \
+    NfcNci \
+    Tag
 
 # Overlays
 PRODUCT_ENFORCE_RRO_TARGETS := *
@@ -288,10 +323,21 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     libmtkperf_client_vendor:64 \
     libmtkperf_client:64 \
+    libpower.vendor:64
 
 # Power configurations
 PRODUCT_COPY_FILES += \
     $(CONFIGS_PATH)/power/powerhint.json:$(TARGET_COPY_OUT_VENDOR)/etc/powerhint.json
+
+# Properties
+include $(DEVICE_PATH)/vendor_logtag.mk
+
+# Protobuf
+PRODUCT_PACKAGES += \
+    libprotobuf-cpp-full.vendor:64 \
+    libprotobuf-cpp-lite.vendor:64 \
+    libprotobuf-cpp-full-3.9.1-vendorcompat:64 \
+    libprotobuf-cpp-lite-3.9.1-vendorcompat:64
 
 # Public Libraries
 PRODUCT_COPY_FILES += \
@@ -311,6 +357,13 @@ PRODUCT_PACKAGES += \
 # Radio
 PRODUCT_PACKAGES += \
     android.hardware.broadcastradio@1.1-impl
+
+# Required for QPR3
+PRODUCT_PACKAGES += \
+    libpiex \
+    libmemunreachable.vendor \
+    libruy.vendor \
+    libpcap.vendor
 
 # Sensors
 PRODUCT_PACKAGES += \
@@ -342,6 +395,11 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     $(CONFIGS_PATH)/thermal/thermal_info_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/thermal_info_config.json
 
+# vndservice
+PRODUCT_PACKAGES += \
+   vndservicemanager \
+   vndservice
+
 # Wi-Fi
 PRODUCT_PACKAGES += \
     libwifi-hal-wrapper:64 \
@@ -359,5 +417,5 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     $(call find-copy-subdir-files,*,$(CONFIGS_PATH)/wifi/,$(TARGET_COPY_OUT_VENDOR)/etc/wifi)
 
-# Inherit the proprietary files
+# Inherit from the proprietary files makefile.
 $(call inherit-product, vendor/samsung/a15nsxx/a15nsxx-vendor.mk)

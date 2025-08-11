@@ -1,63 +1,88 @@
 # Audio
-ro.audio.usb.period_us=16000
 ro.audio.silent=0
+ro.audio.usb.period_us=16000
 ro.camera.sound.forced=0
+
 # Blur
+
 # Brand
 Build.BRAND=MTK
+
 # Camera
-# Charger
-# Cached app compaction
-# Dex / Dalvik
-pm.dexopt.ab-ota=speed-profile
+pm.dexopt.install=speed-profile
 pm.dexopt.bg-dexopt=speed-profile
 pm.dexopt.first-boot=verify
-pm.dexopt.install=speed-profile
-# Disable mtk aggressive_dex2oat
-# Display / Fingerprint
-# FUSE passthrough
-persist.sys.fuse.passthrough.enable=true
+pm.dexopt.ab-ota=speed-profile
+
 # Graphics
 ro.opengles.version=196610
+
 # Iorapd
 ro.iorapd.enable=false
-# IMS
+
 # Kernel
 ro.kernel.zio=38,108,105,16
+
 # IPO
 sys.ipo.disable=1
 sys.ipo.pwrdncap=2
+
 # Media
-debug.stagefright.c2inputsurface=-1
 media.stagefright.thumbnail.prefer_hw_codecs=true
 ro.vendor.mtk_flv_playback_support=1
 vendor.mtk_thumbnail_optimization=true
+
 # Memory Optimization
 ro.config.per_app_memcg=false
+
 # MTK vendor
 ro.vendor.mtk_omacp_support=1
 ro.vendor.mtk_telephony_add_on_policy=0
+
 # Performance
 ro.mtk_perf_fast_start_win=1
 ro.mtk_perf_response_time=1
 ro.mtk_perf_simple_start_win=1
 security.perf_harden=1
+
 # Radio
-# RIL Powersaving
+
 # SLA
+
 # Thermal Management
+
 # Thermal Configuration
+
 # USB
 ro.sys.usb.bicr=no
 ro.sys.usb.charging.only=yes
 ro.sys.usb.mtp.whql.enable=0
 ro.sys.usb.storage.type=mtp
 
+# Zygote
+
 # Charger
+
+# Cached app compaction
+
+# Dex / Dalvik
+
+# Disable mtk aggressive_dex2oat
+
+# Display / Fingerprint
+
+# FUSE passthrough
+
+persist.sys.fuse.passthrough.enable=true
+
+# IMS
+debug.stagefright.c2inputsurface=-1
+
+# RIL Powersaving
 ro.charger.enable_suspend=true
 
 # ZRAM
-# Zygote
+
 bluetooth.profile.a2dp.source.enabled=true
 bluetooth.profile.asha.central.enabled=true
 bluetooth.profile.avrcp.target.enabled=true
@@ -72,6 +97,7 @@ bluetooth.profile.pan.nap.enabled=true
 bluetooth.profile.pan.panu.enabled=true
 bluetooth.profile.pbap.server.enabled=true
 bluetooth.profile.sap.server.enabled=true
+
 dalvik.vm.appimageformat=lz4
 dalvik.vm.dex2oat-Xms=64m
 dalvik.vm.dex2oat-Xmx=512m
@@ -98,18 +124,22 @@ dalvik.vm.usap_pool_size_min=1
 dalvik.vm.usap_refill_threshold=1
 dalvik.vm.useartservice=true
 dalvik.vm.usejit=true
+
 debug.atrace.tags.enableflags=0
 debug.sf.enable_gl_backpressure=0
 debug.sf.enable_transaction_tracing=false
 debug.sf.predict_hwc_composition_strategy=0
 debug.sf.treat_170m_as_sRGB=1
+
 log.tag.ClatdController=D
 log.tag.ConnectivityManager=D
 log.tag.ConnectivityService=D
 log.tag.IptablesRestoreController=D
 log.tag.NetworkLogger=D
+
 mediatek.wlan.ctia=0
 net.bt.name=Android
+
 persist.audio.deepbuffer_delay=0
 persist.log.level=0xFFFFFFFF
 persist.log.semlevel=0xFFFFFF00
@@ -117,15 +147,19 @@ persist.log.tag.BufferQueueDump=I
 persist.log.tag.BufferQueueProducer=I
 persist.log.tag.GraphicBuffer=I
 persist.log.tag.SurfaceControl=I
+
 persist.traced.enable=1
+
 persist.vendor.mdlog.flush_log_ratio=0
 persist.vendor.mtk.vilte.enable=1
 persist.vendor.pco5.radio.ctrl=0
 persist.vendor.pms_removable=1
 persist.vendor.vilte_support=1
 persist.vendor.vzw_device_type=0
+
 persist.vendor.wfc.sys_wfc_support=1
 pm.dexopt.boot-after-mainline-update=verify
+
 pm.dexopt.boot-after-ota=verify
 pm.dexopt.cmdline=verify
 pm.dexopt.inactive=verify
@@ -136,6 +170,7 @@ pm.dexopt.install-bulk-secondary-downgraded=verify
 pm.dexopt.install-fast=skip
 pm.dexopt.post-boot=verify
 pm.dexopt.shared=speed
+
 qemu.hw.mainkeys=0
 ro.actionable_compatible_property.enabled=true
 ro.allow.mock.location=0
@@ -187,6 +222,7 @@ vendor.af.dynamic.sleeptime.enable=true
 vendor.af.pausewait.enable=false
 vendor.af.threshold.src_and_effect_count=5
 vendor.rild.libargs=-d /dev/ttyC0
+
 wifi.direct.interface=p2p0
 wifi.interface=wlan0
 wifi.tethering.interface=ap0

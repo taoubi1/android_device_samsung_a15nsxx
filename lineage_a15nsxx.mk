@@ -6,7 +6,10 @@
 # Inherit from those products. Most specific first.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
+TARGET_SUPPORTS_OMX_SERVICE := false
 AB_OTA_UPDATER := false
+$(call inherit-product, $(SRC_TARGET_DIR)/product/generic_ramdisk.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/non_ab_device.mk)
 
 # Inherit from device makefile.
@@ -27,3 +30,6 @@ PRODUCT_GMS_CLIENTID_BASE := android-samsung
 PRODUCT_BUILD_PROP_OVERRIDES += \
     DeviceName=a15nsxx \
     BuildFingerprint=samsung/a15nsxx/a15:15/AP3A.240905.015.A2/A155FXXU6CYE5:user/release-keys
+
+# Time
+LINEAGE_VERSION_APPEND_TIME_OF_DAY := true

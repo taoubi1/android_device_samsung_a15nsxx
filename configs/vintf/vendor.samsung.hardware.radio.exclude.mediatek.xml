@@ -1,0 +1,45 @@
+<manifest version="1.0" type="device">
+    <hal override="true" format="hidl">
+        <name>vendor.mediatek.hardware.videotelephony</name>
+        <transport>hwbinder</transport>
+    </hal>
+    <hal override="true" format="hidl">
+        <name>vendor.mediatek.hardware.atci</name>
+        <transport>hwbinder</transport>
+    </hal>
+    <hal override="true" format="hidl">
+        <name>vendor.mediatek.hardware.mtkradioex</name>
+        <transport>hwbinder</transport>
+    </hal>
+    <hal override="true" format="hidl">
+        <name>vendor.mediatek.hardware.interfaces_tc1.mtkradioex_tc1</name>
+        <transport>hwbinder</transport>
+    </hal>
+    <hal override="true" format="aidl">
+        <name>vendor.mediatek.hardware.mtkradioex.data</name>
+    </hal>
+    <hal override="true" format="aidl">
+        <name>vendor.mediatek.hardware.mtkradioex.messaging</name>
+    </hal>
+    <hal override="true" format="aidl">
+        <name>vendor.mediatek.hardware.mtkradioex.modem</name>
+    </hal>
+    <hal override="true" format="aidl">
+        <name>vendor.mediatek.hardware.mtkradioex.network</name>
+    </hal>
+    <hal override="true" format="aidl">
+        <name>vendor.mediatek.hardware.mtkradioex.sim</name>
+    </hal>
+    <hal override="true" format="aidl">
+        <name>vendor.mediatek.hardware.mtkradioex.voice</name>
+    </hal>
+    <hal override="true" format="aidl">
+        <name>vendor.mediatek.hardware.mtkradioex.ims</name>
+    </hal>
+    <hal override="true" format="aidl">
+        <name>vendor.mediatek.hardware.mtkradioex.rcs</name>
+    </hal>
+    <hal override="true" format="aidl">
+        <name>vendor.mediatek.hardware.mtkradioex.dch</name>
+    </hal>
+</manifest>

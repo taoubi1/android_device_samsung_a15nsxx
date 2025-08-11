@@ -1,3 +1,114 @@
 <?xml version="1.0"?>
 <compatibility-matrix version="4.0" type="framework">
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.bluetooth.audio</name>
+        <version>2.1</version>
+        <version>2.2</version>
+        <interface>
+            <name>IBluetoothAudioProvidersFactory</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.nvram</name>
+        <version>1.1</version>
+        <interface>
+            <name>INvram</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.samsung.hardware.biometrics.fingerprint</name>
+        <version>3.0</version>
+        <interface>
+            <name>ISehBiometricsFingerprint</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.samsung.hardware.security.fkeymaster</name>
+        <interface>
+            <name>ISehFkeymaster</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.camera.isphal</name>
+        <version>1.1</version>
+        <interface>
+            <name>IISPModule</name>
+            <instance>internal/0</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.samsung.hardware.camera.provider</name>
+        <version>4.0</version>
+        <interface>
+            <name>ISehCameraProvider</name>
+            <instance>legacy/0</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.apuware.apusys</name>
+        <version>1</version>
+        <version>2</version>
+        <version>3</version>
+        <version>4</version>
+        <version>5</version>
+        <interface>
+            <name>INeuronApusys</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.apuware.hmp</name>
+        <version>1.0</version>
+        <interface>
+            <name>IApuwareHmp</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.apuware.utils</name>
+        <version>1.0</version>
+        <version>2.0</version>
+        <interface>
+            <name>IApuwareUtils</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.lbs</name>
+        <version>1.0</version>
+        <interface>
+            <name>ILbs</name>
+            <instance>mtk_lbs_log_v2s</instance>
+            <instance>mtk_mnld2mtklogger</instance>
+            <instance>mtk_mtklogger2mnld</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.samsung.hardware.gnss</name>
+        <version>3-4</version>
+        <interface>
+            <name>ISehGnss</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.mmagent</name>
+        <version>1.1</version>
+        <interface>
+            <name>IMMAgent</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.mms</name>
+        <version>1.6-7</version>
+        <interface>
+            <name>IMms</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
 </compatibility-matrix>
