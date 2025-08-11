@@ -1,0 +1,5 @@
+# Camera
+vendor_public_prop(vendor_camera_prop)
+
+# Fingerprint
+system_public_prop(vendor_fingerprint_prop)

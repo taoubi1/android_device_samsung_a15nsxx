@@ -1,0 +1,43 @@
+# Audio
+vendor.audiomediatek. u:object_r:vendor_audioserver_prop:s0
+
+# Camera
+persist.vendor.camera.                      u:object_r:vendor_camera_prop:s0
+ro.mtk_cam_dualzoom_support                 u:object_r:vendor_mtk_camera_prop:s0
+ro.mtk_cam_stereo_camera_support            u:object_r:vendor_mtk_camera_prop:s0
+vendor.debug.seninf.hs_trail                u:object_r:vendor_mtk_camera_prop:s0
+ro.vendor.camera_tran_hal_server_support    u:object_r:vendor_mtk_camera_prop:s0
+ro.vendor.camera_tran_fake_stereo_support   u:object_r:vendor_mtk_camera_prop:s0
+
+RUNTIME_OVERRIDE_OPENCL_MEM_TYPE            u:object_r:exported_default_prop:s0
+RUNTIME_OVERRIDE_LOG_LEVEL                  u:object_r:exported_default_prop:s0
+demo.                                       u:object_r:exported_default_prop:s0
+
+# Display
+ro.vendor.mtk_hdr_video_support             u:object_r:vendor_mtk_default_prop:s0
+
+# Dynamic sensor
+vendor.dynamic_sensor.                          u:object_r:vendor_dynamic_sensor_prop:s0
+
+# Fingerprint
+persist.vendor.goodix.dump_data             u:object_r:vendor_fingerprint_prop:s0
+persist.vendor.sys.fp.goodix.spmt.flag      u:object_r:vendor_fingerprint_prop:s0
+vendor.fp.goodix.X.offset                   u:object_r:vendor_fingerprint_prop:s0
+vendor.fp.goodix.Y.offset                   u:object_r:vendor_fingerprint_prop:s0
+vendor.fp.transsion.lcmname                 u:object_r:vendor_fingerprint_prop:s0
+vendor.fp.currentUid                        u:object_r:vendor_fingerprint_prop:s0
+persist.vendor.fp.sensorUid                 u:object_r:vendor_fingerprint_prop:s0
+persist.vendor.sys.fp.fod.location.X_Y         u:object_r:vendor_fingerprint_prop:s0
+persist.vendor.sys.fp.fod.size.width_height    u:object_r:vendor_fingerprint_prop:s0
+
+# Key manager
+ro.mtk_key_manager_support                  u:object_r:vendor_mtk_default_prop:s0
+
+# NFC properties
+persist.vendor.nfc.            u:object_r:vendor_nfc_prop:s0
+
+# TEE property
+vendor.tee.googlekey.status                          u:object_r:vendor_mtk_trustonic_tee_prop:s0
+
+# VT
+ro.vendor.vt.                               u:object_r:vendor_mtk_vendor_vt_prop:s0

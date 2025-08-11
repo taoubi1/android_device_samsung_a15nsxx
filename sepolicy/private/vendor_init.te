@@ -1,0 +1,1 @@
+dontaudit vendor_init system_mtk_fd_prop:property_service set;

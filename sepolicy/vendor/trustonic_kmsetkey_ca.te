@@ -1,0 +1,13 @@
+type trustonic_kmsetkey_ca, domain;
+type trustonic_kmsetkey_ca_exec, exec_type, file_type, vendor_file_type;
+
+init_daemon_domain(trustonic_kmsetkey_ca)
+
+set_prop(trustonic_kmsetkey_ca, vendor_mtk_trustonic_tee_prop)
+
+allow trustonic_kmsetkey_ca mnt_vendor_file:dir search;
+allow trustonic_kmsetkey_ca persist_data_file:dir search;
+allow trustonic_kmsetkey_ca persist_data_file:file { getattr open read };
+allow trustonic_kmsetkey_ca ut_keymaster_device:chr_file rw_file_perms;
+
+hal_client_domain(trustonic_kmsetkey_ca, hal_keymaster)

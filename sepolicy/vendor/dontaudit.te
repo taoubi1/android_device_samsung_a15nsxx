@@ -1,0 +1,6 @@
+dontaudit {
+    mobicore
+    mtk_hal_camera
+} shell_data_file:dir search;
+
+dontaudit ueventd tranfs_block_device:blk_file rw_file_perms;

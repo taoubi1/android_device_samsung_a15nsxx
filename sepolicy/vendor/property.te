@@ -1,0 +1,8 @@
+# Audio
+vendor_public_prop(vendor_audioserver_prop);
+
+# Dynamic sensor
+vendor_internal_prop(vendor_dynamic_sensor_prop);
+
+# NFC
+vendor_internal_prop(vendor_nfc_prop);

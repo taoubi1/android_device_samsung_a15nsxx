@@ -1,0 +1,21 @@
+# Camera
+vendor.transsion.hardware.trancam.trancamserver::ITrancamserver                     u:object_r:hal_trancamserver_hwservice:s0
+
+# Fingerprint
+vendor.goodix.hardware.biometrics.fingerprint::IGoodixFingerprintDaemon             u:object_r:hal_fingerprint_hwservice:s0
+vendor.goodix.hardware.biometrics.fingerprint::IGoodixFingerprintDaemonExt          u:object_r:hal_fingerprint_hwservice:s0
+vendor.goodix.hardware.biometrics.fingerprint::IGoodixFingerprintDaemonHbd          u:object_r:hal_fingerprint_hwservice:s0
+vendor.goodix.hardware.biometrics.fingerprint::IGoodixFingerprintDaemonFido         u:object_r:hal_fingerprint_hwservice:s0
+vendor.mediatek.hardware.biometrics.fingerprint::ITranBiometricsFingerprint         u:object_r:hal_fingerprint_hwservice:s0
+vendor.fptool.fingerprint::IFptoolFingerprint                                   u:object_r:hal_fingerprint_hwservice:s0
+vendor.fpsensor.hardware.fpsensorhidlsvc::IFpsensorHidlSvc                     u:object_r:fp_ext_svc2_hwservice:s0
+
+# NXP NFC
+vendor.nxp.nxpnfc::INxpNfc                                                               u:object_r:nxpnfc_hwservice:s0
+vendor.nxp.nxpnfclegacy::INxpNfcLegacy                                                   u:object_r:nxpnfc_hwservice:s0
+
+# TNE
+vendor.transsion.hardware.tne.tneengine::ITne                                  u:object_r:hal_tnev_hwservice:s0
+
+# Wi-Fi
+vendor.transsion.hardware.wifi.hostapd::IHostapd                                    u:object_r:hal_wifi_hostapd_hwservice:s0

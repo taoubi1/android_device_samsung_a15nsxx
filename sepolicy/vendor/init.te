@@ -1,0 +1,7 @@
+allow init sysfs_devices_block:file rw_file_perms;
+allow init tranfs_block_device:blk_file { read relabelto };
+allow init trustonic_kmsetkey_ca_exec:file execute;
+allow init fpsensor_fp_device:chr_file write;
+
+get_prop(init, vendor_mtk_service_nvram_restore_prop)
+get_prop(init, vts_status_prop)

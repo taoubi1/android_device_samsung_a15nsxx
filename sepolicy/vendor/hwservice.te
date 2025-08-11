@@ -1,0 +1,11 @@
+# Camera
+type hal_trancamserver_hwservice, hwservice_manager_type;
+
+# Fingerprint
+type fp_ext_svc2_hwservice, hwservice_manager_type;
+
+# NXP NFC
+type nxpnfc_hwservice, hwservice_manager_type;
+
+# TNE
+type hal_tnev_hwservice, hwservice_manager_type;

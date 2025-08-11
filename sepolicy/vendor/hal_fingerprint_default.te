@@ -1,0 +1,24 @@
+allow hal_fingerprint_default input_device:chr_file rw_file_perms;
+allow hal_fingerprint_default input_device:dir r_dir_perms;
+allow hal_fingerprint_default mnt_vendor_file:dir search;
+allow hal_fingerprint_default persist_data_file:dir create_dir_perms;
+allow hal_fingerprint_default persist_data_file:file create_file_perms;
+allow hal_fingerprint_default self:netlink_kobject_uevent_socket { read create bind setopt };
+allow hal_fingerprint_default sysfs_fp_name_path:dir r_dir_perms;
+allow hal_fingerprint_default sysfs_fp_name_path:file rw_file_perms;
+allow hal_fingerprint_default vndbinder_device:chr_file { ioctl read write getattr lock append map open watch watch_reads };
+allow hal_fingerprint_default vendor_gf_data_file:dir create_dir_perms;
+allow hal_fingerprint_default vendor_gf_data_file:file create_file_perms;
+allow hal_fingerprint_default property_socket:sock_file write;
+allow hal_fingerprint_default fpsensor_fp_device:chr_file rw_file_perms;
+
+add_hwservice(hal_fingerprint_default, fp_ext_svc2_hwservice)
+
+vndbinder_use(hal_fingerprint_default)
+hwbinder_use(hal_fingerprint_default)
+hal_client_domain(hal_fingerprint_default, hal_power)
+hal_client_domain(hal_fingerprint_default, hal_health)
+
+get_prop(hal_fingerprint_default, boot_status_prop)
+get_prop(hal_fingerprint_default, vendor_fingerprint_prop)
+set_prop(hal_fingerprint_default, vendor_fingerprint_prop)

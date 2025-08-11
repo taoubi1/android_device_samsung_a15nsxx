@@ -1,0 +1,70 @@
+allow hal_sensors_default hf_manager_device:chr_file rw_file_perms;
+allow hal_sensors_default nvcfg_file:dir create_dir_perms;
+allow hal_sensors_default nvcfg_file:file create_file_perms;
+
+allow hal_sensors_default {
+    dri_device
+    gpu_device
+    ion_device
+    m_acc_misc_device
+    m_act_misc_device
+    m_als_misc_device
+    m_baro_misc_device
+    m_bio_misc_device
+    m_fusion_misc_device
+    m_gyro_misc_device
+    m_hmdy_misc_device
+    m_mag_misc_device
+    m_pedo_misc_device
+    m_ps_misc_device
+    m_situ_misc_device
+    m_step_c_misc_device
+    sensorlist_device
+    hwmsensor_device
+}:chr_file rw_file_perms;
+
+allow hal_sensors_default ion_device:dir create_dir_perms;
+allow hal_sensors_default gpu_device:dir create_dir_perms;
+
+allow hal_sensors_default {
+    gsi_metadata_file
+    mnt_vendor_file
+    metadata_file
+    sysfs_dt_firmware_android
+}:dir search;
+
+allow hal_sensors_default {
+    sysfs_sensor
+    system_file
+}:dir r_dir_perms;
+
+allow hal_sensors_default sysfs_sensor:file rw_file_perms;
+allow hal_sensors_default sysfs_mtk_nanohub_state:file r_file_perms;
+
+allow hal_sensors_default sysfs_dt_firmware_android:file {
+    ioctl read getattr lock map open watch watch_reads
+};
+
+allow hal_sensors_default {
+    nvdata_file
+}:dir { read search open };
+allow hal_sensors_default {
+    nvdata_file
+}:file { read getattr open };
+
+allow hal_sensors_default sensor_data_file:dir search;
+
+allow hal_sensors_default hal_graphics_allocator_default:fd use;
+allow hal_sensors_default merged_hal_service:fd use;
+
+binder_call(hal_sensors_default, system_server)
+
+rw_dir_file(hal_sensors_default, nvdata_file)
+rw_dir_file(hal_sensors_default, sensor_data_file)
+
+# Allow access for dynamic sensor properties.
+get_prop(hal_sensors_default, vendor_dynamic_sensor_prop)
+
+# Allow access to raw HID devices for dynamic sensors.
+allow hal_sensors_default device:dir r_dir_perms;
+allow hal_sensors_default hidraw_device:chr_file rw_file_perms;

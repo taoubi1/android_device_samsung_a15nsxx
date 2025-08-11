@@ -1,0 +1,1 @@
+dontaudit em_app mtk_hal_nvramagent_hwservice:hwservice_manager find;

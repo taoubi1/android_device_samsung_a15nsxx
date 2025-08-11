@@ -1,0 +1,22 @@
+binder_call(mtk_hal_camera, trancamserver)
+
+allow mtk_hal_camera cml421_ois_device:chr_file rw_file_perms;
+allow mtk_hal_camera cwvi5300_device:chr_file rw_file_perms;
+allow mtk_hal_camera sysfs_dt_firmware_android:dir search;
+allow mtk_hal_camera sysfs_dt_firmware_android:file r_file_perms;
+allow mtk_hal_camera sysfs_sub_torch_file:file rw_file_perms;
+allow mtk_hal_camera sysfs_torch_file:file rw_file_perms;
+allow mtk_hal_camera sysfs_tran_cam_file:file rw_file_perms;
+allow mtk_hal_camera transsion_camera_data_file:dir { write search add_name };
+allow mtk_hal_camera transsion_camera_data_file:file {read write create open };
+allow mtk_hal_camera vendor_arcsoft_data_file:dir { read write open add_name search };
+allow mtk_hal_camera vendor_arcsoft_data_file:file { read write create getattr open };
+allow mtk_hal_camera vendor_megvii_data_file:dir { read write open add_name search };
+allow mtk_hal_camera vendor_megvii_data_file:file { read write create getattr open };
+allow mtk_hal_camera vendor_watermark_data_file:dir { read write open add_name search };
+allow mtk_hal_camera vendor_watermark_data_file:file { read write create getattr open };
+allow mtk_hal_camera property_socket:sock_file write;
+allow mtk_hal_camera hal_trancamserver_hwservice:hwservice_manager find;
+
+get_prop(mtk_hal_camera, vendor_camera_prop)
+set_prop(mtk_hal_camera, vendor_mtk_camera_prop)

@@ -1,0 +1,5 @@
+allow system_server sysfs_OTG_STATE_file:file { read write getattr open };
+allow system_server sysfs_OTG_CTL_file:file { read write getattr open };
+allow system_server sysfs_vibrator:file { read open getattr write };
+
+get_prop(system_server, wifi_hal_prop)

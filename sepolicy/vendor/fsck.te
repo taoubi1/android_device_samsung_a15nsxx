@@ -1,0 +1,2 @@
+allow fsck tmpfs:blk_file { read write ioctl };
+allow fsck tranfs_block_device:blk_file rw_file_perms;

@@ -1,0 +1,3 @@
+allow cameraserver dmabuf_system_heap_device:chr_file { ioctl read getattr lock map open watch watch_reads };
+
+get_prop(cameraserver, vendor_camera_prop)

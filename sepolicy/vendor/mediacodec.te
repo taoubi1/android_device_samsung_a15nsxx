@@ -1,0 +1,2 @@
+get_prop(mediacodec, vendor_mtk_omx_core_prop)
+get_prop(mediacodec, vendor_mtk_sec_video_path_support_prop)
