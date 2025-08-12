@@ -189,7 +189,7 @@ SYSTEM_EXT_PUBLIC_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/public
 BOARD_VENDOR_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/vendor
 
 # Vendor Security Patch
-VENDOR_SECURITY_PATCH := 2025-05-01
+VENDOR_SECURITY_PATCH := 2025-07-01
 
 # Verified Boot (AVB) - Matches Samsung Stock Layout
 BOARD_AVB_ENABLE := true

@@ -29,7 +29,7 @@ PRODUCT_GMS_CLIENTID_BASE := android-samsung
 
 PRODUCT_BUILD_PROP_OVERRIDES += \
     DeviceName=a15nsxx \
-    BuildFingerprint=samsung/a15nsxx/a15:15/AP3A.240905.015.A2/A155FXXU6CYE5:user/release-keys
+    BuildFingerprint=samsung/a15nsxx/a15:15/AP3A.240905.015.A2/A155FXXS7CYG1:user/release-keys
 
 # Time
 LINEAGE_VERSION_APPEND_TIME_OF_DAY := true

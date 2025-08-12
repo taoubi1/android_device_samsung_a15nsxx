@@ -319,7 +319,7 @@ ro.vendor.fm.platform=mt6631_6635
 ro.vendor.have_aeev_feature=1
 ro.vendor.md_log_memdump_wait=15
 ro.vendor.mediatek.version.branch=alps-mp-s0.mp1.tc10sp2
-ro.vendor.mediatek.version.release=alps-mp-s0.mp1.tc10sp2-V1.52
+ro.vendor.mediatek.version.release=alps-mp-s0.mp1.tc10sp2-V1.52_titan.s0mp1.k6789v1.64.titan.sumatran.tiger_P2
 ro.vendor.mgvi_name=mgvi_64_non_ab_armv82
 ro.vendor.mtk_audio_tuning_tool_ver=V2.2
 ro.vendor.mtk_cam_security_support=1
@@ -337,7 +337,7 @@ ro.vendor.mtk_ufs_support=1
 ro.vendor.mtk_wappush_support=1
 
 ro.vendor.num_md_protocol=2
-ro.vendor.qb.id=96481141
+ro.vendor.qb.id=98969789
 
 ro.vendor.sim_me_lock_mode=0
 ro.vendor.wfd.dummy.enable=0
