@@ -369,7 +369,7 @@
       "PowerHint": "INTERACTION",
       "Node": "CPUSuperClusterMinFreq",
       "Duration": 1000,
-      "Value": "1100000"
+      "Value": "1400000"
     },
     {
       "PowerHint": "INTERACTION",
