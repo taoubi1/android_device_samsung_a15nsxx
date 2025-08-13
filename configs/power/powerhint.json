@@ -363,7 +363,7 @@
       "PowerHint": "INTERACTION",
       "Node": "CPUEfficiencyClusterMinFreq",
       "Duration": 1000,
-      "Value": "1150000"
+      "Value": "1300000"
     },
     {
       "PowerHint": "INTERACTION",
