@@ -111,6 +111,9 @@ PRODUCT_PACKAGES += \
     libhwc2on1adapter:64 \
     libhwc2onfbadapter:64
 
+PRODUCT_COPY_FILES += \
+    $(CONFIGS_PATH)/displayconfig/display_id_4627039422300187648.xmll:$(TARGET_COPY_OUT_VENDOR)/etc/displayconfig/display_id_4627039422300187648.xml
+
 # DRM
 PRODUCT_PACKAGES += \
     android.hardware.drm-service.clearkey:64 \
