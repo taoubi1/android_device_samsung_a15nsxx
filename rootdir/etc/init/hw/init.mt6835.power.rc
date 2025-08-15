@@ -13,8 +13,10 @@ on charger
 on post-fs-data
     write /sys/devices/system/cpu/cpufreq/policy0/scaling_governor sugov_ext
     write /sys/devices/system/cpu/cpufreq/policy6/scaling_governor sugov_ext
+    write /proc/sys/kernel/sched_pelt_multiplier 4
     write /proc/sys/kernel/sched_util_clamp_min_rt_default 0
 
+on boot
     # boot perf. tune
     write /dev/cpuctl/system/cpu.uclamp.min 100
     write /dev/cpuctl/system/cpu.uclamp.latency_sensitive 1

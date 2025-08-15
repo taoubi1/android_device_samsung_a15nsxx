@@ -46,9 +46,9 @@
 /dev/gpsdl0               0660   gps        gps
 /dev/gpsdl1               0660   gps        gps
 /dev/stpgps               0660   gps        gps
+/dev/stpgps2              0660   gps        gps
 /dev/gps                  0660   gps        system
 /dev/gps_emi              0660   gps        gps
-/dev/gps2scp              0660   gps        gps
 /dev/gps_pwr              0660   gps        gps
 /dev/fw_log_gps           0660   gps        gps
 # ANT
@@ -57,8 +57,7 @@
 # WIFI
 /dev/wmtWifi              0660   wifi     wifi
 /dev/fw_log_wifi          0660   wifi     wifi
-/dev/fw_log_wifi_write_log_to_file     0660    wifi    wifi
-/dev/sa_log_wifi          0660   wifi     wifi
+/dev/fw_log_wifi_write_log_to_file     0660   wifi   wifi
 
 # FMRadio
 /dev/fm                   0660   system     audio
@@ -82,6 +81,13 @@
 /dev/mobicore-user        0666   system     system
 /dev/t-base-tui           0666   system     system
 
+# TEEGRIS
+/dev/tzdev		0666	system		system
+/dev/tziwsock		0666	system		system
+/dev/tziwshmem		0666	system		system
+/dev/tuihw		0660	system		system
+/dev/tzirs		0660	system		system
+
 # teeperf driver
 /dev/teeperf              0666   system     system
 
@@ -93,10 +99,6 @@
 #v4l2 codec
 /dev/vcu    0660 camera system
 
-#vdec-fmt
-/dev/vdec-fmt   0660 media system
-/dev/fmt_sync   0660 system system
-
 #v4l2 camera
 /dev/mtk_hcp     0660 camera system
 
@@ -106,8 +108,15 @@
 # MDDP node
 /dev/mddp                 0660   system     system
 
-#widevine driver node
-/dev/drm_wv               0660   media      system
+# cpu hotplug
+/sys/devices/system/cpu/cpu* cpufreq/sugov_ext/down_rate_limit_us 0664 system system
+/sys/devices/system/cpu/cpu* cpufreq/sugov_ext/up_rate_limit_us 0664 system system
+
+# Google FRP solution
+/dev/block/by-name/persistent    0660    system    system
+
+# Reactivation lock
+/dev/block/by-name/steady    0660    system    system
 
 # add the read write right of ttyUSB*
 /dev/bus/usb/*     	  0660   root       usb
@@ -165,39 +174,13 @@
 
 # Camera
 /dev/camera_eeprom*       0660   system     camera
-/dev/camera-sysram        0660   system     camera
-/dev/camera-isp           0660   system     camera
-/dev/camera-mem           0660   system     camera
-/dev/camera-dip           0660   system     camera
-/dev/camera-tsf           0660   system     camera
-/dev/camera-dpe           0660   system     camera
-/dev/camera-mfb           0660   system     camera
-/dev/camera-rsc           0660   system     camera
-/dev/camera-owe           0660   system     camera
-/dev/camera-fdvt          0660   system     camera
-/dev/camera-wpe           0660   system     camera
-/dev/camera-pipemgr       0660   system     camera
-/dev/kd_camera_hw         0660   system     camera
-/dev/seninf               0660   system     camera
-/dev/seninf_n3d           0660   system     camera
-/dev/flashlight           0660   system     camera
-/dev/kd_camera_hw_bus2    0660   system     camera
-/dev/FM50AF               0660   system     camera
-/dev/CAM_CAL_DRV          0660   system     camera
-/dev/MAINAF               0660   system     camera
-/dev/MAIN2AF              0660   system     camera
-/dev/MAIN3AF              0660   system     camera
-/dev/SUBAF                0660   system     camera
-/dev/vpu                  0660   system     camera
-/dev/apusys               0660   system     camera
-/dev/mtk_ccd              0660   system     camera
 
 #FOR VIA MODEM
 /dev/ttySDIO*             0660   radio      sdcard_rw
 /dev/ttyRB*               0660   radio      radio
 
 # Mali node
-/dev/mali0                0666   system     graphics
+/dev/mali0                 0666   system     graphics
 
 # Change ION driver permission
 /dev/ion                  0666   system     graphics
@@ -205,8 +188,8 @@
 # Change DMA_HEAP deice permission
 #     refs: /system/core/rootdir/uevent.rc
 #           /dev/dma_heap/system      0444   system     system
-/dev/dma_heap/mtk_mm                        0444   system     system
-/dev/dma_heap/mtk_mm-uncached               0444   system     system
+/dev/dma_heap/mtk_mm                                0444   system     system
+/dev/dma_heap/mtk_mm-uncached                       0444   system     system
 /dev/dma_heap/mtk_svp_page-uncached                 0444   system     system
 /dev/dma_heap/mtk_prot_page-uncached                0444   system     system
 /dev/dma_heap/mtk_svp_region                        0444   system     system
@@ -218,10 +201,6 @@
 /dev/dma_heap/mtk_wfd_region                        0444   system     system
 /dev/dma_heap/mtk_wfd_region-aligned                0444   system     system
 /dev/dma_heap/mtk_wfd_page-uncached                 0444   system     system
-/dev/dma_heap/mtk_sapu_data_shm_region              0444   system     system
-/dev/dma_heap/mtk_sapu_data_shm_region-aligned      0444   system     system
-/dev/dma_heap/mtk_sapu_engine_shm_region            0444   system     system
-/dev/dma_heap/mtk_sapu_engine_shm_region-aligned    0444   system     system
 
 #touch
 /dev/touch                0660   root       system
@@ -234,37 +213,31 @@
 #MTK In-House TEE
 /dev/ttyACM0              0660   radio      radio
 
-# Raw HID devices
-/dev/hidraw*     0660   system     system
+#sensor
+/dev/hf_manager           0660    system    system
 
 # Param
 /dev/block/by-name/param    0660    root    system
 
-# Google FRP solution
-/dev/block/by-name/persistent    0660    system    system
-
-# Reactivation lock
-/dev/block/by-name/steady    0660    system    system
+#dynamic sensor
+/dev/hidraw*   0660 system system
 
 # Sensor Hub
 /dev/shub_sensorhub        0660   system     system
 /dev/shub_data_injection   0660   system     system
 /dev/batch_io              0660   system     system
-/dev/iio:device*           0660   system	 system
+/dev/iio:device*           0660   system     system
 /sys/devices/platform/shub/iio:device*    buffer/enable       0660    system    system
 /sys/devices/platform/shub/iio:device*    buffer/length       0660    system    system
 /sys/bus/iio/devices/iio:device*    0664   system     radio
 
 # grip sensor
-/dev/input/event*				0660	system	input
-/sys/devices/virtual/input/input*   enable      0660	system	input
+/dev/input/event*                               0660    system    input
+/sys/devices/virtual/input/input*   enable      0660    system    input
+/sys/devices/virtual/input/input*   poll_delay  0660    system    input
 
 # PROCA dev config
 /dev/proca_config         0440   system     system
 
-# TEEGRIS
-/dev/tzdev		0666	system		system
-/dev/tziwsock		0666	system		system
-/dev/tziwshmem		0666	system		system
-/dev/tuihw		0660	system		system
-/dev/tzirs		0660	system		system
+# AT+MTKEDLBK
+/dev/block/by-name/btd    0660    root    system

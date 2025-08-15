@@ -31,14 +31,6 @@ on post-fs-data
     chmod 0660 /dev/BU64745GWZAF
     chown system camera /dev/BU64745GWZAF
 
-    #Create TP_MFNR mount point
-    chown root system /vendor/etc/tp_mfnr/
-    chmod 0771 /vendor/etc/tp_mfnr/
-
-    #Create TP_SFNR mount point
-    chown root system /vendor/etc/tp_sfnr/
-    chmod 0771 /vendor/etc/tp_sfnr/
-
 #SMB
     chown system system /proc/smb/ScreenComm
     chmod 0660 /proc/smb/ScreenComm

@@ -1,10 +1,10 @@
 # MTK platform .rc configure
 
 import /vendor/etc/init/hw/init.connectivity.rc
-import /vendor/etc/init/hw/init.mt6789.usb.rc
+import /vendor/etc/init/hw/init.mt6835.usb.rc
 import /vendor/etc/init/hw/init.audio.samsung.rc
 import /vendor/etc/init/hw/init.project.rc
-import /vendor/etc/init/hw/init.mt6789.power.rc
+import /vendor/etc/init/hw/init.mt6835.power.rc
 import /vendor/etc/init/hw/init.logger-service.rc
 
 # init.modem.rc must be the LAST rc file because vold.post_fs_data_done is set in it
@@ -16,6 +16,16 @@ on early-init
 
     # initialize vendor.all.modules.ready to 1 here to prevent NOT GKI project blocked
     setprop vendor.all.modules.ready 1
+
+    # midground set
+    mkdir /dev/cpuset/midground
+    copy /dev/cpuset/cpus /dev/cpuset/midground/cpus
+    copy /dev/cpuset/mems /dev/cpuset/midground/mems
+    chown root system /dev/cpuset/midground/cgroup.procs
+    chmod 0664 /dev/cpuset/midground/cgroup.procs
+    chown root system /dev/cpuset/midground/cpus
+    chmod 0664 /dev/cpuset/midground/cpus
+    write /dev/cpuset/midground/cpus 0-5
 
     # softdog
     chown root system /dev/watchdog1
@@ -31,6 +41,16 @@ on init
     # if primary storage is physical, set ro.vold.primary_physical to 1
     # setprop ro.vold.primary_physical 1
 
+    # midground cpuctl 
+    mkdir /dev/cpuctl/midground
+    chown root system /dev/cpuctl/midground/cgroup.procs
+    chown root system /dev/cpuctl/midground/cpu.uclamp.max
+    chown root system /dev/cpuctl/midground/cpu.uclamp.min
+    chmod 0664 /dev/cpuctl/midground/cgroup.procs
+    chmod 0664 /dev/cpuctl/midground/cpu.uclamp.max
+    chmod 0664 /dev/cpuctl/midground/cpu.uclamp.min
+    write /dev/cpuctl/midground/cpu.uclamp.max 20
+
 # change lk_env permission
     chown root system /proc/lk_env
     chmod 0660 /proc/lk_env
@@ -42,20 +62,9 @@ on init
 # update cpus for cpuset cgroup
     write /dev/cpuset/foreground/cpus 0-7
     write /dev/cpuset/foreground/boost/cpus 0-7
-    write /dev/cpuset/background/cpus 0-3
-    write /dev/cpuset/system-background/cpus 0-3
+    write /dev/cpuset/background/cpus 0-5
+    write /dev/cpuset/system-background/cpus 0-5
     write /dev/cpuset/top-app/cpus 0-7
-
-    #SystemPerformance - ActivityManagerPerformance
-    setprop sys.config.amp_to_app_switch 6000
-
-# Meta event
-    chown system radio /sys/class/sensors/sensor_dev/flush
-# Grip Sensor
-    chown system radio /sys/class/sensors/grip_sensor/noti_enable
-
-# Property used by vintf for sku specific manifests
-    setprop ro.boot.product.hardware.sku ${ro.boot.hardware.sku}
 
 on late-init
 # enable rcu_expedited
@@ -89,10 +98,8 @@ on property:init.svc.vendor.charger=running
     chmod 0660 /sys/power/wakeup_count
     write /sys/power/pm_freeze_timeout 2000
 
-# initialize powerHAL when boot is completed
-on property:sys.boot_completed=1
-    setprop vendor.powerhal.init 1
-    setprop vendor.mediatek.powerhal.init 1
+    start fuelgauged
+    start fuelgauged_nvram
 
 on fs
     # mount fstab
@@ -136,6 +143,11 @@ on post-fs
 
     # allow ccci_mdinit access ccci_dump
     chown root system /proc/ccci_dump
+    chown root system /proc/ccci_lp_mem
+
+# mem_boost_mode
+    chmod 0664 /sys/kernel/mm/vmscan/mem_boost_mode
+    chown cameraserver system /sys/kernel/mm/vmscan/mem_boost_mode
 
 on post-fs-data
     wait_for_prop vendor.all.modules.ready 1
@@ -144,29 +156,11 @@ on post-fs-data
     write /proc/sys/vm/watermark_boost_factor 0
 
     # zram
-    write /sys/block/zram0/comp_algorithm lz4
-    write /proc/sys/vm/page-cluster 0
     write /proc/sys/vm/swappiness 130
-    write /sys/kernel/mm/swap/vma_ra_enabled false
-    swapon_all /vendor/etc/fstab.ramplus
-
-    # boot time fs tune
-    # write /sys/block/mmcblk0/queue/iostats 0
-    write /sys/block/mmcblk0/queue/read_ahead_kb 2048
-    # write /sys/block/mmcblk0/queue/nr_requests 256
-    # write /sys/block/sdc/queue/iostats 0
-    write /sys/block/sdc/queue/read_ahead_kb 2048
-    # write /sys/block/sdc/queue/nr_requests 256
-    write /sys/block/dm-0/queue/read_ahead_kb 2048
-    write /sys/block/dm-1/queue/read_ahead_kb 2048
-    write /sys/block/dm-2/queue/read_ahead_kb 2048
-    write /sys/block/dm-3/queue/read_ahead_kb 2048
-    write /sys/block/dm-4/queue/read_ahead_kb 2048
-    write /sys/block/dm-5/queue/read_ahead_kb 2048
 
     chown system system /mnt/vendor/nvcfg
     chmod 0771 /mnt/vendor/nvcfg
-    # restorecon_recursive /mnt/vendor/nvcfg
+    restorecon_recursive /mnt/vendor/nvcfg
     chown system system /mnt/vendor/nvcfg/fg
     chown system system /mnt/vendor/nvcfg/fg/old_fg_data
     chown system system /mnt/vendor/nvcfg/fg/car_tune_value
@@ -212,26 +206,30 @@ on post-fs-data
     chown root system /data/vendor/flicker
     chmod 0771 /data/vendor/flicker
 
-    #Create sensor hub dump
-    mkdir /data/vendor/sensorhub/ 0771 root system
-
     #Add /mnt/vendor/efs mount point
     chown radio system /mnt/vendor/efs
     chmod 0771 /mnt/vendor/efs
     restorecon_recursive /mnt/vendor/efs
+ 
+    #Create TP_MFNR mount point
+    chown root system /vendor/etc/tp_mfnr/
+    chmod 0771 /vendor/etc/tp_mfnr/
+
+    #Create TP_SFNR mount point
+    chown root system /vendor/etc/tp_sfnr/
+    chmod 0771 /vendor/etc/tp_sfnr/
 
     # Set SELinux security contexts on upgrade or policy update.
-    # restorecon_recursive /mnt/vendor/nvdata
-    restorecon --recursive --force /mnt/vendor/nvdata
-    restorecon --recursive --force /mnt/vendor/nvcfg
-    restorecon --recursive --force /mnt/vendor/protect_f
-    restorecon --recursive --force /mnt/vendor/protect_s
+    restorecon_recursive /mnt/vendor/nvdata
 
     #give system access to rfkill device node
     chmod 0660 /dev/rfkill
 
     # create for muxd pts device node , to operate without root
     mkdir /dev/radio 0770 radio radio
+
+    # create mdota to mount mcf_ota
+    mkdir /mnt/vendor/mdota
 
     chmod 0660 /dev/spm
     chown system system /dev/spm
@@ -293,284 +291,10 @@ on post-fs-data
     chown system system /sys/class/mdnie/mdnie/bypass
     chown system system /sys/class/mdnie/mdnie/mdnie_ldu
     chown system system /sys/class/mdnie/mdnie/hdr
-    chown system system /sys/class/mdnie/mdnie/vividness
 
 # GPS
     chmod 0775 /vendor/xbin/MPED
     chmod 0666 /dev/gps_emi
-
-# Sensors
-# SensorHub
-    write /sys/class/sensors/ssp_sensor/fs_ready 1
-
-# Factory EFS
-    chown system system /efs/FactoryApp/baro_delta
-    chown system system /efs/FactoryApp/gyro_cal_data
-    chown system system /efs/FactoryApp/cal_data
-    chown system system /efs/FactoryApp/mag_cal_data
-    chown system system /efs/FactoryApp/light_cal_data
-    chown system system /efs/FactoryApp/calibration_data
-    chmod 0666 /efs/FactoryApp/calibration_data
-
-# Accelerometer
-    chown system radio /sys/class/sensors/accelerometer_sensor/raw_data
-    chown system radio /sys/class/sensors/accelerometer_sensor/calibration
-    chown system radio /sys/class/sensors/accelerometer_sensor/reactive_alert
-    chown system radio /sys/class/sensors/accelerometer_sensor/vendor
-    chown system radio /sys/class/sensors/accelerometer_sensor/name
-    chown system radio /sys/class/sensors/accelerometer_sensor/selftest
-    chown system radio /sys/class/sensors/accelerometer_sensor/lowpassfilter
-    chown system system /sys/class/sensors/accelerometer_sensor/dhr_sensor_info
-
-# Gyro
-    chown system radio /sys/class/sensors/gyro_sensor/power_on
-    chown system radio /sys/class/sensors/gyro_sensor/power_off
-    chown system radio /sys/class/sensors/gyro_sensor/temperature
-    chown system radio /sys/class/sensors/gyro_sensor/selftest
-    chown system radio /sys/class/sensors/gyro_sensor/selftest_dps
-    chown system radio /sys/class/sensors/gyro_sensor/vendor
-    chown system radio /sys/class/sensors/gyro_sensor/name
-    chown system system /sys/class/sensors/gyro_sensor/dhr_sensor_info
-
-# Magnetometer
-    chown system radio /sys/class/sensors/magnetic_sensor/raw_data
-    chown system radio /sys/class/sensors/magnetic_sensor/vendor
-    chown system radio /sys/class/sensors/magnetic_sensor/name
-    chown system radio /sys/class/sensors/magnetic_sensor/selftest
-    chown system radio /sys/class/sensors/magnetic_sensor/raw_data
-    chown system system /sys/class/sensors/magnetic_sensor/dhr_sensor_info
-
-# Light
-    chown system radio /sys/class/sensors/light_sensor/lux
-    chown system radio /sys/class/sensors/light_sensor/raw_data
-    chown system radio /sys/class/sensors/light_sensor/vendor
-    chown system radio /sys/class/sensors/light_sensor/name
-    chown system system /sys/class/sensors/light_sensor/dhr_sensor_info
-    chown system radio /sys/class/sensors/light_sensor/light_circle
-    chown system radio /sys/class/sensors/light_sensor/light_cal
-    chown system radio /sys/class/sensors/light_sensor/fifo_data
-    chown system radio /sys/class/sensors/light_sensor/hall_ic
-
-# Proximity
-    chown system radio /sys/class/sensors/proximity_sensor/state
-    chown system radio /sys/class/sensors/proximity_sensor/raw_data
-    chown system radio /sys/class/sensors/proximity_sensor/prox_avg
-    chown system radio /sys/class/sensors/proximity_sensor/prox_cal
-    chown system radio /sys/class/sensors/proximity_sensor/vendor
-    chown system radio /sys/class/sensors/proximity_sensor/name
-    chown system radio /sys/class/sensors/proximity_sensor/thresh_high
-    chown system radio /sys/class/sensors/proximity_sensor/thresh_low
-    chown system radio /sys/class/sensors/proximity_sensor/thresh_detect_high
-    chown system radio /sys/class/sensors/proximity_sensor/thresh_detect_low
-    chown system radio /sys/class/sensors/proximity_sensor/barcode_emul_en
-    chown system radio /sys/class/sensors/proximity_sensor/prox_offset_pass
-    chown system radio /sys/class/sensors/proximity_sensor/prox_trim
-    chown system system /sys/class/sensors/proximity_sensor/dhr_sensor_info
-
-# Barometer
-    chown system radio /sys/class/sensors/barometer_sensor/sea_level_pressure
-    chown system radio /sys/class/sensors/barometer_sensor/vendor
-    chown system radio /sys/class/sensors/barometer_sensor/name
-    chown system radio /sys/class/sensors/barometer_sensor/calibration
-    chown system radio /sys/class/sensors/barometer_sensor/temperature
-    chown system system /sys/class/sensors/barometer_sensor/dhr_sensor_info
-
-# Flip Cover Detector
-    chown system radio /sys/class/sensors/flip_cover_detector_sensor/nfc_cover_status
-    chown system radio /sys/class/sensors/flip_cover_detector_sensor/factory_cover_status
-    chown system radio /sys/class/sensors/flip_cover_detector_sensor/axis_threshold_setting
-
-# SensorHub
-    chown system radio /sys/class/sensors/ssp_sensor/enable
-    chown system radio /sys/class/sensors/ssp_sensor/mcu_rev
-    chown system radio /sys/class/sensors/ssp_sensor/mcu_name
-    chown system radio /sys/class/sensors/ssp_sensor/mcu_test
-    chown system radio /sys/class/sensors/ssp_sensor/mcu_reset
-    chown system radio /sys/class/sensors/ssp_sensor/mcu_update
-    chown system radio /sys/class/sensors/ssp_sensor/mcu_sleep_test
-    chown system radio /sys/class/sensors/ssp_sensor/sensor_dump
-    chown system radio /sys/class/sensors/ssp_sensor/hall_ic
-    chown system radio /sys/class/sensors/ssp_sensor/sensor_spec
-    chown system radio /sys/class/sensors/ssp_sensor/ssp_flush
-    chown system radio /sys/class/sensors/ssp_sensor/sensor_state
-    chown system radio /sys/class/sensors/ssp_sensor/shub_file
-    chown system radio /sys/class/sensors/ssp_sensor/scontext_list
-    chown system radio /sys/class/sensors/ssp_sensor/shub_dump
-    chmod 0600 /dev/batch_io
-    chown system system /dev/batch_io
-
-# Meta event
-    chown system radio /sys/class/sensors/sensor_dev/flush
-# [ Permissions for Grip Sensor
-    # For GRIP Sensor
-    chmod 0660 /dev/grip_sensor
-    chown system system /dev/grip_sensor
-    chmod 0660 /dev/grip_sensor_sub
-    chown system system /dev/grip_sensor_sub
-
-    chown system radio /sys/class/sensors/ssp_sensor/grip_fail
-    chown system radio /sys/class/sensors/grip_sensor/noti_enable
-    chown system radio /sys/class/sensors/grip_sensor/motion
-    chown system radio /sys/class/sensors/grip_sensor/unknown_state
-# SX93xx
-    chown system radio /sys/class/sensors/grip_sensor/name
-    chown system radio /sys/class/sensors/grip_sensor/vendor
-    chown system radio /sys/class/sensors/grip_sensor/raw_data
-    chown system radio /sys/class/sensors/grip_sensor/threshold
-    chown system radio /sys/class/sensors/grip_sensor/calibration
-    chown system radio /sys/class/sensors/grip_sensor/onoff
-    chown system radio /sys/class/sensors/grip_sensor/reset
-    chown system radio /sys/class/sensors/grip_sensor/mode
-    chown system radio /sys/class/sensors/grip_sensor/gain
-    chown system radio /sys/class/sensors/grip_sensor/start
-    chown system radio /sys/class/sensors/grip_sensor/normal_threshold
-    chown system radio /sys/class/sensors/grip_sensor/ch_state
-    chown system radio /sys/class/sensors/grip_sensor/body_threshold
-    chown system radio /sys/class/sensors/grip_sensor/grip_flush
-    chown system radio /sys/class/sensors/grip_sensor/irq_count
-    chown system radio /sys/class/sensors/grip_sensor/resolution
-    chown system radio /sys/class/sensors/grip_sensor/adc_filt
-    chown system radio /sys/class/sensors/grip_sensor/useful_filt
-    chown system radio /sys/class/sensors/grip_sensor/ch_count
-    chown system radio /sys/class/sensors/grip_sensor/gain_ch2
-    chown system radio /sys/class/sensors/grip_sensor/raw_data_ch2
-    chown system radio /sys/class/sensors/grip_sensor/diff_avg_ch2
-    chown system radio /sys/class/sensors/grip_sensor/normal_threshold_ch2
-    chown system radio /sys/class/sensors/grip_sensor/sampling_freq_ch2
-    chown system radio /sys/class/sensors/grip_sensor/mcc
-    chown system radio /sys/class/sensors/grip_sensor/hysteresis
-    chown system radio /sys/class/sensors/grip_sensor/sampling_freq
-    chown system radio /sys/class/sensors/grip_sensor/isum
-    chown system radio /sys/class/sensors/grip_sensor/scan_period
-    chown system radio /sys/class/sensors/grip_sensor/analog_gain
-    chown system radio /sys/class/sensors/grip_sensor/cdc_up
-    chown system radio /sys/class/sensors/grip_sensor/cdc_down
-    chown system radio /sys/class/sensors/grip_sensor/temp_enable
-    chown system radio /sys/class/sensors/grip_sensor/cml
-    chown system radio /sys/class/sensors/grip_sensor/grip_ref_cap
-    chown system radio /sys/class/sensors/grip_sensor/analog_gain_b
-    chown system radio /sys/class/sensors/grip_sensor/avg_negfilt_b
-    chown system radio /sys/class/sensors/grip_sensor/avg_posfilt_b
-    chown system radio /sys/class/sensors/grip_sensor/avg_thresh_b
-    chown system radio /sys/class/sensors/grip_sensor/closedeb_b
-    chown system radio /sys/class/sensors/grip_sensor/diff_avg_b
-    chown system radio /sys/class/sensors/grip_sensor/fardeb_b
-    chown system radio /sys/class/sensors/grip_sensor/gain_b
-    chown system radio /sys/class/sensors/grip_sensor/grip_ref_cap_b
-    chown system radio /sys/class/sensors/grip_sensor/hysteresis_b
-    chown system radio /sys/class/sensors/grip_sensor/irq_count_b
-    chown system radio /sys/class/sensors/grip_sensor/normal_threshold_b
-    chown system radio /sys/class/sensors/grip_sensor/proxstatus_b
-    chown system radio /sys/class/sensors/grip_sensor/raw_data_b
-    chown system radio /sys/class/sensors/grip_sensor/rawfilt_b
-    chown system radio /sys/class/sensors/grip_sensor/resolution_b
-    chown system radio /sys/class/sensors/grip_sensor/sampling_freq_b
-    chown system radio /sys/class/sensors/grip_sensor/unknown_state_b
-    chown system radio /sys/class/sensors/grip_sensor/useful_avg_b
-    chown system radio /sys/class/sensors/grip_sensor/useful_filt_b
-
-    chown system radio /sys/class/sensors/grip_sensor_sub/name
-    chown system radio /sys/class/sensors/grip_sensor_sub/vendor
-    chown system radio /sys/class/sensors/grip_sensor_sub/raw_data
-    chown system radio /sys/class/sensors/grip_sensor_sub/threshold
-    chown system radio /sys/class/sensors/grip_sensor_sub/calibration
-    chown system radio /sys/class/sensors/grip_sensor_sub/onoff
-    chown system radio /sys/class/sensors/grip_sensor_sub/reset
-    chown system radio /sys/class/sensors/grip_sensor_sub/mode
-    chown system radio /sys/class/sensors/grip_sensor_sub/gain
-    chown system radio /sys/class/sensors/grip_sensor_sub/start
-    chown system radio /sys/class/sensors/grip_sensor_sub/normal_threshold
-    chown system radio /sys/class/sensors/grip_sensor_sub/ch_state
-    chown system radio /sys/class/sensors/grip_sensor_sub/body_threshold
-    chown system radio /sys/class/sensors/grip_sensor_sub/grip_flush
-    chown system radio /sys/class/sensors/grip_sensor_sub/irq_count
-    chown system radio /sys/class/sensors/grip_sensor_sub/resolution
-    chown system radio /sys/class/sensors/grip_sensor_sub/adc_filt
-    chown system radio /sys/class/sensors/grip_sensor_sub/useful_filt
-    chown system radio /sys/class/sensors/grip_sensor_sub/ch_count
-    chown system radio /sys/class/sensors/grip_sensor_sub/mcc
-    chown system radio /sys/class/sensors/grip_sensor_sub/hysteresis
-    chown system radio /sys/class/sensors/grip_sensor_sub/sampling_freq
-    chown system radio /sys/class/sensors/grip_sensor_sub/isum
-    chown system radio /sys/class/sensors/grip_sensor_sub/scan_period
-    chown system radio /sys/class/sensors/grip_sensor_sub/analog_gain
-    chown system radio /sys/class/sensors/grip_sensor_sub/cdc_up
-    chown system radio /sys/class/sensors/grip_sensor_sub/cdc_down
-    chown system radio /sys/class/sensors/grip_sensor_sub/temp_enable
-    chown system radio /sys/class/sensors/grip_sensor_sub/cml
-    chown system radio /sys/class/sensors/grip_sensor_sub/grip_ref_cap
-    chown system radio /sys/class/sensors/grip_sensor_sub/analog_gain_b
-    chown system radio /sys/class/sensors/grip_sensor_sub/avg_negfilt_b
-    chown system radio /sys/class/sensors/grip_sensor_sub/avg_posfilt_b
-    chown system radio /sys/class/sensors/grip_sensor_sub/avg_thresh_b
-    chown system radio /sys/class/sensors/grip_sensor_sub/closedeb_b
-    chown system radio /sys/class/sensors/grip_sensor_sub/diff_avg_b
-    chown system radio /sys/class/sensors/grip_sensor_sub/fardeb_b
-    chown system radio /sys/class/sensors/grip_sensor_sub/gain_b
-    chown system radio /sys/class/sensors/grip_sensor_sub/grip_ref_cap_b
-    chown system radio /sys/class/sensors/grip_sensor_sub/hysteresis_b
-    chown system radio /sys/class/sensors/grip_sensor_sub/irq_count_b
-    chown system radio /sys/class/sensors/grip_sensor_sub/normal_threshold_b
-    chown system radio /sys/class/sensors/grip_sensor_sub/proxstatus_b
-    chown system radio /sys/class/sensors/grip_sensor_sub/raw_data_b
-    chown system radio /sys/class/sensors/grip_sensor_sub/rawfilt_b
-    chown system radio /sys/class/sensors/grip_sensor_sub/resolution_b
-    chown system radio /sys/class/sensors/grip_sensor_sub/sampling_freq_b
-    chown system radio /sys/class/sensors/grip_sensor_sub/unknown_state_b
-    chown system radio /sys/class/sensors/grip_sensor_sub/useful_avg_b
-    chown system radio /sys/class/sensors/grip_sensor_sub/useful_filt_b
-
-    chown system radio /sys/class/sensors/grip_sensor_sub2/name
-    chown system radio /sys/class/sensors/grip_sensor_sub2/vendor
-    chown system radio /sys/class/sensors/grip_sensor_sub2/raw_data
-    chown system radio /sys/class/sensors/grip_sensor_sub2/threshold
-    chown system radio /sys/class/sensors/grip_sensor_sub2/calibration
-    chown system radio /sys/class/sensors/grip_sensor_sub2/onoff
-    chown system radio /sys/class/sensors/grip_sensor_sub2/reset
-    chown system radio /sys/class/sensors/grip_sensor_sub2/mode
-    chown system radio /sys/class/sensors/grip_sensor_sub2/gain
-    chown system radio /sys/class/sensors/grip_sensor_sub2/start
-    chown system radio /sys/class/sensors/grip_sensor_sub2/normal_threshold
-    chown system radio /sys/class/sensors/grip_sensor_sub2/gain_b
-    chown system radio /sys/class/sensors/grip_sensor_sub2/raw_data_b
-    chown system radio /sys/class/sensors/grip_sensor_sub2/diff_avg_b
-    chown system radio /sys/class/sensors/grip_sensor_sub2/normal_threshold_b
-    chown system radio /sys/class/sensors/grip_sensor_sub2/ch_state
-    chown system radio /sys/class/sensors/grip_sensor_sub2/body_threshold
-    chown system radio /sys/class/sensors/grip_sensor_sub2/grip_flush
-    chown system radio /sys/class/sensors/grip_sensor_sub2/irq_count
-    chown system radio /sys/class/sensors/grip_sensor_sub2/ch_count
-    chown system radio /sys/class/sensors/grip_sensor_sub2/resolution
-    chown system radio /sys/class/sensors/grip_sensor_sub2/adc_filt
-    chown system radio /sys/class/sensors/grip_sensor_sub2/useful_filt
-    chown system radio /sys/class/sensors/grip_sensor_sub2/grip_ref_cap
-    chown system radio /sys/class/sensors/grip_sensor_sub2/grip_ref_cap_b
-
-    chown system radio /sys/class/sensors/grip_sensor_sub3/name
-    chown system radio /sys/class/sensors/grip_sensor_sub3/vendor
-    chown system radio /sys/class/sensors/grip_sensor_sub3/raw_data
-    chown system radio /sys/class/sensors/grip_sensor_sub3/threshold
-    chown system radio /sys/class/sensors/grip_sensor_sub3/calibration
-    chown system radio /sys/class/sensors/grip_sensor_sub3/onoff
-    chown system radio /sys/class/sensors/grip_sensor_sub3/reset
-    chown system radio /sys/class/sensors/grip_sensor_sub3/mode
-    chown system radio /sys/class/sensors/grip_sensor_sub3/gain
-    chown system radio /sys/class/sensors/grip_sensor_sub3/start
-    chown system radio /sys/class/sensors/grip_sensor_sub3/normal_threshold
-    chown system radio /sys/class/sensors/grip_sensor_sub3/gain_b
-    chown system radio /sys/class/sensors/grip_sensor_sub3/raw_data_b
-    chown system radio /sys/class/sensors/grip_sensor_sub3/diff_avg_b
-    chown system radio /sys/class/sensors/grip_sensor_sub3/normal_threshold_b
-    chown system radio /sys/class/sensors/grip_sensor_sub3/ch_state
-    chown system radio /sys/class/sensors/grip_sensor_sub3/body_threshold
-    chown system radio /sys/class/sensors/grip_sensor_sub3/grip_flush
-    chown system radio /sys/class/sensors/grip_sensor_sub3/irq_count
-    chown system radio /sys/class/sensors/grip_sensor_sub3/ch_count
-    chown system radio /sys/class/sensors/grip_sensor_sub3/resolution
-    chown system radio /sys/class/sensors/grip_sensor_sub3/adc_filt
-    chown system radio /sys/class/sensors/grip_sensor_sub3/useful_filt
-    chown system radio /sys/class/sensors/grip_sensor_sub3/grip_ref_cap
-    chown system radio /sys/class/sensors/grip_sensor_sub3/grip_ref_cap_b
 
 # GPU DVFS for SKI
     chown system system /sys/kernel/gpu/gpu_freq_table
@@ -621,6 +345,16 @@ on post-fs-data
     chmod 0440 /dev/sspm
     chown root system /dev/sspm
 
+    # VCP log
+    chmod 0660 /sys/class/misc/vcp/vcp_mobile_log
+    chown root system /sys/class/misc/vcp/vcp_mobile_log
+    chmod 0220 /sys/class/misc/vcp/vcp_log_flush
+    chown root system /sys/class/misc/vcp/vcp_log_flush
+    chmod 0440 /dev/vcp
+    chown root system /dev/vcp
+    chmod 0664 /sys/class/misc/vcp/vcp_ee_force_ke
+    chown root system /sys/class/misc/vcp/vcp_ee_force_ke
+
     # radvd
     chmod 444 /etc/radvd/radvd.conf
 
@@ -669,6 +403,12 @@ on post-fs-data
     chmod 0640 /dev/offloadservice
     chown media media /dev/offloadservice
 
+    #Permissions for audio
+    chown system radio /sys/class/audio/earjack/key_state
+    chown system radio /sys/class/audio/earjack/mic_adc
+    chown system radio /sys/class/audio/earjack/select_jack
+    chown system radio /sys/class/audio/earjack/state
+
     #OPEN DSP
     chmod 0640 /dev/audio_ipi
     chown media media /dev/audio_ipi
@@ -684,6 +424,12 @@ on post-fs-data
 
     #Fingerprint
     chmod 0666 /dev/goodix_fp
+
+    #vdec-fmt
+    chmod 0660 /dev/vdec-fmt
+    chown media system /dev/vdec-fmt
+    chmod 0660 /dev/fmt_sync
+    chown system system /dev/fmt_sync
 
     #v4l2 codec
     chmod 0660 /dev/vcu
@@ -855,6 +601,61 @@ on post-fs-data
     chown system system /dev/gz_kree
 
     #Camera
+    chmod 0660 /dev/camera-sysram
+    chmod 0660 /dev/camera-isp
+    chmod 0660 /dev/camera-mem
+    chmod 0660 /dev/camera-dip
+    chmod 0660 /dev/camera-tsf
+    chmod 0660 /dev/camera-dpe
+    chmod 0660 /dev/camera-mfb
+    chmod 0660 /dev/camera-rsc
+    chmod 0660 /dev/camera-owe
+    chmod 0660 /dev/camera-fdvt
+    chmod 0660 /dev/camera-pda
+    chmod 0660 /dev/camera-wpe
+    chmod 0660 /dev/camera-pipemgr
+    chmod 0660 /dev/kd_camera_hw
+    chmod 0660 /dev/seninf
+    chmod 0660 /dev/seninf_n3d
+    chmod 0660 /dev/flashlight
+    chmod 0660 /dev/kd_camera_hw_bus2
+    chmod 0660 /dev/FM50AF
+    chmod 0660 /dev/CAM_CAL_DRV
+    chmod 0660 /dev/MAINAF
+    chmod 0660 /dev/MAIN2AF
+    chmod 0660 /dev/MAIN3AF
+    chmod 0660 /dev/SUBAF
+    chmod 0660 /dev/vpu
+    chmod 0660 /dev/apusys
+    chmod 0660 /dev/mtk_ccd
+
+    chown system camera /dev/camera-sysram
+    chown system camera /dev/camera-isp
+    chown system camera /dev/camera-mem
+    chown system camera /dev/camera-dip
+    chown system camera /dev/camera-dpe
+    chown system camera /dev/camera-mfb
+    chown system camera /dev/camera-rsc
+    chown system camera /dev/camera-owe
+    chown system camera /dev/camera-tsf
+    chown system camera /dev/camera-fdvt
+    chown system camera /dev/camera-pda
+    chown system camera /dev/camera-wpe
+    chown system camera /dev/camera-pipemgr
+    chown system camera /dev/kd_camera_hw
+    chown system camera /dev/seninf
+    chown system camera /dev/seninf_n3d
+    chown system camera /dev/flashlight
+    chown system camera /dev/kd_camera_hw_bus2
+    chown system camera /dev/FM50AF
+    chown system camera /dev/CAM_CAL_DRV
+    chown system camera /dev/MAINAF
+    chown system camera /dev/MAIN2AF
+    chown system camera /dev/MAIN3AF
+    chown system camera /dev/SUBAF
+    chown system camera /dev/vpu
+    chown system camera /dev/apusys
+    chown system camera /dev/mtk_ccd
     chown system camera /sys/kernel/debug/mtk_cam_dbg/0/ctrl
     chown system camera /sys/kernel/debug/mtk_cam_dbg/1/ctrl
     chown system camera /sys/kernel/debug/mtk_cam_dbg/2/ctrl
@@ -930,6 +731,384 @@ on post-fs-data
     #Flash
     chown system camera /sys/class/camera/flash/rear_flash
 
+# Meta event
+    chown system radio /sys/class/sensors/sensor_dev/flush
+# [ Permissions for Grip Sensor
+    # For GRIP Sensor
+    chmod 0660 /dev/grip_sensor
+    chown system system /dev/grip_sensor
+    chmod 0660 /dev/grip_sensor_sub
+    chown system system /dev/grip_sensor_sub
+
+    chown system radio /sys/class/sensors/ssp_sensor/grip_fail
+    chown system radio /sys/class/sensors/grip_sensor/noti_enable
+    chown system radio /sys/class/sensors/grip_sensor/motion
+    chown system radio /sys/class/sensors/grip_sensor/unknown_state
+# SX93xx
+    chown system radio /sys/class/sensors/grip_sensor/analog_gain
+    chown system radio /sys/class/sensors/grip_sensor/analog_gain_b
+    chown system radio /sys/class/sensors/grip_sensor/avg_negfilt
+    chown system radio /sys/class/sensors/grip_sensor/avg_negfilt_b
+    chown system radio /sys/class/sensors/grip_sensor/avg_posfilt
+    chown system radio /sys/class/sensors/grip_sensor/avg_posfilt_b
+    chown system radio /sys/class/sensors/grip_sensor/avg_thresh
+    chown system radio /sys/class/sensors/grip_sensor/avg_thresh_b
+    chown system radio /sys/class/sensors/grip_sensor/cal_state
+    chown system radio /sys/class/sensors/grip_sensor/closedeb
+    chown system radio /sys/class/sensors/grip_sensor/closedeb_b
+    chown system radio /sys/class/sensors/grip_sensor/diff_avg
+    chown system radio /sys/class/sensors/grip_sensor/diff_avg_b
+    chown system radio /sys/class/sensors/grip_sensor/fardeb
+    chown system radio /sys/class/sensors/grip_sensor/fardeb_b
+    chown system radio /sys/class/sensors/grip_sensor/gain
+    chown system radio /sys/class/sensors/grip_sensor/gain_b
+    chown system radio /sys/class/sensors/grip_sensor/grip_ref_cap
+    chown system radio /sys/class/sensors/grip_sensor/grip_ref_cap_b
+    chown system radio /sys/class/sensors/grip_sensor/hysteresis
+    chown system radio /sys/class/sensors/grip_sensor/hysteresis_b
+    chown system radio /sys/class/sensors/grip_sensor/irq_count
+    chown system radio /sys/class/sensors/grip_sensor/irq_count_b
+    chown system radio /sys/class/sensors/grip_sensor/menual_calibrate
+    chown system radio /sys/class/sensors/grip_sensor/mode
+    chown system radio /sys/class/sensors/grip_sensor/motion
+    chown system radio /sys/class/sensors/grip_sensor/name
+    chown system radio /sys/class/sensors/grip_sensor/normal_threshold
+    chown system radio /sys/class/sensors/grip_sensor/normal_threshold_b
+    chown system radio /sys/class/sensors/grip_sensor/noti_enable
+    chown system radio /sys/class/sensors/grip_sensor/onoff
+    chown system radio /sys/class/sensors/grip_sensor/phase
+    chown system radio /sys/class/sensors/grip_sensor/proxstatus
+    chown system radio /sys/class/sensors/grip_sensor/proxstatus_b
+    chown system radio /sys/class/sensors/grip_sensor/raw_data
+    chown system radio /sys/class/sensors/grip_sensor/raw_data_b
+    chown system radio /sys/class/sensors/grip_sensor/rawfilt
+    chown system radio /sys/class/sensors/grip_sensor/rawfilt_b
+    chown system radio /sys/class/sensors/grip_sensor/register_read
+    chown system radio /sys/class/sensors/grip_sensor/register_read_all
+    chown system radio /sys/class/sensors/grip_sensor/register_write
+    chown system radio /sys/class/sensors/grip_sensor/regproxdata
+    chown system radio /sys/class/sensors/grip_sensor/reset
+    chown system radio /sys/class/sensors/grip_sensor/resolution
+    chown system radio /sys/class/sensors/grip_sensor/resolution_b
+    chown system radio /sys/class/sensors/grip_sensor/sampling_freq
+    chown system radio /sys/class/sensors/grip_sensor/sampling_freq_b
+    chown system radio /sys/class/sensors/grip_sensor/scan_period
+    chown system radio /sys/class/sensors/grip_sensor/unknown_state
+    chown system radio /sys/class/sensors/grip_sensor/unknown_state_b
+    chown system radio /sys/class/sensors/grip_sensor/useful_avg
+    chown system radio /sys/class/sensors/grip_sensor/useful_avg_b
+ 
+    chown system radio /sys/class/sensors/grip_sensor/useful_filt
+    chown system radio /sys/class/sensors/grip_sensor/useful_filt_b
+    chown system radio /sys/class/sensors/grip_sensor/vendor
+
+
+    chown system radio /sys/class/sensors/grip_sensor_sub/analog_gain
+    chown system radio /sys/class/sensors/grip_sensor_sub/analog_gain_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub/avg_negfilt
+    chown system radio /sys/class/sensors/grip_sensor_sub/avg_negfilt_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub/avg_posfilt
+    chown system radio /sys/class/sensors/grip_sensor_sub/avg_posfilt_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub/avg_thresh
+    chown system radio /sys/class/sensors/grip_sensor_sub/avg_thresh_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub/cal_state
+    chown system radio /sys/class/sensors/grip_sensor_sub/closedeb
+    chown system radio /sys/class/sensors/grip_sensor_sub/closedeb_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub/diff_avg
+    chown system radio /sys/class/sensors/grip_sensor_sub/diff_avg_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub/fardeb
+    chown system radio /sys/class/sensors/grip_sensor_sub/fardeb_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub/gain
+    chown system radio /sys/class/sensors/grip_sensor_sub/gain_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub/grip_ref_cap
+    chown system radio /sys/class/sensors/grip_sensor_sub/grip_ref_cap_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub/hysteresis
+    chown system radio /sys/class/sensors/grip_sensor_sub/hysteresis_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub/irq_count
+    chown system radio /sys/class/sensors/grip_sensor_sub/irq_count_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub/menual_calibrate
+    chown system radio /sys/class/sensors/grip_sensor_sub/mode
+    chown system radio /sys/class/sensors/grip_sensor_sub/motion
+    chown system radio /sys/class/sensors/grip_sensor_sub/name
+    chown system radio /sys/class/sensors/grip_sensor_sub/normal_threshold
+    chown system radio /sys/class/sensors/grip_sensor_sub/normal_threshold_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub/noti_enable
+    chown system radio /sys/class/sensors/grip_sensor_sub/onoff
+    chown system radio /sys/class/sensors/grip_sensor_sub/phase
+    chown system radio /sys/class/sensors/grip_sensor_sub/proxstatus
+    chown system radio /sys/class/sensors/grip_sensor_sub/proxstatus_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub/raw_data
+    chown system radio /sys/class/sensors/grip_sensor_sub/raw_data_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub/rawfilt
+    chown system radio /sys/class/sensors/grip_sensor_sub/rawfilt_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub/register_read
+    chown system radio /sys/class/sensors/grip_sensor_sub/register_read_all
+    chown system radio /sys/class/sensors/grip_sensor_sub/register_write
+    chown system radio /sys/class/sensors/grip_sensor_sub/regproxdata
+    chown system radio /sys/class/sensors/grip_sensor_sub/reset
+    chown system radio /sys/class/sensors/grip_sensor_sub/resolution
+    chown system radio /sys/class/sensors/grip_sensor_sub/resolution_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub/sampling_freq
+    chown system radio /sys/class/sensors/grip_sensor_sub/sampling_freq_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub/scan_period
+    chown system radio /sys/class/sensors/grip_sensor_sub/unknown_state
+    chown system radio /sys/class/sensors/grip_sensor_sub/unknown_state_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub/useful_avg
+    chown system radio /sys/class/sensors/grip_sensor_sub/useful_avg_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub/useful_filt
+    chown system radio /sys/class/sensors/grip_sensor_sub/useful_filt_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub/vendor 
+
+    chown system radio /sys/class/sensors/grip_sensor_sub2/analog_gain
+    chown system radio /sys/class/sensors/grip_sensor_sub2/analog_gain_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub2/avg_negfilt
+    chown system radio /sys/class/sensors/grip_sensor_sub2/avg_negfilt_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub2/avg_posfilt
+    chown system radio /sys/class/sensors/grip_sensor_sub2/avg_posfilt_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub2/avg_thresh
+    chown system radio /sys/class/sensors/grip_sensor_sub2/avg_thresh_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub2/cal_state
+    chown system radio /sys/class/sensors/grip_sensor_sub2/closedeb
+    chown system radio /sys/class/sensors/grip_sensor_sub2/closedeb_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub2/diff_avg
+    chown system radio /sys/class/sensors/grip_sensor_sub2/diff_avg_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub2/fardeb
+    chown system radio /sys/class/sensors/grip_sensor_sub2/fardeb_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub2/gain
+    chown system radio /sys/class/sensors/grip_sensor_sub2/gain_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub2/grip_ref_cap
+    chown system radio /sys/class/sensors/grip_sensor_sub2/grip_ref_cap_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub2/hysteresis
+    chown system radio /sys/class/sensors/grip_sensor_sub2/hysteresis_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub2/irq_count
+    chown system radio /sys/class/sensors/grip_sensor_sub2/irq_count_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub2/menual_calibrate
+    chown system radio /sys/class/sensors/grip_sensor_sub2/mode
+    chown system radio /sys/class/sensors/grip_sensor_sub2/motion
+    chown system radio /sys/class/sensors/grip_sensor_sub2/name
+    chown system radio /sys/class/sensors/grip_sensor_sub2/normal_threshold
+    chown system radio /sys/class/sensors/grip_sensor_sub2/normal_threshold_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub2/noti_enable
+    chown system radio /sys/class/sensors/grip_sensor_sub2/onoff
+    chown system radio /sys/class/sensors/grip_sensor_sub2/phase
+    chown system radio /sys/class/sensors/grip_sensor_sub2/proxstatus
+    chown system radio /sys/class/sensors/grip_sensor_sub2/proxstatus_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub2/raw_data
+    chown system radio /sys/class/sensors/grip_sensor_sub2/raw_data_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub2/rawfilt
+    chown system radio /sys/class/sensors/grip_sensor_sub2/rawfilt_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub2/register_read
+    chown system radio /sys/class/sensors/grip_sensor_sub2/register_read_all
+    chown system radio /sys/class/sensors/grip_sensor_sub2/register_write
+    chown system radio /sys/class/sensors/grip_sensor_sub2/regproxdata
+    chown system radio /sys/class/sensors/grip_sensor_sub2/reset
+    chown system radio /sys/class/sensors/grip_sensor_sub2/resolution
+    chown system radio /sys/class/sensors/grip_sensor_sub2/resolution_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub2/sampling_freq
+    chown system radio /sys/class/sensors/grip_sensor_sub2/sampling_freq_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub2/scan_period
+    chown system radio /sys/class/sensors/grip_sensor_sub2/unknown_state
+    chown system radio /sys/class/sensors/grip_sensor_sub2/unknown_state_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub2/useful_avg
+    chown system radio /sys/class/sensors/grip_sensor_sub2/useful_avg_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub2/useful_filt
+    chown system radio /sys/class/sensors/grip_sensor_sub2/useful_filt_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub2/vendor 
+
+    chown system radio /sys/class/sensors/grip_sensor_wifi/analog_gain
+    chown system radio /sys/class/sensors/grip_sensor_wifi/analog_gain_2ch
+    chown system radio /sys/class/sensors/grip_sensor_wifi/avg_negfilt
+    chown system radio /sys/class/sensors/grip_sensor_wifi/avg_negfilt_2ch
+    chown system radio /sys/class/sensors/grip_sensor_wifi/avg_posfilt
+    chown system radio /sys/class/sensors/grip_sensor_wifi/avg_posfilt_2ch
+    chown system radio /sys/class/sensors/grip_sensor_wifi/avg_thresh
+    chown system radio /sys/class/sensors/grip_sensor_wifi/avg_thresh_2ch
+    chown system radio /sys/class/sensors/grip_sensor_wifi/cal_state
+    chown system radio /sys/class/sensors/grip_sensor_wifi/closedeb
+    chown system radio /sys/class/sensors/grip_sensor_wifi/closedeb_2ch
+    chown system radio /sys/class/sensors/grip_sensor_wifi/diff_avg
+    chown system radio /sys/class/sensors/grip_sensor_wifi/diff_avg_2ch
+    chown system radio /sys/class/sensors/grip_sensor_wifi/fardeb
+    chown system radio /sys/class/sensors/grip_sensor_wifi/fardeb_2ch
+    chown system radio /sys/class/sensors/grip_sensor_wifi/gain
+    chown system radio /sys/class/sensors/grip_sensor_wifi/gain_2ch
+    chown system radio /sys/class/sensors/grip_sensor_wifi/grip_ref_cap
+    chown system radio /sys/class/sensors/grip_sensor_wifi/grip_ref_cap_2ch
+    chown system radio /sys/class/sensors/grip_sensor_wifi/hysteresis
+    chown system radio /sys/class/sensors/grip_sensor_wifi/hysteresis_2ch
+    chown system radio /sys/class/sensors/grip_sensor_wifi/irq_count
+    chown system radio /sys/class/sensors/grip_sensor_wifi/irq_count_2ch
+    chown system radio /sys/class/sensors/grip_sensor_wifi/menual_calibrate
+    chown system radio /sys/class/sensors/grip_sensor_wifi/mode
+    chown system radio /sys/class/sensors/grip_sensor_wifi/motion
+    chown system radio /sys/class/sensors/grip_sensor_wifi/name
+    chown system radio /sys/class/sensors/grip_sensor_wifi/normal_threshold
+    chown system radio /sys/class/sensors/grip_sensor_wifi/normal_threshold_2ch
+    chown system radio /sys/class/sensors/grip_sensor_wifi/noti_enable
+    chown system radio /sys/class/sensors/grip_sensor_wifi/onoff
+    chown system radio /sys/class/sensors/grip_sensor_wifi/phase
+    chown system radio /sys/class/sensors/grip_sensor_wifi/proxstatus
+    chown system radio /sys/class/sensors/grip_sensor_wifi/proxstatus_2ch
+    chown system radio /sys/class/sensors/grip_sensor_wifi/raw_data
+    chown system radio /sys/class/sensors/grip_sensor_wifi/raw_data_2ch
+    chown system radio /sys/class/sensors/grip_sensor_wifi/rawfilt
+    chown system radio /sys/class/sensors/grip_sensor_wifi/rawfilt_2ch
+    chown system radio /sys/class/sensors/grip_sensor_wifi/register_read
+    chown system radio /sys/class/sensors/grip_sensor_wifi/register_read_all
+    chown system radio /sys/class/sensors/grip_sensor_wifi/register_write
+    chown system radio /sys/class/sensors/grip_sensor_wifi/regproxdata
+    chown system radio /sys/class/sensors/grip_sensor_wifi/reset
+    chown system radio /sys/class/sensors/grip_sensor_wifi/resolution
+    chown system radio /sys/class/sensors/grip_sensor_wifi/resolution_2ch
+    chown system radio /sys/class/sensors/grip_sensor_wifi/sampling_freq
+    chown system radio /sys/class/sensors/grip_sensor_wifi/sampling_freq_2ch
+    chown system radio /sys/class/sensors/grip_sensor_wifi/scan_period
+    chown system radio /sys/class/sensors/grip_sensor_wifi/unknown_state
+    chown system radio /sys/class/sensors/grip_sensor_wifi/unknown_state_2ch
+    chown system radio /sys/class/sensors/grip_sensor_wifi/useful_avg
+    chown system radio /sys/class/sensors/grip_sensor_wifi/useful_avg_2ch
+    chown system radio /sys/class/sensors/grip_sensor_wifi/useful_filt
+    chown system radio /sys/class/sensors/grip_sensor_wifi/useful_filt_2ch
+    chown system radio /sys/class/sensors/grip_sensor_wifi/vendor 
+
+# Abov
+    chown system radio /sys/class/sensors/grip_sensor/grip_irq_count
+    chown system radio /sys/class/sensors/grip_sensor/grip_threshold
+    chown system radio /sys/class/sensors/grip_sensor/grip_total_cap
+    chown system radio /sys/class/sensors/grip_sensor/grip_sar_enable
+    chown system radio /sys/class/sensors/grip_sensor/grip_sw_reset
+    chown system radio /sys/class/sensors/grip_sensor/grip_earjack
+    chown system radio /sys/class/sensors/grip_sensor/grip
+    chown system radio /sys/class/sensors/grip_sensor/grip_baseline
+    chown system radio /sys/class/sensors/grip_sensor/grip_raw
+    chown system radio /sys/class/sensors/grip_sensor/grip_ref_cap
+    chown system radio /sys/class/sensors/grip_sensor/grip_gain
+    chown system radio /sys/class/sensors/grip_sensor/grip_gain_2ch
+    chown system radio /sys/class/sensors/grip_sensor/grip_check
+    chown system radio /sys/class/sensors/grip_sensor/grip_sar_only_mode
+    chown system radio /sys/class/sensors/grip_sensor/grip_sar_press_threshold
+    chown system radio /sys/class/sensors/grip_sensor/grip_sar_release_threshold
+    chown system radio /sys/class/sensors/grip_sensor/grip_firm_version_phone
+    chown system radio /sys/class/sensors/grip_sensor/grip_firm_version_panel
+    chown system radio /sys/class/sensors/grip_sensor/grip_firm_update
+    chown system radio /sys/class/sensors/grip_sensor/grip_firm_update_status
+    chown system radio /sys/class/sensors/grip_sensor/grip_irq_state
+    chown system radio /sys/class/sensors/grip_sensor/grip_irq_en_cnt
+    chown system radio /sys/class/sensors/grip_sensor/grip_reg_rw
+    chown system radio /sys/class/sensors/grip_sensor/grip_crc_check
+    chown system radio /sys/class/sensors/grip_sensor/grip_sw_reset_ready
+    chown system radio /sys/class/sensors/grip_sensor/grip_register_recover
+
+    chown system radio /sys/class/sensors/grip_sensor/grip_sar_press_threshold_2ch
+    chown system radio /sys/class/sensors/grip_sensor/grip_sar_release_threshold_2ch
+    chown system radio /sys/class/sensors/grip_sensor/grip_irq_count_2ch
+
+    chown system radio /sys/class/sensors/grip_sensor/grip_threshold_2ch
+    chown system radio /sys/class/sensors/grip_sensor/grip_total_cap_2ch
+    chown system radio /sys/class/sensors/grip_sensor/grip_2ch
+    chown system radio /sys/class/sensors/grip_sensor/grip_baseline_2ch
+    chown system radio /sys/class/sensors/grip_sensor/grip_raw_2ch
+    chown system radio /sys/class/sensors/grip_sensor/grip_check_2ch
+
+    chown system radio /sys/class/sensors/grip_sensor_sub/grip_irq_count
+    chown system radio /sys/class/sensors/grip_sensor_sub/grip_threshold
+    chown system radio /sys/class/sensors/grip_sensor_sub/grip_total_cap
+    chown system radio /sys/class/sensors/grip_sensor_sub/grip_sar_enable
+    chown system radio /sys/class/sensors/grip_sensor_sub/grip_sw_reset
+    chown system radio /sys/class/sensors/grip_sensor_sub/grip_earjack
+    chown system radio /sys/class/sensors/grip_sensor_sub/grip
+    chown system radio /sys/class/sensors/grip_sensor_sub/grip_baseline
+    chown system radio /sys/class/sensors/grip_sensor_sub/grip_raw
+    chown system radio /sys/class/sensors/grip_sensor_sub/grip_ref_cap
+    chown system radio /sys/class/sensors/grip_sensor_sub/grip_gain
+    chown system radio /sys/class/sensors/grip_sensor_sub/grip_gain_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub/grip_check
+    chown system radio /sys/class/sensors/grip_sensor_sub/grip_sar_only_mode
+    chown system radio /sys/class/sensors/grip_sensor_sub/grip_sar_press_threshold
+    chown system radio /sys/class/sensors/grip_sensor_sub/grip_sar_release_threshold
+    chown system radio /sys/class/sensors/grip_sensor_sub/grip_firm_version_phone
+    chown system radio /sys/class/sensors/grip_sensor_sub/grip_firm_version_panel
+    chown system radio /sys/class/sensors/grip_sensor_sub/grip_firm_update
+    chown system radio /sys/class/sensors/grip_sensor_sub/grip_firm_update_status
+    chown system radio /sys/class/sensors/grip_sensor_sub/grip_irq_state
+    chown system radio /sys/class/sensors/grip_sensor_sub/grip_irq_en_cnt
+    chown system radio /sys/class/sensors/grip_sensor_sub/grip_reg_rw
+    chown system radio /sys/class/sensors/grip_sensor_sub/grip_crc_check
+    chown system radio /sys/class/sensors/grip_sensor_sub/grip_sw_reset_ready
+    chown system radio /sys/class/sensors/grip_sensor_sub/grip_register_recover
+
+    chown system radio /sys/class/sensors/grip_sensor_sub/grip_sar_press_threshold_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub/grip_sar_release_threshold_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub/grip_irq_count_2ch
+
+    chown system radio /sys/class/sensors/grip_sensor_sub/grip_threshold_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub/grip_total_cap_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub/grip_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub/grip_baseline_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub/grip_raw_2ch
+    chown system radio /sys/class/sensors/grip_sensor_sub/grip_check_2ch
+# WIFI Grip sensor
+    chown system radio /sys/class/sensors/grip_sensor_wifi/name
+    chown system radio /sys/class/sensors/grip_sensor_wifi/vendor
+    chown system radio /sys/class/sensors/grip_sensor_wifi/raw_data
+    chown system radio /sys/class/sensors/grip_sensor_wifi/threshold
+    chown system radio /sys/class/sensors/grip_sensor_wifi/calibration
+    chown system radio /sys/class/sensors/grip_sensor_wifi/onoff
+    chown system radio /sys/class/sensors/grip_sensor_wifi/reset
+    chown system radio /sys/class/sensors/grip_sensor_wifi/mode
+    chown system radio /sys/class/sensors/grip_sensor_wifi/grip_ref_cap
+    chown system radio /sys/class/sensors/grip_sensor_wifi/gain
+    chown system radio /sys/class/sensors/grip_sensor_wifi/start
+    chown system radio /sys/class/sensors/grip_sensor_wifi/normal_threshold
+    chown system radio /sys/class/sensors/grip_sensor_wifi/gain_ch2
+    chown system radio /sys/class/sensors/grip_sensor_wifi/raw_data_ch2
+    chown system radio /sys/class/sensors/grip_sensor_wifi/diff_avg_ch2
+    chown system radio /sys/class/sensors/grip_sensor_wifi/normal_threshold_ch2
+    chown system radio /sys/class/sensors/grip_sensor_wifi/ch_state
+    chown system radio /sys/class/sensors/grip_sensor_wifi/body_threshold
+    chown system radio /sys/class/sensors/grip_sensor_wifi/grip_flush
+    chown system radio /sys/class/sensors/grip_sensor_wifi/irq_count
+    chown system radio /sys/class/sensors/grip_sensor_wifi/ch_count
+    chown system radio /sys/class/sensors/grip_sensor_wifi/resolution
+    chown system radio /sys/class/sensors/grip_sensor_wifi/adc_filt
+    chown system radio /sys/class/sensors/grip_sensor_wifi/useful_filt
+    chown system radio /sys/class/sensors/grip_sensor_wifi/grip_irq_count
+    chown system radio /sys/class/sensors/grip_sensor_wifi/grip_threshold
+    chown system radio /sys/class/sensors/grip_sensor_wifi/grip_total_cap
+    chown system radio /sys/class/sensors/grip_sensor_wifi/grip_sar_enable
+    chown system radio /sys/class/sensors/grip_sensor_wifi/grip_sw_reset
+    chown system radio /sys/class/sensors/grip_sensor_wifi/grip_earjack
+    chown system radio /sys/class/sensors/grip_sensor_wifi/grip
+    chown system radio /sys/class/sensors/grip_sensor_wifi/grip_baseline
+    chown system radio /sys/class/sensors/grip_sensor_wifi/grip_raw
+    chown system radio /sys/class/sensors/grip_sensor_wifi/grip_gain
+    chown system radio /sys/class/sensors/grip_sensor_wifi/grip_gain_2ch
+    chown system radio /sys/class/sensors/grip_sensor_wifi/grip_check
+    chown system radio /sys/class/sensors/grip_sensor_wifi/grip_sar_only_mode
+    chown system radio /sys/class/sensors/grip_sensor_wifi/grip_sar_press_threshold
+    chown system radio /sys/class/sensors/grip_sensor_wifi/grip_sar_release_threshold
+    chown system radio /sys/class/sensors/grip_sensor_wifi/grip_firm_version_phone
+    chown system radio /sys/class/sensors/grip_sensor_wifi/grip_firm_version_panel
+    chown system radio /sys/class/sensors/grip_sensor_wifi/grip_firm_update
+    chown system radio /sys/class/sensors/grip_sensor_wifi/grip_firm_update_status
+    chown system radio /sys/class/sensors/grip_sensor_wifi/grip_irq_state
+    chown system radio /sys/class/sensors/grip_sensor_wifi/grip_irq_en_cnt
+    chown system radio /sys/class/sensors/grip_sensor_wifi/grip_reg_rw
+    chown system radio /sys/class/sensors/grip_sensor_wifi/grip_crc_check
+    chown system radio /sys/class/sensors/grip_sensor_wifi/grip_sw_reset_ready
+    chown system radio /sys/class/sensors/grip_sensor_wifi/grip_register_recover
+
+    chown system radio /sys/class/sensors/grip_sensor_wifi/grip_sar_press_threshold_2ch
+    chown system radio /sys/class/sensors/grip_sensor_wifi/grip_sar_release_threshold_2ch
+    chown system radio /sys/class/sensors/grip_sensor_wifi/grip_irq_count_2ch
+
+    chown system radio /sys/class/sensors/grip_sensor_wifi/grip_threshold_2ch
+    chown system radio /sys/class/sensors/grip_sensor_wifi/grip_total_cap_2ch
+    chown system radio /sys/class/sensors/grip_sensor_wifi/grip_2ch
+    chown system radio /sys/class/sensors/grip_sensor_wifi/grip_baseline_2ch
+    chown system radio /sys/class/sensors/grip_sensor_wifi/grip_raw_2ch
+    chown system radio /sys/class/sensors/grip_sensor_wifi/grip_check_2ch
+# ] Permissions for Grip Sensor
     #CCU
     chmod 0660 /dev/ccu
     chown system camera /dev/ccu
@@ -946,95 +1125,6 @@ on post-fs-data
     chown root radio /dev/mt_otg_test
     chmod 0660 /dev/mt_otg_test
 
-	#Vibrator
-    chown system system /sys/class/timed_output/vibrator/enable
-    chmod 0644 /sys/class/timed_output/vibrator/enable
-
-    # Switch Device
-    chown system radio /sys/class/sec/switch/usb_sel
-    chown system radio /sys/class/sec/switch/uart_sel
-    chown system radio /sys/class/sec/switch/uart_en
-    chown system radio /sys/class/sec/switch/otg_test
-    chown system radio /sys/class/sec/switch/apo_factory
-    chown system radio /sys/class/sec/switch/afc_disable
-    chown system radio /sys/class/sec/switch/afc_set_voltage
-    chown system radio /sys/class/sec/switch/hiccup
-    chown system radio /sys/class/sec/switch/jig_disable
-    chown system radio /sys/class/sec/switch/factory_uart
-
-    # OTG Test
-    chown system radio /sys/class/host_notify/usb_otg/booster
-    chmod 0664 /sys/class/host_notify/usb_otg/booster
-
-    # Permission for type-c manager
-    chown system radio /sys/class/sec/typec_manager/fac_usb_control
-
-    # Permission for CCIC
-    chown system radio /sys/class/sec/ccic/lpm_mode
-    chmod 0664 /sys/class/sec/ccic/lpm_mode
-    chown system system /sys/class/sec/ccic/control_gpio
-    chmod 0660 /sys/class/sec/ccic/control_gpio
-    chown system radio /sys/class/sec/ccic/fw_update
-    chmod 0220 /sys/class/sec/ccic/fw_update
-    chown system radio /sys/class/sec/ccic/role_swap
-    chmod 0220 /sys/class/sec/ccic/role_swap
-    chown system usb /sys/class/sec/ccic/dex_fan_uvdm
-    chmod 0220 /sys/class/sec/ccic/dex_fan_uvdm
-    chown system usb /sys/class/sec/ccic/samsung_uvdm
-    chmod 0220 /sys/class/sec/ccic/samsung_uvdm
-    chown system radio /sys/class/sec/ccic/ccic_control_option
-    chown system system /sys/class/sec/ccic/cc_pin_status
-    chmod 0440 /sys/class/sec/ccic/cc_pin_status
-    chown system usb /dev/ccic_misc
-    chmod 0664 /dev/ccic_misc
-    chown system radio /sys/class/sec/ccic/cc_sbu_adc
-    chown system radio /sys/class/sec/ccic/vsafe0v_status
-    chmod 0444 /sys/class/sec/ccic/vsafe0v_status
-    chown system radio /sys/class/sec/ccic/ovp_ic_shutdown
-    chmod 0220 /sys/class/sec/ccic/ovp_ic_shutdown
-    chown system system /sys/class/sec/ccic/hmd_power
-    chmod 0220 /sys/class/sec/ccic/hmd_power
-    chown system system /sys/class/sec/ccic/novbus_rp22k
-    chmod 0440 /sys/class/sec/ccic/novbus_rp22k
-
-    # usb disable
-    chown system usb /sys/class/usb_notify/usb_control/disable
-    chmod 0664 /sys/class/usb_notify/usb_control/disable
-
-    # usb usb_data_enabled
-    chown root system /sys/class/usb_notify/usb_control/usb_data_enabled
-    chmod 0664 /sys/class/usb_notify/usb_control/usb_data_enabled
-
-    # usb hw param
-    chown system usb /sys/class/usb_notify/usb_control/usb_hw_param
-    chmod 0664 /sys/class/usb_notify/usb_control/usb_hw_param
-    chown system usb /sys/class/usb_notify/usb_control/hw_param
-    chmod 0664 /sys/class/usb_notify/usb_control/hw_param
-
-    # usb whitelist
-    chown system usb /sys/class/usb_notify/usb_control/whitelist_for_mdm
-    chmod 0664 /sys/class/usb_notify/usb_control/whitelist_for_mdm
-
-    # ccic UVDM permission
-    chown system usb /dev/ccic_misc
-    chmod 0664 /dev/ccic_misc
-
-    # set file permission for boot
-    chown radio system /efs/usb_hw_param
-    chmod 771 /efs/usb_hw_param
-    chown system system /efs/usb_hw_param/usb_hw_param.log
-    chmod 0660 /efs/usb_hw_param/usb_hw_param.log
-
-    # MTP device permission
-    chmod 0660 /dev/usb_mtp_gadget
-    chown system mtp /dev/usb_mtp_gadget
-    mkdir /dev/socket/mtp 0770 system mtp
-
-    # vib_info permission
-    chown system system /sys/class/vib_info_class/vib_support_info/functions
-    chown system system /sys/class/vib_info_class/vib_support_info/intensities
-    chown system system /sys/class/vib_info_class/vib_support_info/haptic_intensities
-
     # MDP
     chmod 0660 /dev/mt-mdp
     chown system media /dev/mt-mdp
@@ -1044,8 +1134,8 @@ on post-fs-data
     chown media media /dev/MTK_SMI
 
     # MMQoS
-    chmod 0660 /sys/devices/platform/soc/soc:interconnect/mmqos_hrt/camera_max_bw
-    chown media media /sys/devices/platform/soc/soc:interconnect/mmqos_hrt/camera_max_bw
+    chmod 0660 /sys/devices/platform/interconnect/mmqos_hrt/camera_max_bw
+    chown media media /sys/devices/platform/interconnect/mmqos_hrt/camera_max_bw
 
     # RRC
     chmod 0660 /dev/mtk_rrc
@@ -1054,9 +1144,6 @@ on post-fs-data
     # DFRC
     chmod 0660 /dev/mtk_dfrc
     chown system graphics /dev/mtk_dfrc
-
-    # Permission for Memboost
-    chown cameraserver cameraserver /sys/kernel/mm/vmscan/mem_boost_mode
 
     # change partition permission
 
@@ -1130,15 +1217,21 @@ on post-fs-data
     chmod 0664 sys/kernel/debug/rt-regmap/mt6360_ldo.5-0064/reg_addr
     chmod 0664 sys/kernel/debug/rt-regmap/mt6360-4e/reg_addr
 
+    #widevine driver node
+    chmod 0660 /dev/drm_wv
+    chown media system /dev/drm_wv
+
 # End of adding by MTK drivers
 # -----------------------
 on boot
 
-    write /proc/sys/vm/dirty_writeback_centisecs 300
     chmod 0660 /sys/power/autosleep
 
     chmod 0664 /sys/class/leds/lcd-backlight/brightness
     chown system system /sys/class/leds/lcd-backlight/brightness
+
+    # For vibrator
+    chown system system /sys/class/leds/vibrator/trigger
 
     chown system system /sys/devices/system/cpu/cpufreq/hotplug/cpu_num_base
     chmod 0660 /sys/devices/system/cpu/cpufreq/hotplug/cpu_num_base
@@ -1167,7 +1260,8 @@ on boot
     chown system system /sys/class/leds/blue/trigger
 
     # gauge symbolic
-    symlink /sys/devices/platform/soc/10026000.pwrap/10026000.pwrap:mt6366/mt6358-gauge /dev/gauge
+    symlink /sys/devices/platform/soc/1c804000.spmi/spmi-0/0-04/mt6377-gauge /dev/gauge
+    symlink /sys/devices/platform/soc/11b21000.i2c/i2c-5/5-0034/11b21000.i2c:mt6375@34:mtk_gauge /dev/gauge
 
     # Permission for hibernation
     chown radio system /sys/power/tuxonice
@@ -1316,118 +1410,486 @@ on boot
 #Power Manager
     write /sys/power/pm_freeze_timeout 2000
 
- # Permissions for Touchscreen
-    chown system radio /sys/class/sec/tsp/cmd
-    chown system system /sys/class/sec/tsp/input/enabled
-    chown system system /sys/class/sec/tsp/enabled
-    chmod 0660 /sys/class/sec/tsp/input/enabled
-    chown root system /proc/tsp_msg
-    chmod 0440 /proc/tsp_msg
-    chown system system /sys/class/sec/tsp/multi_count
-    chown system system /sys/class/sec/tsp/wet_mode
-    chown system system /sys/class/sec/tsp/noise_mode
-    chown system system /sys/class/sec/tsp/comm_err_count
-    chown system system /sys/class/sec/tsp/checksum
-    chown system system /sys/class/sec/tsp/all_touch_count
-    chown system system /sys/class/sec/tsp/z_value
-    chown system system /sys/class/sec/tsp/sensitivity_mode
-    chown system system /sys/class/sec/tsp/prox_power_off
-    chown system system /sys/class/sec/tsp/ic_reset_count
-    chown system system /sys/class/sec/tsp/mode_change_failed_count
-    chown system system /dev/tspio
-    chown system system /sys/class/sec/tsp/ear_detect_enable
-    chown system system /sys/class/sec/tsp/hw_param
-    chown system system /sys/class/sec/tsp/dualscreen_policy
+ # Permissions for Charging
+    mkdir /efs/Battery 0775 radio system
+    chown radio system /efs/Battery
+    chmod 0775 /efs/Battery
+    chown system system /data/vendor/log/chg
+    chmod 0775 /data/vendor/log/chg
+    chown system system /data/vendor/log/chg/battery_dump1
+    chown system system /data/vendor/log/chg/battery_dump2
+    copy /system/vendor/firmware/battery_data.dat /efs/Battery/battery_data.dat
+    chmod 0400 /efs/Battery/battery_data.dat
+    write /sys/class/power_supply/battery/batt_update_data "/efs/Battery/battery_data.dat"
+    chown system radio /sys/class/power_supply/battery/batt_ext_dev_chg
+    chown system radio /sys/class/power_supply/battery/batt_temp_control_test
+    chown system radio /efs/Battery/fg_full_voltage
+    chown system radio /sys/class/power_supply/battery/fg_full_voltage
+    chown system radio /sys/class/power_supply/battery/batt_self_discharging_control
+    chown system radio /sys/class/power_supply/battery/batt_inbat_wireless_cs100
+    chmod 0664 /efs/Battery/fg_full_voltage
+    chmod 0664 /sys/class/power_supply/battery/fg_full_voltage
+    chown system radio /sys/class/power_supply/battery/test_mode
+    chown system radio /sys/class/power_supply/battery/batt_reset_soc
+    chown system radio /sys/class/power_supply/battery/batt_slate_mode
+    chown system radio /sys/class/power_supply/battery/batt_swelling_control
+    chown system radio /sys/class/power_supply/battery/batt_battery_id
+    chown system radio /sys/class/power_supply/battery/batt_sub_battery_id
+    chown system radio /sys/class/power_supply/battery/factory_mode
+    chmod 0664 /sys/class/power_supply/battery/factory_mode
+    chown system radio /sys/class/power_supply/battery/batt_factory_mode
+    chmod 0664 /sys/class/power_supply/battery/batt_factory_mode
+    chown system radio /sys/class/power_supply/battery/siop_level
+    chown system radio /sys/class/power_supply/battery/siop_event
+    chown system radio /sys/class/power_supply/battery/batt_temp
+    chown system radio /sys/class/power_supply/battery/wc_enable
+    chown system radio /sys/class/power_supply/battery/factory_mode_relieve
+    chown system radio /sys/class/power_supply/battery/factory_mode_bypass
+    chown system system /sys/class/power_supply/battery/normal_mode_bypass
+    chown system radio /sys/class/power_supply/battery/factory_voltage_regulation
+    chown system radio /sys/class/power_supply/battery/factory_mode_disable
+    chown system radio /sys/class/power_supply/battery/batt_pon_ocv
+    chown system radio /sys/class/power_supply/battery/batt_user_pon_ocv
+    chown system radio /sys/class/power_supply/battery/set_ship_mode
+    chmod 0664 /sys/class/power_supply/battery/set_ship_mode
+    chown system nfc /sys/class/power_supply/battery/wc_control
+    chown system nfc /sys/class/power_supply/battery/wc_control_cnt
+    chown system nfc /sys/class/power_supply/battery/led_cover
+    chown system radio /sys/class/power_supply/battery/update
+    chown system radio /sys/class/power_supply/battery/batt_wdt_control
+    chown system sdcard_rw /sys/class/power_supply/battery/store_mode
+    chown sdcard_rw sdcard_rw /sys/class/power_supply/battery/call
+    chown sdcard_rw sdcard_rw /sys/class/power_supply/battery/video
+    chown sdcard_rw sdcard_rw /sys/class/power_supply/battery/music
+    chown sdcard_rw sdcard_rw /sys/class/power_supply/battery/browser
+    chown sdcard_rw sdcard_rw /sys/class/power_supply/battery/hotspot
+    chown sdcard_rw sdcard_rw /sys/class/power_supply/battery/camera
+    chown system radio /sys/class/power_supply/battery/talk_wcdma
+    chown system radio /sys/class/power_supply/battery/talk_gsm
+    chown system radio /sys/class/power_supply/battery/call
+    chown system radio /sys/class/power_supply/battery/data_call
+    chown system radio /sys/class/power_supply/battery/gps
+    chown system radio /sys/class/power_supply/battery/wifi
+    chown system radio /sys/class/power_supply/battery/lte
+    chown system radio /sys/class/power_supply/battery/lcd
+    chown system radio /sys/class/power_supply/ps/status
+    chmod 0664 /sys/class/power_supply/battery/wc_control
+    chmod 0664 /sys/class/power_supply/battery/wc_control_cnt
+    chmod 0664 /sys/class/power_supply/battery/led_cover
+    chmod 0664 /sys/class/power_supply/ps/status
+    chmod 0664 /sys/class/power_supply/battery/batt_temp_table
+    chown system radio /sys/class/power_supply/battery/batt_temp_table
+    chown system radio /sys/class/power_supply/battery/batt_high_current_usb
+    chown system radio /sys/class/power_supply/battery/batt_inbat_voltage
+    chmod 0664 /sys/class/power_supply/battery/batt_high_current_usb
+    chown system radio /sys/class/power_supply/battery/hmt_ta_connected
+    chown system radio /sys/class/power_supply/battery/hmt_ta_charge
+    chown system radio /sys/class/power_supply/battery/battery_cycle
+    chown system radio /sys/class/power_supply/otg/online
+    chmod 0664 /sys/class/power_supply/otg/online
+    chown system radio /sys/class/power_supply/battery/charge_otg_control
+    chown system radio /sys/class/power_supply/battery/charge_uno_control
+    chown system radio /sys/class/power_supply/battery/batt_wireless_firmware_update
+    chown system radio /sys/class/power_supply/battery/otp_firmware_result
+    chown system radio /sys/class/power_supply/battery/wc_ic_grade
+    chown system radio /sys/class/power_supply/battery/wc_ic_chip_id
+    chown system radio /sys/class/power_supply/battery/otp_firmware_ver_bin
+    chown system radio /sys/class/power_supply/battery/otp_firmware_ver
+    chown system radio /sys/class/power_supply/battery/tx_firmware_result
+    chown system radio /sys/class/power_supply/battery/batt_tx_firmware
+    chown system radio /sys/class/power_supply/battery/batt_hv_wireless_status
+    chown system radio /sys/class/power_supply/battery/batt_hv_wireless_pad_ctrl
+    chmod 0664 /sys/class/power_supply/battery/charge_otg_control
+    chmod 0664 /sys/class/power_supply/battery/charge_uno_control
+    chmod 0664 /sys/class/power_supply/battery/batt_wireless_firmware_update
+    chmod 0664 /sys/class/power_supply/battery/otp_firmware_result
+    chmod 0664 /sys/class/power_supply/battery/wc_ic_grade
+    chmod 0664 /sys/class/power_supply/battery/wc_ic_chip_id
+    chmod 0664 /sys/class/power_supply/battery/otp_firmware_ver_bin
+    chmod 0664 /sys/class/power_supply/battery/otp_firmware_ver
+    chmod 0664 /sys/class/power_supply/battery/tx_firmware_result
+    chmod 0664 /sys/class/power_supply/battery/tx_firmware_ver
+    chmod 0664 /sys/class/power_supply/battery/batt_tx_firmware
+    chmod 0664 /sys/class/power_supply/battery/batt_hv_wireless_status
+    chmod 0664 /sys/class/power_supply/battery/batt_hv_wireless_pad_ctrl
+    chown system radio /sys/class/power_supply/battery/tx_firmware_result
+    chown system radio /sys/class/power_supply/battery/batt_tune_chg_limit_cur
+    chown system radio /sys/class/power_supply/battery/batt_tune_chg_temp_high
+    chown system radio /sys/class/power_supply/battery/batt_tune_chg_temp_rec
+    chown system radio /sys/class/power_supply/battery/batt_tune_coil_limit_cur
+    chown system radio /sys/class/power_supply/battery/batt_tune_coil_temp_high
+    chown system radio /sys/class/power_supply/battery/batt_tune_coil_temp_rec
+    chown system radio /sys/class/power_supply/battery/batt_tune_wpc_temp_high
+    chown system radio /sys/class/power_supply/battery/batt_tune_wpc_temp_high_rec
+    chown system radio /sys/class/power_supply/battery/batt_tune_dchg_temp_high
+    chown system radio /sys/class/power_supply/battery/batt_tune_dchg_temp_high_rec
+    chown system radio /sys/class/power_supply/battery/batt_tune_dchg_batt_temp_high
+    chown system radio /sys/class/power_supply/battery/batt_tune_dchg_batt_temp_high_rec
+    chown system radio /sys/class/power_supply/battery/batt_tune_dchg_limit_input_cur
+    chown system radio /sys/class/power_supply/battery/batt_tune_dchg_limit_chg_cur
+    chown system radio /sys/class/power_supply/battery/batt_tune_fast_charge_current
+    chown system radio /sys/class/power_supply/battery/batt_tune_float_voltage
+    chown system radio /sys/class/power_supply/battery/batt_tune_input_charge_current
+    chown system radio /sys/class/power_supply/battery/batt_tune_temp_high_event
+    chown system radio /sys/class/power_supply/battery/batt_tune_temp_high_normal
+    chown system radio /sys/class/power_supply/battery/batt_tune_temp_high_rec_event
+    chown system radio /sys/class/power_supply/battery/batt_tune_temp_high_rec_normal
+    chown system radio /sys/class/power_supply/battery/batt_tune_temp_low_event
+    chown system radio /sys/class/power_supply/battery/batt_tune_temp_low_normal
+    chown system radio /sys/class/power_supply/battery/batt_tune_temp_low_rec_event
+    chown system radio /sys/class/power_supply/battery/batt_tune_temp_low_rec_normal
+    chown system radio /sys/class/power_supply/battery/batt_tune_ui_term_cur_1st
+    chown system radio /sys/class/power_supply/battery/batt_tune_ui_term_cur_2nd
+    chown system radio /sys/class/power_supply/battery/batt_misc_event
+    chown system radio /sys/class/power_supply/battery/batt_tx_event
+    chmod 0664 /sys/class/power_supply/battery/batt_tune_chg_limit_cur
+    chmod 0664 /sys/class/power_supply/battery/batt_tune_chg_temp_high
+    chmod 0664 /sys/class/power_supply/battery/batt_tune_chg_temp_rec
+    chmod 0664 /sys/class/power_supply/battery/batt_tune_coil_limit_cur
+    chmod 0664 /sys/class/power_supply/battery/batt_tune_coil_temp_high
+    chmod 0664 /sys/class/power_supply/battery/batt_tune_coil_temp_rec
+    chown 0664 /sys/class/power_supply/battery/batt_tune_wpc_temp_high
+    chown 0664 /sys/class/power_supply/battery/batt_tune_wpc_temp_high_rec
+    chmod 0664 /sys/class/power_supply/battery/batt_tune_dchg_temp_high
+    chmod 0664 /sys/class/power_supply/battery/batt_tune_dchg_temp_high_rec
+    chmod 0664 /sys/class/power_supply/battery/batt_tune_dchg_batt_temp_high
+    chmod 0664 /sys/class/power_supply/battery/batt_tune_dchg_batt_temp_high_rec
+    chmod 0664 /sys/class/power_supply/battery/batt_tune_dchg_limit_input_cur
+    chmod 0664 /sys/class/power_supply/battery/batt_tune_dchg_limit_chg_cur
+    chmod 0664 /sys/class/power_supply/battery/batt_tune_fast_charge_current
+    chmod 0664 /sys/class/power_supply/battery/batt_tune_float_voltage
+    chmod 0664 /sys/class/power_supply/battery/batt_tune_input_charge_current
+    chmod 0664 /sys/class/power_supply/battery/batt_tune_temp_high_normal
+    chmod 0664 /sys/class/power_supply/battery/batt_tune_temp_high_rec_normal
+    chmod 0664 /sys/class/power_supply/battery/batt_tune_temp_low_normal
+    chmod 0664 /sys/class/power_supply/battery/batt_tune_temp_low_rec_normal
+    chmod 0664 /sys/class/power_supply/battery/batt_tune_ui_term_cur_1st
+    chmod 0664 /sys/class/power_supply/battery/batt_tune_ui_term_cur_2nd
+    chown system radio /sys/class/power_supply/battery/batt_tune_lrp_temp_high
+    chmod 0664 /sys/class/power_supply/battery/batt_tune_lrp_temp_high
+    chown system radio /sys/class/power_supply/battery/batt_tune_lrp_temp_rec
+    chmod 0664 /sys/class/power_supply/battery/batt_tune_lrp_temp_rec
+    chmod 0664 /sys/class/power_supply/battery/batt_misc_event
+    chmod 0664 /sys/class/power_supply/battery/batt_tx_event
+    chown system radio /sys/class/power_supply/battery/batt_filter_cfg
+    chown system radio /sys/class/power_supply/battery/batt_current_ua_avg
+    chown system radio /sys/class/power_supply/battery/batt_current_ua_now
+    chown system radio /sys/class/power_supply/battery/voltage_avg
+    chown system radio /sys/class/power_supply/battery/voltage_now
+    chown system radio /sys/class/power_supply/battery/mode
+    chown system radio /sys/class/power_supply/battery/safety_timer_set
+    chown system radio /sys/class/power_supply/battery/safety_timer_info
+    chown system radio /sys/class/power_supply/battery/batt_temp_test
+    chown system radio /sys/class/power_supply/battery/vbus_value
+    chown system radio /sys/class/power_supply/battery/dchg_temp
+    chmod 0664 /sys/class/power_supply/battery/dchg_temp
+    chown system radio /sys/class/power_supply/battery/dchg_temp_adc
+    chmod 0664 /sys/class/power_supply/battery/dchg_temp_adc
+    chown system radio /sys/class/power_supply/battery/blkt_temp
+    chmod 0664 /sys/class/power_supply/battery/blkt_temp
+    chown system radio /sys/class/power_supply/battery/blkt_temp_adc
+    chmod 0664 /sys/class/power_supply/battery/blkt_temp_adc
+    chown system radio /sys/class/power_supply/battery/dchg_adc_mode_ctrl
+    chmod 0664 /sys/class/power_supply/battery/dchg_adc_mode_ctrl
+    chown system radio /sys/class/power_supply/battery/batt_type
+    chmod 0660 /sys/class/power_supply/battery/batt_type
+    chown system system /efs/FactoryApp/cisd_data
+    chmod 0660 /efs/FactoryApp/cisd_data
+    chown system radio /sys/class/power_supply/battery/cisd_wc_data_json
+    chmod 0660 /sys/class/power_supply/battery/cisd_wc_data_json
+    chmod 0664 /sys/class/power_supply/battery/mode
+    chown system radio /sys/class/power_supply/battery/wc_op_freq
+    chmod 0664 /sys/class/power_supply/battery/wc_op_freq
+    chown system radio /sys/class/power_supply/battery/wc_cmd_info
+    chmod 0664 /sys/class/power_supply/battery/wc_cmd_info
+    chown system radio /sys/class/power_supply/battery/error_cause
+    chmod 0440 /sys/class/power_supply/battery/error_cause
+    chown system radio /sys/class/power_supply/battery/batt_capacity_max
+    chmod 0660 /sys/class/power_supply/battery/batt_capacity_max
+    chown radio system /efs/Battery/batt_capacity_max
+    chmod 0664 /efs/Battery/batt_capacity_max
+    chown system radio /sys/class/power_supply/battery/batt_type
+    chmod 0660 /sys/class/power_supply/battery/batt_type
+    chown system radio /sys/class/power_supply/battery/cisd_fullcaprep_max
+    chmod 0660 /sys/class/power_supply/battery/cisd_fullcaprep_max
+    chown system radio /sys/class/power_supply/battery/cisd_wire_count
+    chmod 0660 /sys/class/power_supply/battery/cisd_wire_count
+    chown system radio /sys/class/power_supply/battery/cisd_data
+    chmod 0660 /sys/class/power_supply/battery/cisd_data
+    chown system system /efs/FactoryApp/cisd_data
+    chmod 0660 /efs/FactoryApp/cisd_data
+    chown system radio /sys/class/power_supply/battery/cisd_data_json
+    chmod 0660 /sys/class/power_supply/battery/cisd_data_json
+    chown system radio /sys/class/power_supply/battery/cisd_data_d_json
+    chmod 0660 /sys/class/power_supply/battery/cisd_data_d_json
+    chown system radio /sys/class/power_supply/battery/cisd_wc_data
+    chmod 0660 /sys/class/power_supply/battery/cisd_wc_data
+    chown system system /efs/FactoryApp/cisd_wc_data
+    chmod 0660 /efs/FactoryApp/cisd_wc_data
+    chown system radio /sys/class/power_supply/battery/cisd_wc_data_json
+    chmod 0660 /sys/class/power_supply/battery/cisd_wc_data_json
+    chown system system /efs/FactoryApp/sbm_log.log
+    chmod 0664 /efs/FactoryApp/sbm_log.log
+    chown system radio /sys/class/power_supply/battery/cisd_power_data
+    chmod 0660 /sys/class/power_supply/battery/cisd_power_data
+    chown system system /efs/FactoryApp/cisd_power_data
+    chmod 0660 /efs/FactoryApp/cisd_power_data
+    chown system radio /sys/class/power_supply/battery/cisd_power_data_json
+    chmod 0660 /sys/class/power_supply/battery/cisd_power_data_json
+    chown system radio /sys/class/power_supply/battery/cisd_pd_data
+    chmod 0660 /sys/class/power_supply/battery/cisd_pd_data
+    chown system system /efs/FactoryApp/cisd_pd_data
+    chmod 0660 /efs/FactoryApp/cisd_pd_data
+    chown system radio /sys/class/power_supply/battery/cisd_pd_data_json
+    chmod 0660 /sys/class/power_supply/battery/cisd_pd_data_json
+    chown system radio /sys/class/power_supply/battery/cisd_cable_data
+    chmod 0660 /sys/class/power_supply/battery/cisd_cable_data
+    chown system system /efs/FactoryApp/cisd_cable_data
+    chmod 0660 /efs/FactoryApp/cisd_cable_data
+    chown system radio /sys/class/power_supply/battery/cisd_cable_data_json
+    chmod 0660 /sys/class/power_supply/battery/cisd_cable_data_json
+    chown system radio /sys/class/power_supply/battery/cisd_tx_data
+    chmod 0660 /sys/class/power_supply/battery/cisd_tx_data
+    chown system system /efs/FactoryApp/cisd_tx_data
+    chmod 0660 /efs/FactoryApp/cisd_tx_data
+    chown system radio /sys/class/power_supply/battery/cisd_tx_data_json
+    chmod 0660 /sys/class/power_supply/battery/cisd_tx_data_json
+    chown system radio /sys/class/power_supply/battery/cisd_event_data
+    chmod 0660 /sys/class/power_supply/battery/cisd_event_data
+    chown system system /efs/FactoryApp/cisd_event_data
+    chmod 0660 /efs/FactoryApp/cisd_event_data
+    chown system radio /sys/class/power_supply/battery/cisd_event_data_json
+    chmod 0660 /sys/class/power_supply/battery/cisd_event_data_json
+    chown system system /sys/class/power_supply/battery/fg_asoc
+    chmod 0660 /sys/class/power_supply/battery/fg_asoc
+    chown system system /sys/class/power_supply/battery/fg_capacity
+    chmod 0640 /sys/class/power_supply/battery/fg_capacity
+    chown system system /sys/class/power_supply/battery/fg_fullcapnom
+    chmod 0640 /sys/class/power_supply/battery/fg_fullcapnom
+    chown system system /sys/class/power_supply/battery/batt_jig_gpio
+    chmod 0664 /sys/class/power_supply/battery/batt_jig_gpio
+    chown system radio /sys/class/power_supply/battery/wc_tx_en
+    chmod 0664 /sys/class/power_supply/battery/wc_tx_en
+    chown system system /dev/batt_misc
+    chmod 0664 /dev/batt_misc
+    chown system radio /sys/class/power_supply/battery/wc_tx_stop_capacity
+    chmod 0660 /sys/class/power_supply/battery/wc_tx_stop_capacity
+    chown system radio /sys/class/power_supply/battery/wc_tx_vout
+    chmod 0664 /sys/class/power_supply/battery/wc_tx_vout
+    chown system radio /sys/class/power_supply/battery/batt_tx_status
+    chmod 0664 /sys/class/power_supply/battery/batt_tx_status
+    chown system radio /sys/class/power_supply/battery/wc_rx_connected
+    chmod 0660 /sys/class/power_supply/battery/wc_rx_connected
+    chown system radio /sys/class/power_supply/battery/wc_tx_mfc_vin_from_uno
+    chmod 0660 /sys/class/power_supply/battery/wc_tx_mfc_vin_from_uno
+    chown system radio /sys/class/power_supply/battery/wc_tx_mfc_iin_from_uno
+    chmod 0660 /sys/class/power_supply/battery/wc_tx_mfc_iin_from_uno
+    chown system radio /sys/class/power_supply/battery/wc_tx_avg_curr
+    chmod 0660 /sys/class/power_supply/battery/wc_tx_avg_curr
+    chown system radio /sys/class/power_supply/battery/wc_tx_total_pwr
+    chmod 0660 /sys/class/power_supply/battery/wc_tx_total_pwr
+    chown system radio /sys/class/power_supply/battery/wc_tx_id
+    chmod 0664 /sys/class/power_supply/battery/wc_tx_id
+    chown system radio /sys/class/power_supply/battery/wc_auth_adt_sent
+    chmod 0660 /sys/class/power_supply/battery/wc_auth_adt_sent
+    chown system radio /sys/class/power_supply/battery/wc_duo_rx_power
+    chmod 0660 /sys/class/power_supply/battery/wc_duo_rx_power
+    chown system radio /sys/class/power_supply/battery/ext_event
+    chmod 0660 /sys/class/power_supply/battery/ext_event
+    chown system system /sys/class/power_supply/battery/batt_shipmode_test
+    chmod 0660 /sys/class/power_supply/battery/batt_shipmode_test
+    chown system system /sys/class/power_supply/battery/batt_misc_test
+    chmod 0664 /sys/class/power_supply/battery/batt_misc_test
+    chown system radio /sys/class/power_supply/battery/vbyp_voltage
+    chmod 0660 /sys/class/power_supply/battery/vbyp_voltage
+    chown system radio /sys/class/power_supply/battery/batt_main_voltage
+    chmod 0660 /sys/class/power_supply/battery/batt_main_voltage
+    chown system radio /sys/class/power_supply/battery/batt_sub_voltage
+    chmod 0660 /sys/class/power_supply/battery/batt_sub_voltage
+    chown system radio /sys/class/power_supply/battery/batt_main_current_ma
+    chmod 0660 /sys/class/power_supply/battery/batt_main_current_ma
+    chown system radio /sys/class/power_supply/battery/batt_sub_current_ma
+    chmod 0660 /sys/class/power_supply/battery/batt_sub_current_ma
+    chown system radio /sys/class/power_supply/battery/batt_main_con_det
+    chmod 0660 /sys/class/power_supply/battery/batt_main_con_det
+    chown system radio /sys/class/power_supply/battery/batt_sub_con_det
+    chmod 0660 /sys/class/power_supply/battery/batt_sub_con_det
+    chown system radio /sys/class/power_supply/battery/batt_main_enb
+    chmod 0660 /sys/class/power_supply/battery/batt_main_enb
+    chown system radio /sys/class/power_supply/battery/batt_sub_enb
+    chmod 0660 /sys/class/power_supply/battery/batt_sub_enb
+    chown system system /sys/class/power_supply/battery/ss_factory_mode
+    chmod 0660 /sys/class/power_supply/battery/ss_factory_mode
+    chown system system /sys/class/power_supply/battery/factory_charging_test
+    chmod 0660 /sys/class/power_supply/battery/factory_charging_test
+    chown system radio /sys/class/power_supply/battery/direct_charging_status
+    chmod 0660 /sys/class/power_supply/battery/direct_charging_status
+    chown system radio /sys/class/power_supply/battery/direct_charging_step
+    chmod 0660 /sys/class/power_supply/battery/direct_charging_step
+    chown system radio /sys/class/power_supply/battery/direct_charging_total_step
+    chmod 0660 /sys/class/power_supply/battery/direct_charging_total_step
+    chown system radio /sys/class/power_supply/battery/direct_charging_chg_status
+    chmod 0660 /sys/class/power_supply/battery/direct_charging_chg_status
+    chown system radio /sys/class/power_supply/battery/switch_charging_source
+    chmod 0660 /sys/class/power_supply/battery/switch_charging_source
+    chown system system /sys/class/power_supply/battery/dchg_adc_mode_ctrl
+    chmod 0664 /sys/class/power_supply/battery/dchg_adc_mode_ctrl
+    chown system radio /sys/class/power_supply/battery/pass_through
+    chmod 0660 /sys/class/power_supply/battery/pass_through
+    chown system radio /sys/class/power_supply/battery/boot_complete
+    chmod 0660 /sys/class/power_supply/battery/boot_complete
+    chown system radio /sys/class/power_supply/battery/batt_tune_wireless_vout_current
+    chmod 0660 /sys/class/power_supply/battery/batt_tune_wireless_vout_current
+    chown system radio /sys/class/power_supply/battery/pd_disable
+    chmod 0664 /sys/class/power_supply/battery/pd_disable
+    chown system radio /sys/class/power_supply/battery/wc_param_info
+    chmod 0440 /sys/class/power_supply/battery/wc_param_info
+    chown system radio /sys/class/power_supply/battery/batt_full_capacity
+    chmod 0660 /sys/class/power_supply/battery/batt_full_capacity
+    chown system system /efs/Battery/batt_full_capacity
+    chmod 0660 /efs/Battery/batt_full_capacity
+    chown system radio /sys/class/power_supply/battery/batt_after_manufactured
+    chmod 0664 /sys/class/power_supply/battery/batt_after_manufactured
+    chown system radio /sys/class/power_supply/wireless/sgf
+    chmod 0666 /sys/class/power_supply/wireless/sgf
+    chown system radio /sys/class/power_supply/battery/lrp
+    chmod 0664 /sys/class/power_supply/battery/lrp
+    chown system system /sys/class/power_supply/battery/battery_dump
+    chmod 0660 /sys/class/power_supply/battery/battery_dump
+    chown system radio /sys/class/power_supply/battery/dc_rb_en
+    chmod 0660 /sys/class/power_supply/battery/dc_rb_en
+    chown system radio /sys/class/power_supply/battery/dc_op_mode
+    chmod 0660 /sys/class/power_supply/battery/dc_op_mode
+    chown system radio /sys/class/power_supply/battery/dc_adc_mode
+    chmod 0660 /sys/class/power_supply/battery/dc_adc_mode
+    chown system radio /sys/class/power_supply/battery/dc_vbus
+    chmod 0660 /sys/class/power_supply/battery/dc_vbus
+    chown system radio /sys/class/power_supply/battery/pass_through
+    chmod 0660 /sys/class/power_supply/battery/pass_through
+    chown system radio /sys/class/power_supply/battery/chg_soc_lim
+    chmod 0660 /sys/class/power_supply/battery/chg_soc_lim
+    chown system radio /sys/class/tcpc/type_c_port0/ss_factory
 
- # Permissions for Touchscreen-1
-    chown system radio /sys/class/sec/tsp1/cmd
-    chown system system /sys/class/sec/tsp1/input/enabled
-    chown system system /sys/class/sec/tsp1/enabled
-    chmod 0660 /sys/class/sec/tsp1/input/enabled
-    chown system system /sys/class/sec/tsp1/sensitivity_mode
-    chown system system /sys/class/sec/tsp1/prox_power_off
-    chown system system /sys/class/sec/tsp1/hw_param
-    chown system system /sys/class/sec/tsp1/dualscreen_policy
+# Switch Device
+    chown system radio /sys/class/sec/switch/usb_sel
+    chown system radio /sys/class/sec/switch/uart_sel
+    chown system radio /sys/class/sec/switch/uart_en
+    chown system radio /sys/class/sec/switch/otg_test
+    chown system radio /sys/class/sec/switch/apo_factory
+    chown system radio /sys/class/sec/switch/afc_disable
+    chown system radio /sys/class/sec/switch/afc_set_voltage
+    chown system radio /sys/class/sec/switch/hiccup
+    chown system radio /sys/class/sec/switch/jig_disable
+    chown system radio /sys/class/sec/switch/factory_uart
 
- # Permissions for Touchscreen-2
-    chown system radio /sys/class/sec/tsp2/cmd
-    chown system system /sys/class/sec/tsp2/input/enabled
-    chown system system /sys/class/sec/tsp2/enabled
-    chmod 0660 /sys/class/sec/tsp2/input/enabled
-    chown system system /sys/class/sec/tsp2/sensitivity_mode
-    chown system system /sys/class/sec/tsp2/prox_power_off
-    chown system system /sys/class/sec/tsp2/hw_param
-    chown system system /sys/class/sec/tsp2/dualscreen_policy
+#Vibrator
+    chown system system /sys/class/timed_output/vibrator/enable
+    chmod 0644 /sys/class/timed_output/vibrator/enable
 
- # Permission for Securetouch
-    chown system system /sys/class/sec/ss_touch/secure/secure_touch_enable
-    chown system system /sys/class/sec/tsp/input/secure_touch_enable
-    chown system system /sys/class/sec/tsp1/input/secure_touch_enable
-    chown system system /sys/class/sec/tsp2/input/secure_touch_enable
+# OTG Test
+    chown system radio /sys/class/host_notify/usb_otg/booster
+    chmod 0664 /sys/class/host_notify/usb_otg/booster
 
-    chown system radio /sys/class/sec/tsp1/cmd
-    chown system system /sys/class/sec/tsp1/input/enabled
-    chmod 0660 /sys/class/sec/tsp1/input/enabled
-    chown system radio /sys/class/sec/tsp2/cmd
-    chown system system /sys/class/sec/tsp2/input/enabled
-    chmod 0660 /sys/class/sec/tsp2/input/enabled
+# Permission for type-c manager
+    chown system radio /sys/class/sec/typec_manager/fac_usb_control
 
-# Permission for Wacom
-    chown system radio /sys/class/sec/sec_epen/cmd
-    chown system system /sys/class/sec/sec_epen/input/enabled
-    chown system system /sys/class/sec/sec_epen/enabled
-    chmod 0660 /sys/class/sec/sec_epen/input/enabled
-    chown system radio /sys/class/sec/sec_epen/epen_firm_update
-    chown system radio /sys/class/sec/sec_epen/epen_reset
-    chown system radio /sys/class/sec/sec_epen/epen_reset_result
-    chown system radio /sys/class/sec/sec_epen/epen_checksum
-    chown system radio /sys/class/sec/sec_epen/epen_checksum_result
-    chown system radio /sys/class/sec/sec_epen/epen_saving_mode
-    chown system radio /sys/class/sec/sec_epen/epen_wcharging_mode
-    chown system radio /sys/class/sec/sec_epen/epen_ble_charging_mode
-    chown system radio /sys/class/sec/sec_epen/epen_fac_garage_mode
-    chown system radio /sys/class/sec/sec_epen/epen_fac_select_firmware
-    chown system radio /sys/class/sec/sec_epen/keyboard_mode
-    chown system radio /sys/class/sec/sec_epen/epen_disable_mode
-    chown system radio /sys/class/sec/sec_epen/aod_enable
-    chown system radio /sys/class/sec/sec_epen/aod_lcd_onoff_status
-    chown system radio /sys/class/sec/sec_epen/screen_off_memo_enable
-    chown system radio /sys/class/sec/sec_epen/dex_enable
-    chown system system /sys/class/sec/sec_epen/hw_param
-# pogo keyboard
-    chown system system /sys/class/sec/sec_keypad/fw_update
+# Permission for CCIC
+    chown system radio /sys/class/sec/ccic/lpm_mode
+    chmod 0664 /sys/class/sec/ccic/lpm_mode
+    chown system system /sys/class/sec/ccic/control_gpio
+    chmod 0660 /sys/class/sec/ccic/control_gpio
+    chown system radio /sys/class/sec/ccic/fw_update
+    chmod 0220 /sys/class/sec/ccic/fw_update
+    chown system radio /sys/class/sec/ccic/role_swap
+    chmod 0220 /sys/class/sec/ccic/role_swap
+    chown system usb /sys/class/sec/ccic/dex_fan_uvdm
+    chmod 0220 /sys/class/sec/ccic/dex_fan_uvdm
+    chown system usb /sys/class/sec/ccic/samsung_uvdm
+    chmod 0220 /sys/class/sec/ccic/samsung_uvdm
+    chown system radio /sys/class/sec/ccic/ccic_control_option
+    chown system system /sys/class/sec/ccic/cc_pin_status
+    chmod 0440 /sys/class/sec/ccic/cc_pin_status
+    chown system usb /dev/ccic_misc
+    chmod 0664 /dev/ccic_misc
+    chown system radio /sys/class/sec/ccic/cc_sbu_adc
+    chown system radio /sys/class/sec/ccic/vsafe0v_status
+    chmod 0444 /sys/class/sec/ccic/vsafe0v_status
+    chown system radio /sys/class/sec/ccic/ovp_ic_shutdown
+    chmod 0220 /sys/class/sec/ccic/ovp_ic_shutdown
+    chown system system /sys/class/sec/ccic/hmd_power
+    chmod 0220 /sys/class/sec/ccic/hmd_power
+    chown system system /sys/class/sec/ccic/novbus_rp22k
+    chmod 0440 /sys/class/sec/ccic/novbus_rp22k
 
-# Permissions for Power
-    chown radio system /sys/devices/system/cpu/cpufreq_limit/cpufreq_max_limit
-    chown radio system /sys/devices/system/cpu/cpufreq_limit/cpufreq_min_limit
-    chown radio system /sys/devices/system/cpu/cpufreq_limit/cpufreq_table
-    chown radio system /sys/devices/system/cpu/cpufreq_limit/over_limit
-    chmod 0664 /sys/devices/system/cpu/cpufreq_limit/cpufreq_max_limit
-    chmod 0664 /sys/devices/system/cpu/cpufreq_limit/cpufreq_min_limit
-    chmod 0444 /sys/devices/system/cpu/cpufreq_limit/cpufreq_table
-    chmod 0664 /sys/devices/system/cpu/cpufreq_limit/over_limit
+# usb disable
+    chown system usb /sys/class/usb_notify/usb_control/disable
+    chmod 0664 /sys/class/usb_notify/usb_control/disable
 
-# end boot time fs tune
-on property:sys.boot_completed=1
-    # write /sys/block/mmcblk0/queue/iostats 1
-    write /sys/block/mmcblk0/queue/read_ahead_kb 512
-    # write /sys/block/mmcblk0/queue/nr_requests 128
-    # write /sys/block/sdc/queue/iostats 1
-    write /sys/block/sdc/queue/read_ahead_kb 512
-    # write /sys/block/sdc/queue/nr_requests 128
-    write /sys/block/dm-0/queue/read_ahead_kb 128
-    write /sys/block/dm-1/queue/read_ahead_kb 128
-    write /sys/block/dm-2/queue/read_ahead_kb 128
-    write /sys/block/dm-3/queue/read_ahead_kb 128
-    write /sys/block/dm-4/queue/read_ahead_kb 128
-    write /sys/block/dm-5/queue/read_ahead_kb 128
+# usb usb_data_enabled
+    chown root system /sys/class/usb_notify/usb_control/usb_data_enabled
+    chmod 0664 /sys/class/usb_notify/usb_control/usb_data_enabled
+
+# usb hw param
+    chown system usb /sys/class/usb_notify/usb_control/usb_hw_param
+    chmod 0664 /sys/class/usb_notify/usb_control/usb_hw_param
+    chown system usb /sys/class/usb_notify/usb_control/hw_param
+    chmod 0664 /sys/class/usb_notify/usb_control/hw_param
+
+# usb whitelist
+    chown system usb /sys/class/usb_notify/usb_control/whitelist_for_mdm
+    chmod 0664 /sys/class/usb_notify/usb_control/whitelist_for_mdm
+
+# ccic UVDM permission
+    chown system usb /dev/ccic_misc
+    chmod 0664 /dev/ccic_misc
+
+# set file permission for boot
+    chown radio system /efs/usb_hw_param
+    chmod 771 /efs/usb_hw_param
+    chown system system /efs/usb_hw_param/usb_hw_param.log
+    chmod 0660 /efs/usb_hw_param/usb_hw_param.log
+
+# MTP device permission
+    chmod 0660 /dev/usb_mtp_gadget
+    chown system mtp /dev/usb_mtp_gadget
+    mkdir /dev/socket/mtp 0770 system mtp
+
+# vib_info permission
+    chown system system /sys/class/vib_info_class/vib_support_info/functions
+    chown system system /sys/class/vib_info_class/vib_support_info/intensities
+    chown system system /sys/class/vib_info_class/vib_support_info/haptic_intensities
 
 on property:sys.boot_completed=1
     write /proc/perfmgr/boost_ctrl/cpu_ctrl/boot_freq "-1 -1 -1 -1 -1 -1"
     write /sys/devices/platform/boot_dramboost/dramboost/dramboost 0
 
-on property:sys.boot_completed=1 && property:ro.build.type=eng
+    chown system system /sys/devices/system/cpu/sched_ctl/sched_prio_sensitive
+
+on property:sys.boot_completed=1
     write /sys/class/secgpio_check/secgpio_check_all/gpioinit_call 1
 
-on property:sys.boot_completed=1 && property:ro.build.type=userdebug
-    write /sys/class/secgpio_check/secgpio_check_all/gpioinit_call 1
+    # stop bootprof
+    write /proc/bootprof 0
+
+# Battery info
+on property:persist.vendor.mediatek.fg.disable=1
+    write /sys/devices/platform/soc/1c804000.spmi/spmi-0/0-04/mt6377-gauge/FG_daemon_disable 1
+    write /dev/gauge/FG_daemon_disable 1
+
+on property:persist.vendor.mediatek.fg.force25c=1
+    write /sys/devices/platform/soc/1c804000.spmi/spmi-0/0-04/mt6377-gauge/Battery_Temperature 25
+    write /dev/gauge/Battery_Temperature 25
+
+on property:persist.vendor.mediatek.fg.force25c=0
+    write /sys/devices/platform/soc/1c804000.spmi/spmi-0/0-04/mt6377-gauge/Battery_Temperature 65535
+    write /dev/gauge/Battery_Temperature 65535
+
+on property:persist.vendor.mediatek.fg.log.enable=1
+    write /sys/devices/platform/soc/1c804000.spmi/spmi-0/0-04/mt6377-gauge/FG_daemon_log_level 7
+    write /sys/devices/platform/soc/11b21000.i2c/i2c-5/5-0034/11b21000.i2c:mt6375@34:mtk_gauge/FG_daemon_log_level 7
+    write /dev/gauge/FG_daemon_log_level 7
+    write /proc/sys/kernel/printk 8
+# MTK fast charging support
+on property:persist.vendor.mediatek.fast_charging.support=*
+    write /sys/devices/platform/charger/fast_chg_indicator ${persist.vendor.mediatek.fast_charging.support}
+
