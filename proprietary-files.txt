@@ -4,6 +4,7 @@
 vendor/lib64/libaedv.so
 
 # APU
+vendor/lib64/APUWareApusysAidlServer.so
 vendor/lib64/APUWareUtilsServer.so
 vendor/lib64/libapu_mdw.so
 vendor/lib64/libapu_mdw_batch.so
@@ -287,8 +288,13 @@ vendor/lib64/mt6835/libcam.pdtblgen.so;SYMLINK=vendor/lib64/libcam.pdtblgen.so
 vendor/lib64/mt6835/libcam.tuning.cache.so;SYMLINK=vendor/lib64/libcam.tuning.cache.so
 vendor/lib64/mt6835/libcam.utils.sensorprovider.so;SYMLINK=vendor/lib64/libcam.utils.sensorprovider.so
 vendor/lib64/mt6835/libcam.vhdr.so;SYMLINK=vendor/lib64/libcam.vhdr.so
+vendor/lib64/mt6835/libcamalgo.eis.so;SYMLINK=vendor/lib64/libcamalgo.eis.so
+vendor/lib64/mt6835/libcamalgo.fsc.so;SYMLINK=vendor/lib64/libcamalgo.fsc.so
+vendor/lib64/mt6835/libcamalgo.gyro.so;SYMLINK=vendor/lib64/libcamalgo.gyro.so
 vendor/lib64/mt6835/libcamalgo.ispfeature.so;SYMLINK=vendor/lib64/libcamalgo.ispfeature.so
+vendor/lib64/mt6835/libcamalgo.lmv.so;SYMLINK=vendor/lib64/libcamalgo.lmv.so
 vendor/lib64/mt6835/libcamalgo.lsc.so;SYMLINK=vendor/lib64/libcamalgo.lsc.so
+vendor/lib64/mt6835/libcamalgo.n3d.so;SYMLINK=vendor/lib64/libcamalgo.n3d.so
 vendor/lib64/mt6835/libcamalgo.platform2.so;SYMLINK=vendor/lib64/libcamalgo.platform2.so
 vendor/lib64/mt6835/libcamalgo.rotate.so;SYMLINK=vendor/lib64/libcamalgo.rotate.so
 vendor/lib64/mt6835/libcamalgo.vsf.so;SYMLINK=vendor/lib64/libcamalgo.vsf.so
@@ -327,6 +333,7 @@ vendor/lib64/mt6835/libimageio_plat_pipe.so;SYMLINK=vendor/lib64/libimageio_plat
 vendor/lib64/mt6835/liblpcnr.so;SYMLINK=vendor/lib64/liblpcnr.so
 vendor/lib64/mt6835/libmsnr.so;SYMLINK=vendor/lib64/libmsnr.so
 vendor/lib64/mt6835/libmtkcam.atmseventmgr.so;SYMLINK=vendor/lib64/libmtkcam.atmseventmgr.so
+vendor/lib64/mt6835/libmtkcam.debugwrapper.so;SYMLINK=vendor/lib64/libmtkcam.debugwrapper.so
 vendor/lib64/mt6835/libmtkcam.eventcallback.so;SYMLINK=vendor/lib64/libmtkcam.eventcallback.so
 vendor/lib64/mt6835/libmtkcam.featurepipe.capture.so;SYMLINK=vendor/lib64/libmtkcam.featurepipe.capture.so
 vendor/lib64/mt6835/libmtkcam.featurepipe.depthmap.so;SYMLINK=vendor/lib64/libmtkcam.featurepipe.depthmap.so
@@ -645,6 +652,7 @@ vendor/lib64/libCamera_sc501csmipiraw_Video_720p.so
 vendor/lib64/libCamera_sc501csmipiraw_Video_Capture.so
 vendor/lib64/libCamera_sc501csmipiraw_supernight_capture.so
 vendor/lib64/libCamera_sc501csmipiraw_supernight_preview.so
+vendor/lib64/libOpenCv.camera.samsung.so
 vendor/lib64/libSQLiteModule_VER_ALL.so
 vendor/lib64/libcam.hal3a.v3.customframework.so
 vendor/lib64/libcam.seninfn3d.so
@@ -740,10 +748,13 @@ vendor/lib64/libion_mtk.so
 vendor/lib64/libion_ulit.so
 vendor/lib64/libmml.so
 vendor/lib64/libpqframework.so
+vendor/lib64/libpqhdrmetaparser.so
 vendor/lib64/libudf.so
 vendor/lib64/vendor.mediatek.hardware.composer_ext@1.0.so
 
 # PQ
+vendor/bin/hw/vendor.mediatek.hardware.pq_aidl-service
+vendor/etc/init/vendor.mediatek.hardware.pq_aidl-service.rc
 vendor/lib64/hw/mt6835/vendor.mediatek.hardware.pq_aidl-impl.so;SYMLINK=vendor/lib64/hw/vendor.mediatek.hardware.pq_aidl-impl.so
 vendor/lib64/vendor.mediatek.hardware.pq@2.0.so
 vendor/lib64/vendor.mediatek.hardware.pq@2.1.so
@@ -762,6 +773,9 @@ vendor/lib64/vendor.mediatek.hardware.pq@2.9.so
 vendor/lib64/vendor.mediatek.hardware.pq_aidl-V1-ndk.so
 
 # DRM
+vendor/bin/hw/android.hardware.drm-service.widevine
+vendor/etc/init/android.hardware.drm-service.widevine.rc
+vendor/etc/vintf/manifest/manifest_android.hardware.drm-service.widevine.xml
 vendor/lib64/liboemcrypto.so
 vendor/lib64/liburee_meta_drmkeyinstall.so
 
@@ -769,15 +783,23 @@ vendor/lib64/liburee_meta_drmkeyinstall.so
 vendor/apex/com.samsung.android.biometrics.face.signed.apex
 vendor/apex/com.samsung.android.biometrics.fingerprint.signed.apex
 vendor/bin/hw/vendor.samsung.hardware.biometrics.face-service
+vendor/bin/hw/vendor.samsung.hardware.biometrics.fingerprint-service
 vendor/etc/init/fingerprint_common.rc
 vendor/etc/init/init.fingerprint.rc
+vendor/etc/init/vendor.samsung.hardware.biometrics.fingerprint-service.rc
+vendor/etc/vintf/manifest/vendor.samsung.hardware.biometrics.fingerprint-service.xml
 vendor/lib/libegis_fp_normal_sensor_test.so
 vendor/lib/libgf_in_system_lib.so
 vendor/lib/libqfp_sensortest.so
+vendor/lib64/android.hardware.biometrics.common-V2-ndk.so
+vendor/lib64/android.hardware.biometrics.face-V2-ndk.so
+vendor/lib64/android.hardware.biometrics.fingerprint-V2-ndk.so
 vendor/lib64/libegis_fp_normal_sensor_test.so
 vendor/lib64/libgf_in_system_lib.so
 vendor/lib64/libqfp_sensortest.so
 vendor/lib64/libsynaFpSensorTestNwd.so
+vendor/lib64/vendor.samsung.hardware.biometrics.face-V3-ndk.so
+vendor/lib64/vendor.samsung.hardware.biometrics.fingerprint-V1-ndk.so
 
 # Firmware
 vendor/firmware/nfc/libpn557_fw.so
@@ -837,6 +859,7 @@ vendor/etc/init/ipsec_mon.rc
 vendor/etc/init/vendor.samsung.hardware.gnss-service.rc
 vendor/lib/vendor.samsung.hardware.gnss-V3-ndk.so
 vendor/lib64/hw/gps.default.so
+vendor/lib64/gnss_aidl_lib.so
 vendor/lib64/librpc.so
 vendor/lib64/libviagpsrpc.so
 vendor/lib64/vendor.samsung.hardware.gnss-V3-ndk.so
@@ -851,6 +874,7 @@ vendor/lib/libthha.so
 vendor/lib64/android.hardware.keymaster@3.0.so
 vendor/lib64/android.hardware.keymaster@4.0.so
 vendor/lib64/android.hardware.keymaster@4.1.so
+vendor/lib64/android.hardware.security.keymint-V1-ndk.so
 vendor/lib64/android.system.wifi.keystore@1.0.so
 vendor/lib64/libdecrypt.so
 vendor/lib64/libkeymaster4_1support.so
@@ -860,6 +884,8 @@ vendor/lib64/libkeymaster_portable.so
 vendor/lib64/libpuresoftkeymasterdevice.so
 vendor/lib64/libskeymint10device.so
 vendor/lib64/libskeymint_cli.so
+vendor/lib64/vendor.samsung.hardware.keymint-V2-ndk.so
+vendor/lib64/vendor.samsung.hardware.security.fkeymaster-V1-ndk.so
 
 # libladder
 vendor/lib/libladder.so
@@ -873,17 +899,18 @@ vendor/lib/libvcodec_utility_plat.mt6835.so
 vendor/lib/libvcodecdrv_header_stub.so
 vendor/lib64/libvpu.so
 
-# Media (X)
-vendor/lib64/libcodec2_simple_component.so
-vendor/lib64/libcodec2_soft_ac4dec.so
-vendor/lib64/libcodec2_soft_eac3dec.so
-
 # Media (C2)
 vendor/bin/hw/android.hardware.media.c2@1.2-mediatek-64b
-vendor/etc/mtk_platform_codecs_config.xml
+vendor/etc/init/android.hardware.media.c2@1.2-mediatek-64b.rc
 vendor/lib64/libcodec2_mtk_c2store.so
 vendor/lib64/libcodec2_mtk_vdec.so
 vendor/lib64/libcodec2_mtk_venc.so
+vendor/lib64/libcodec2_simple_component.so
+vendor/lib64/libcodec2_soft_ac4dec.so
+vendor/lib64/libcodec2_soft_eac3dec.so
+vendor/lib64/libcodec2_vpp_AIMEMC_plugin.so
+vendor/lib64/libcodec2_vpp_AISR_plugin.so
+vendor/lib64/libcodec2_vpp_mi_plugin.so
 vendor/lib64/libcodec2_vpp_qt_plugin.so
 vendor/lib64/libcodec2_vpp_rs_plugin.so
 vendor/lib64/libformatter.so
@@ -924,6 +951,7 @@ vendor/lib64/libmvpu_engine_pub.so
 vendor/lib64/libmvpu_pattern.so
 vendor/lib64/libmvpu_pattern_pub.so
 vendor/lib64/libmvpu_runtime.so
+vendor/lib64/libmvpu_runtime_builtin.so
 vendor/lib64/libmvpu_runtime_pub.so
 vendor/lib64/libmvpuop_mtk_cv.so
 vendor/lib64/libmvpuop_mtk_nn.so
@@ -999,6 +1027,11 @@ vendor/lib64/libnvram_sec.so
 vendor/lib64/vendor.mediatek.hardware.nvram@1.0.so
 vendor/lib64/vendor.mediatek.hardware.nvram@1.1.so
 
+# X?
+vendor/bin/hw/vendor.mediatek.hardware.mmlpq@V1-service
+vendor/lib64/mt6835/libmmlpqImpl.so;SYMLINK=vendor/lib64/libmmlpqImpl.so
+vendor/lib64/vendor.mediatek.hardware.mmlpq-V2-ndk.so
+
 # Power
 vendor/lib64/libpower_timer.so
 vendor/lib64/vendor.mediatek.hardware.power@1.1.so
@@ -1010,6 +1043,8 @@ vendor/bin/ccci_rpcd
 vendor/etc/init/init.cccimdinit.rc
 vendor/etc/init/init.cccirpcd.rc
 vendor/etc/init/init.connfem.rc
+vendor/etc/vintf/manifest/vendor.samsung.hardware.radio_manifest_2_33.xml
+vendor/etc/vintf/manifest/vendor.samsung.hardware.sehradio_manifest_2_33.xml
 vendor/etc/ecc_list.xml
 vendor/etc/ecc_list_OP01.xml
 vendor/etc/ecc_list_OP02.xml
@@ -1028,6 +1063,7 @@ vendor/etc/virtual-spn-conf-by-imsi.xml
 vendor/lib/libccci_util.so
 vendor/lib64/libcares_naptr.so
 vendor/lib64/libccci_util.so
+vendor/lib64/libfloatingfeature.so
 vendor/lib64/libmipc.so
 vendor/lib64/libmtkares.so
 vendor/lib64/libmtkcutils.so
@@ -1045,9 +1081,13 @@ vendor/lib64/libtrm.so
 # Radio (IMS)
 vendor/bin/hw/rild
 vendor/bin/rcs_volte_stack
+vendor/bin/rcs_volte_stack64
 vendor/bin/rttv_v2
 vendor/bin/volte_clientapi_ua
 vendor/bin/volte_rcs_ua
+vendor/bin/volte_rcs_ua64
+vendor/etc/apdb/APDB_MT6835___W2506
+vendor/etc/apdb/APDB_MT6835___W2506_ENUM
 vendor/etc/init/init.vendor.onebinary.rc
 vendor/etc/init/init.vendor.rilcommon.rc
 vendor/etc/init/vendor.samsung.rilchip.mediatek.rc
@@ -1062,6 +1102,7 @@ vendor/lib64/libVendorSemTelephonyProps.so
 vendor/lib64/libaudio-ril.so
 vendor/lib64/libengmode_client.so
 vendor/lib64/libipsec_ims_shr.so
+vendor/lib64/librcs_volte_core.so
 vendor/lib64/libril_sem.so
 vendor/lib64/libsec-ril.so
 vendor/lib64/libsecril-client.so
@@ -1069,8 +1110,6 @@ vendor/lib64/libsemnativecarrierfeature.so
 vendor/lib64/libsimlock.so
 vendor/lib64/libsimmelock.so
 vendor/lib64/vendor.mediatek.hardware.clientapi@1.0.so
-vendor/etc/apdb/APDB_MT6835___W2506
-vendor/etc/apdb/APDB_MT6835___W2506_ENUM
 
 # Sensors
 vendor/lib64/libhfmanager.so
@@ -1094,6 +1133,7 @@ vendor/lib64/libgz_uree.so
 # TEEGRIS
 vendor/bin/tzdaemon
 vendor/bin/tzts_daemon
+vendor/etc/init/teegris.rc
 vendor/lib64/libteecl.so
 vendor/lib64/libthha.so
 vendor/lib64/libuuid.so
@@ -1190,6 +1230,8 @@ vendor/etc/init/hyper-default-sec.rc
 vendor/etc/vintf/manifest/hyper-default-sec.xml
 vendor/lib/vendor.samsung.hardware.hyper-V2-ndk.so
 vendor/lib64/libhyper.so
+vendor/lib64/libhypermotion.uniplugin@1.0.so
+vendor/lib64/libhypermotion_core.so
 vendor/lib64/libhypervintf.so
 vendor/lib64/vendor.samsung.hardware.hyper-V2-ndk.so
 
@@ -1207,6 +1249,7 @@ vendor/lib64/libsnaplite_native.so
 vendor/lib64/libsnaplite_wrapper.so
 vendor/lib64/libtvm_runtime.so
 vendor/lib64/libtvm_wrapper.so
+vendor/lib64/vendor.samsung.hardware.snap-V1-ndk.so
 
 # Weaver
 vendor/etc/vintf/manifest/iweaver_v1_manifest.xml
@@ -1216,6 +1259,7 @@ vendor/lib64/android.hardware.weaver@1.0.so
 vendor/bin/hw/vendor.samsung.hardware.vibrator-service
 vendor/etc/init/vendor.samsung.hardware.vibrator-default.rc
 vendor/etc/vintf/manifest/vendor.samsung.hardware.vibrator-default.xml
+vendor/lib64/vendor.samsung.hardware.vibrator-V5-ndk.so
 
 # Lights
 vendor/bin/hw/vendor.samsung.hardware.light-service
@@ -1230,7 +1274,9 @@ vendor/etc/locale/plmn_delta_zh-rCN.bin
 vendor/etc/locale/plmn_delta_zh-rHK.bin
 vendor/etc/locale/plmn_delta_zh-rTW.bin
 vendor/etc/plmn_delta.bin
+vendor/etc/plmn_delta_attaio.bin
 vendor/etc/plmn_delta_hktw.bin
+vendor/etc/plmn_delta_usagsm.bin
 
 # SAIV
 vendor/etc/saiv/gae/MeanFea.bin
@@ -1257,6 +1303,7 @@ vendor/lib64/libhermes_cred.so
 vendor/lib64/libhwvault.so
 vendor/lib64/libisosechw.so
 vendor/lib64/libshctrl.so
+vendor/lib64/vendor.samsung.hardware.security.hermes-V1-ndk.so
 
 # fuelgauged
 vendor/bin/fuelgauged
@@ -1267,43 +1314,25 @@ vendor/lib/libfgauge_gm30.so
 vendor/lib64/libfgauge_gm30.so
 
 # TODO:re
-vendor/bin/hw/android.hardware.drm-service.widevine
 vendor/bin/hw/android.hardware.graphics.composer@2.4-service
 vendor/bin/hw/android.hardware.graphics.composer@3.1-service
-vendor/bin/hw/vendor.mediatek.hardware.mmlpq@V1-service
-vendor/bin/hw/vendor.mediatek.hardware.pq_aidl-service
-vendor/bin/hw/vendor.samsung.hardware.biometrics.fingerprint-service
 vendor/bin/add.tflite
 vendor/bin/gps_dump
 vendor/bin/mtkconverter
-vendor/bin/rcs_volte_stack64
 vendor/bin/touch_boost
 vendor/bin/uart_launcher
-vendor/bin/volte_rcs_ua64
 vendor/etc/gralloc/cam.xml
 vendor/etc/gralloc/dpu.xml
 vendor/etc/gralloc/dpu_aeu.xml
 vendor/etc/gralloc/gpu.xml
 vendor/etc/gralloc/vpu.xml
-vendor/etc/init/android.hardware.drm-service.widevine.rc
 vendor/etc/init/android.hardware.graphics.composer@3.1-service.rc
-vendor/etc/init/android.hardware.media.c2@1.2-mediatek-64b.rc
 vendor/etc/init/init.a15x.rc
-vendor/etc/init/teegris.rc
-vendor/etc/init/vendor.mediatek.hardware.pq_aidl-service.rc
-vendor/etc/init/vendor.samsung.hardware.biometrics.fingerprint-service.rc
 vendor/etc/vintf/manifest/bluetooth_audio.xml
-vendor/etc/vintf/manifest/manifest_android.hardware.drm-service.widevine.xml
-vendor/etc/vintf/manifest/power-mediatek.xml
 vendor/etc/vintf/manifest/sec_c2_manifest_default0_1_1.xml
-vendor/etc/vintf/manifest/vendor.samsung.hardware.biometrics.fingerprint-service.xml
-vendor/etc/vintf/manifest/vendor.samsung.hardware.radio_manifest_2_33.xml
-vendor/etc/vintf/manifest/vendor.samsung.hardware.sehradio_manifest_2_33.xml
 vendor/etc/command.csv
 vendor/etc/cust_pq.xml
 vendor/etc/mali_platform.config
-vendor/etc/plmn_delta_attaio.bin
-vendor/etc/plmn_delta_usagsm.bin
 vendor/lib64/hw/android.hardware.audio@7.1-impl-mediatek.so
 vendor/lib64/mt6835/arm.graphics-V2-ndk.so;SYMLINK=vendor/lib64/arm.graphics-V2-ndk.so
 vendor/lib64/mt6835/arm.graphics-V3-ndk.so;SYMLINK=vendor/lib64/arm.graphics-V3-ndk.so
@@ -1312,48 +1341,24 @@ vendor/lib64/mt6835/libaiawb_moon_model.so;SYMLINK=vendor/lib64/libaiawb_moon_mo
 vendor/lib64/mt6835/libaiawb_sun_model.so;SYMLINK=vendor/lib64/libaiawb_sun_model.so
 vendor/lib64/mt6835/libarm_egl_properties_sysprop.so;SYMLINK=vendor/lib64/libarm_egl_properties_sysprop.so
 vendor/lib64/mt6835/libarm_gralloc_properties_sysprop.so;SYMLINK=vendor/lib64/libarm_gralloc_properties_sysprop.so
-vendor/lib64/mt6835/libcamalgo.eis.so;SYMLINK=vendor/lib64/libcamalgo.eis.so
-vendor/lib64/mt6835/libcamalgo.fsc.so;SYMLINK=vendor/lib64/libcamalgo.fsc.so
-vendor/lib64/mt6835/libcamalgo.gyro.so;SYMLINK=vendor/lib64/libcamalgo.gyro.so
-vendor/lib64/mt6835/libcamalgo.lmv.so;SYMLINK=vendor/lib64/libcamalgo.lmv.so
-vendor/lib64/mt6835/libcamalgo.n3d.so;SYMLINK=vendor/lib64/libcamalgo.n3d.so
 vendor/lib64/mt6835/liblibarm_mali_config_sysprops.so;SYMLINK=vendor/lib64/liblibarm_mali_config_sysprops.so
 vendor/lib64/mt6835/libmmagent.so;SYMLINK=vendor/lib64/libmmagent.so
-vendor/lib64/mt6835/libmmlpqImpl.so;SYMLINK=vendor/lib64/libmmlpqImpl.so
-vendor/lib64/mt6835/libmtkcam.debugwrapper.so;SYMLINK=vendor/lib64/libmtkcam.debugwrapper.so
 vendor/lib64/mt6835/libneuron_runtime.6.so;SYMLINK=vendor/lib64/libneuron_runtime.6.so
-vendor/lib64/APUWareApusysAidlServer.so
-vendor/lib64/android.hardware.biometrics.common-V2-ndk.so
-vendor/lib64/android.hardware.biometrics.face-V2-ndk.so
-vendor/lib64/android.hardware.biometrics.fingerprint-V2-ndk.so
 vendor/lib64/android.hardware.graphics.composer@2.4.so
-vendor/lib64/android.hardware.security.keymint-V1-ndk.so
-vendor/lib64/android.hardware.wifi@1.6.so
 vendor/lib64/android.media.audio.common.types-V1-cpp.so
 vendor/lib64/android.system.keystore2-V1-ndk.so
 vendor/lib64/audiopolicy-types-aidl-cpp.so
-vendor/lib64/gnss_aidl_lib.so
-vendor/lib64/libOpenCv.camera.samsung.so
 vendor/lib64/libappgamepq.so
-vendor/lib64/libavservices_minijail.so
 vendor/lib64/libbluetooth_audio_session_aidl.so
-vendor/lib64/libcodec2_vpp_AIMEMC_plugin.so
-vendor/lib64/libcodec2_vpp_AISR_plugin.so
-vendor/lib64/libcodec2_vpp_mi_plugin.so
 vendor/lib64/libdre.so
 vendor/lib64/libhdrvideo.so
-vendor/lib64/libhypermotion.uniplugin@1.0.so
-vendor/lib64/libhypermotion_core.so
 vendor/lib64/libmediautils_vendor.so
 vendor/lib64/libmemunreachable.so
-vendor/lib64/libmvpu_runtime_builtin.so
 vendor/lib64/libneuron_runtime_vpp.6.so
-vendor/lib64/libpqhdrmetaparser.so
 vendor/lib64/libpqsharememory.so
 vendor/lib64/libpqtuning.so
 vendor/lib64/libpqxmlparser.so
 vendor/lib64/librcs_interface.so
-vendor/lib64/librcs_volte_core.so
 vendor/lib64/libsehbluetooth_audio_session_aidl.so
 vendor/lib64/libsfp_sensor.so
 vendor/lib64/libsfp_teegw.so
@@ -1363,14 +1368,10 @@ vendor/lib64/libwapi.so
 vendor/lib64/libwvaidl.so
 vendor/lib64/vendor.mediatek.hardware.audio@8.1.so
 vendor/lib64/vendor.mediatek.hardware.bluetooth.audio-V1-ndk.so
-vendor/lib64/vendor.mediatek.hardware.mmlpq-V2-ndk.so
 vendor/lib64/vendor.mediatek.hardware.rcs@2.0.so
 vendor/lib64/vendor.samsung.hardware.audio-V1-ndk.so
-vendor/lib64/vendor.samsung.hardware.biometrics.face-V3-ndk.so
-vendor/lib64/vendor.samsung.hardware.biometrics.fingerprint-V1-ndk.so
 vendor/lib64/vendor.samsung.hardware.bluetooth.audio-V1-ndk.so
 vendor/lib64/vendor.samsung.hardware.bluetooth.audio-impl.so
-vendor/lib64/vendor.samsung.hardware.keymint-V2-ndk.so
 vendor/lib64/vendor.samsung.hardware.radio-V1-ndk.so
 vendor/lib64/vendor.samsung.hardware.radio.bridge-V1-ndk.so
 vendor/lib64/vendor.samsung.hardware.radio.channel-V1-ndk.so
@@ -1378,10 +1379,4 @@ vendor/lib64/vendor.samsung.hardware.radio.data-V1-ndk.so
 vendor/lib64/vendor.samsung.hardware.radio.messaging-V1-ndk.so
 vendor/lib64/vendor.samsung.hardware.radio.network-V1-ndk.so
 vendor/lib64/vendor.samsung.hardware.radio.sim-V1-ndk.so
-vendor/lib64/vendor.samsung.hardware.security.fkeymaster-V1-ndk.so
-vendor/lib64/vendor.samsung.hardware.security.hermes-V1-ndk.so
 vendor/lib64/vendor.samsung.hardware.security.vaultkeeper-V1-ndk.so
-vendor/lib64/vendor.samsung.hardware.snap-V1-ndk.so
-vendor/lib64/vendor.samsung.hardware.vibrator-V5-ndk.so
-vendor/lib64/vendor.samsung.hardware.wifi.supplicant-V1-ndk.so
-vendor/lib64/libfloatingfeature.so
