@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-DEVICE_PATH := device/samsung/a15nsxx
+DEVICE_PATH := device/samsung/a15xub
 KERNEL_PATH := $(DEVICE_PATH)-kernel
 CONFIGS_PATH := $(DEVICE_PATH)/configs
 
@@ -153,7 +153,7 @@ TARGET_COPY_OUT_VENDOR_DLKM := vendor_dlkm
 BOARD_ROOT_EXTRA_FOLDERS := efs metadata
 
 # OTA assert
-TARGET_OTA_ASSERT_DEVICE := a15nsxx,a15
+TARGET_OTA_ASSERT_DEVICE := a15xub,a15x
 
 # Use F2FS for /data
 BOARD_USERDATAIMAGE_FILE_SYSTEM_TYPE := f2fs
@@ -162,7 +162,7 @@ BOARD_USERDATAIMAGE_FILE_SYSTEM_TYPE := f2fs
 PRODUCT_FS_COMPRESSION := 1
 
 # Platform
-TARGET_BOARD_PLATFORM := mt6789
+TARGET_BOARD_PLATFORM := mt6835
 
 # Properties
 TARGET_PRODUCT_PROP += $(CONFIGS_PATH)/properties/product.prop
@@ -243,4 +243,4 @@ WIFI_HIDL_UNIFIED_SUPPLICANT_SERVICE_RC_ENTRY := true
 TARGET_KERNEL_SOURCE := $(KERNEL_PATH)/kernel-headers
 
 # Inherit the proprietary files
-include vendor/samsung/a15nsxx/BoardConfigVendor.mk
+include vendor/samsung/a15xub/BoardConfigVendor.mk

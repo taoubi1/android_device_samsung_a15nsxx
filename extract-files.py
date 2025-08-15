@@ -20,7 +20,7 @@ from extract_utils.main import (
 )
 
 namespace_imports = [
-    'device/samsung/a15nsxx',
+    'device/samsung/a15xub',
 ]
 
 def lib_fixup_vendor_suffix(lib: str, partition: str, *args, **kwargs):
@@ -35,7 +35,7 @@ blob_fixups: blob_fixups_user_type = {
 
 
 module = ExtractUtilsModule(
-    'a15nsxx',
+    'a15xub',
     'samsung',
     blob_fixups=blob_fixups,
     lib_fixups=lib_fixups,

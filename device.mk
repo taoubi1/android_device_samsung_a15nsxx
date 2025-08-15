@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-DEVICE_PATH := device/samsung/a15nsxx
+DEVICE_PATH := device/samsung/a15xub
 CONFIGS_PATH := $(DEVICE_PATH)/configs
 
 # AAPT
@@ -167,25 +167,25 @@ $(call inherit-product, vendor/mediatek/ims/ims.mk)
 
 # Init files
 PRODUCT_PACKAGES += \
-    fstab.mt6789 \
+    fstab.mt6835 \
     fstab.ramplus \
     init_connectivity.rc \
     init.sec.rc \
     init.connectivity.common.rc \
     init.connectivity.rc \
     init.insmod.sh \
-    init.insmod.mt6789.cfg \
+    init.insmod.mt6835.cfg \
     init.modem.rc \
-    init.mt6789.power.rc \
+    init.mt6835.power.rc \
     init.logger-service.rc \
-    init.mt6789.rc \
-    init.mt6789.usb.rc \
+    init.mt6835.rc \
+    init.mt6835.usb.rc \
     init.mtkgki.rc \
     init.project.rc \
-    init.recovery.mt6789.rc \
+    init.recovery.mt6835.rc \
     init.recovery.samsung.rc \
     init.audio.samsung.rc \
-    ueventd.mt6789.rc
+    ueventd.mt6835.rc
 
 # Keylayout
 PRODUCT_COPY_FILES += \
@@ -421,4 +421,4 @@ PRODUCT_COPY_FILES += \
     $(call find-copy-subdir-files,*,$(CONFIGS_PATH)/wifi/,$(TARGET_COPY_OUT_VENDOR)/etc/wifi)
 
 # Inherit from the proprietary files makefile.
-$(call inherit-product, vendor/samsung/a15nsxx/a15nsxx-vendor.mk)
+$(call inherit-product, vendor/samsung/a15xub/a15xub-vendor.mk)
