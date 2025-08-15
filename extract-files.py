@@ -21,6 +21,9 @@ from extract_utils.main import (
 
 namespace_imports = [
     'device/samsung/a15xub',
+    'hardware/mediatek',
+    'hardware/mediatek/libmtkperf_client',
+    'hardware/samsung',
 ]
 
 def lib_fixup_vendor_suffix(lib: str, partition: str, *args, **kwargs):

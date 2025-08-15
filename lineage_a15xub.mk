@@ -23,13 +23,13 @@ PRODUCT_NAME := lineage_a15xub
 PRODUCT_DEVICE := a15xub
 PRODUCT_MANUFACTURER := samsung
 PRODUCT_BRAND := samsung
-PRODUCT_MODEL := SM-A155F
+PRODUCT_MODEL := SM-A156M
 
 PRODUCT_GMS_CLIENTID_BASE := android-samsung
 
 PRODUCT_BUILD_PROP_OVERRIDES += \
     DeviceName=a15xub \
-    BuildFingerprint=samsung/a15xub/a15:15/AP3A.240905.015.A2/A155FXXS7CYG1:user/release-keys
+    BuildFingerprint=samsung/a15xub/a15x:13/TP1A.220624.014/A156MUBS6CYF2:user/release-keys
 
 # Time
 LINEAGE_VERSION_APPEND_TIME_OF_DAY := true
