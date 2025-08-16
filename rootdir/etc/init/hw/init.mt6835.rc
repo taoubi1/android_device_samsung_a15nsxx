@@ -1889,7 +1889,12 @@ on property:persist.vendor.mediatek.fg.log.enable=1
     write /sys/devices/platform/soc/11b21000.i2c/i2c-5/5-0034/11b21000.i2c:mt6375@34:mtk_gauge/FG_daemon_log_level 7
     write /dev/gauge/FG_daemon_log_level 7
     write /proc/sys/kernel/printk 8
+
 # MTK fast charging support
 on property:persist.vendor.mediatek.fast_charging.support=*
     write /sys/devices/platform/charger/fast_chg_indicator ${persist.vendor.mediatek.fast_charging.support}
 
+# initialize powerHAL when boot is completed
+on property:sys.boot_completed=1
+    setprop vendor.powerhal.init 1
+    setprop vendor.mediatek.powerhal.init 1
