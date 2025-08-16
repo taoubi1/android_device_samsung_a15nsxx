@@ -223,8 +223,7 @@ BOARD_AVB_VBMETA_SYSTEM_ROLLBACK_INDEX_LOCATION := 2
 
 # VINTF
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := \
-   $(CONFIGS_PATH)/vintf/device_framework_compatibility_matrix.xml \
-   hardware/mediatek/vintf/mediatek_framework_compatibility_matrix.xml \
+   $(CONFIGS_PATH)/vintf/compatibility_matrix.device.xml.xml \
    vendor/lineage/config/device_framework_matrix.xml
 DEVICE_MANIFEST_FILE := $(CONFIGS_PATH)/vintf/manifest.xml
 DEVICE_MATRIX_FILE := $(CONFIGS_PATH)/vintf/compatibility_matrix.xml
