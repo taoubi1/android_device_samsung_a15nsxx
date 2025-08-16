@@ -17,7 +17,7 @@
 <MediaCodecs>
     <Settings>
         <!-- disable TV and telephony domains by default. These must be opted in by OEMs -->
-        <Domain name="telephony" enabled="false" />
+        <Domain name="telephony" enabled="true" />
         <Domain name="tv" enabled="false" />
         <Variant name="slow-cpu" enabled="false" />
     </Settings>
@@ -380,7 +380,7 @@
             <Limit name="performance-point-1920x1080" value="30" />
         </MediaCodec>
         <MediaCodec name="c2.mtk.heif.encoder" type="image/vnd.android.heic" >
-            <Limit name="size" min="160x128" max="8192x8192" />
+            <Limit name="size" min="160x128" max="5120x2560" />
             <Limit name="alignment" value="16x16" />
             <Limit name="block-size" value="16x16" />
             <Limit name="quality" range="0-100" default="50" />
