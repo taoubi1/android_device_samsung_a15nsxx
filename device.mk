@@ -64,7 +64,7 @@ PRODUCT_PACKAGES += \
 
 # Bluetooth
 PRODUCT_PACKAGES += \
-    android.hardware.bluetooth@1.1.vendor:64
+    android.hardware.bluetooth-service.mediatek
 
 # Boot animation
 TARGET_SCREEN_HEIGHT := 2460
