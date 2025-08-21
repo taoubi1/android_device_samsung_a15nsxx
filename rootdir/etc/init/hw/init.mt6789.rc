@@ -12,20 +12,12 @@ import /vendor/etc/init/hw/init.modem.rc
 # *** DO NOT import the new rc file after this line ***
 
 on early-init
-    write /proc/bootprof "INIT:early-init"
-
     # initialize vendor.all.modules.ready to 1 here to prevent NOT GKI project blocked
     setprop vendor.all.modules.ready 1
 
 on init
-    write /proc/bootprof "INIT:init"
-
     # if primary storage is physical, set ro.vold.primary_physical to 1
     # setprop ro.vold.primary_physical 1
-
-#MD:add XLQYXLQS-5252 for tranfs by xiaoxiang.xiong 20220404 start
-mkdir /tranfs 0771 system system
-#MD:add XLQYXLQS-5252 for tranfs by xiaoxiang.xiong 20220404 end
 
 # change lk_env permission
     chown root system /proc/lk_env
@@ -43,12 +35,10 @@ mkdir /tranfs 0771 system system
     write /dev/cpuset/top-app/cpus 0-7
 
 on late-init
-    write /proc/bootprof "INIT:late-init"
 # enable rcu_expedited
     write /sys/kernel/rcu_expedited 1
 
 # mount different fs start
-
 on property:init.svc.vendor.charger=running
     chmod 0660 /dev/spm
     chown system system /dev/spm
@@ -84,33 +74,16 @@ on property:init.svc.vendor.charger=running
 on property:sys.boot_completed=1
     setprop vendor.mediatek.powerhal.init 1
 
-on early-fs
-    write /proc/bootprof "INIT:early-fs"
-
 on fs
-    write /proc/bootprof "INIT:fs"
-
     # mount fstab
-    write /proc/bootprof "INIT:Mount_START"
-    write /sys/kernel/tracing/trace_marker "B|1|Mount"
     mount_all --early
     exec /system/bin/tune2fs -O has_journal -u 10010 -r 4096 /dev/block/by-name/userdata
-    write /sys/kernel/tracing/trace_marker "E"
-    write /proc/bootprof "INIT:Mount_END"
 
 on late-fs
-    write /proc/bootprof "INIT:late-fs"
     wait_for_prop hwservicemanager.ready "true"
-
-    write /proc/bootprof "INIT:Mount_START --late"
-    write /sys/kernel/tracing/trace_marker "B|1|Mount late"
     mount_all --late
-    write /sys/kernel/tracing/trace_marker "E"
-    write /proc/bootprof "INIT:Mount_END --late"
 
 on post-fs
-    write /proc/bootprof "INIT:post-fs"
-
     #change permissions for mediaserver
     chown root media /proc/clkmgr/mipi_test
 
@@ -126,9 +99,7 @@ on post-fs
     chown radio system /proc/freqhopping/status
     chown radio system /proc/freqhopping/userdef
 
-# change owner
-    chown system system /proc/bootprof
-    chmod 0664 /proc/bootprof
+    # change owner
     chown root system /proc/mtprof/cputime
     chown root system /proc/mtprof/reboot_pid
 
@@ -142,24 +113,8 @@ on post-fs
     # allow ccci_mdinit access ccci_dump
     chown root system /proc/ccci_dump
 
-    #STD:add ffu upgrade KFLJHLEYB-2005 by xiaoxiang.xiong 20221017 start
-    restorecon_recursive /tranfs
-    mkdir /tranfs/ffu 0700 system shell
-    chmod 0777 /tranfs/ffu
-    #STD:add ffu upgrade KFLJHLEYB-2005 by xiaoxiang.xiong 20221017 end
-
-    #STD:add XLLWCHLYEL-738 kfp by hao.lv5 20220907 start
-    restorecon_recursive /tranfs
-    mkdir /tranfs/tranf2fs 0700 root shell
-    chmod 0771 /tranfs/tranf2fs
-    mkdir /tranfs/tranf2fs/kfp 0700 root shell
-    chmod 0771 /tranfs/tranf2fs/kfp
-    #STD:add XLLWCHLYEL-738 kfp by hao.lv5 20220907 end
-
 on post-fs-data
-    write /proc/bootprof "INIT:post-fs-data"
     wait_for_prop vendor.all.modules.ready 1
-    write /proc/bootprof "modprobe: Load_Module_DONE"
 
     # Disable watermark boost
     write /proc/sys/vm/watermark_boost_factor 0
@@ -190,11 +145,6 @@ on post-fs-data
     chown system system /mnt/vendor/nvcfg/fg
     chown system system /mnt/vendor/nvcfg/fg/old_fg_data
     chown system system /mnt/vendor/nvcfg/fg/car_tune_value
-
-#MD:add XLQYXLQS-5252 for tranfs by xiaoxiang.xiong 20220404 start
-    chown system system /tranfs
-    chmod 0777 /tranfs
-#MD:add XLQYXLQS-5252 for tranfs by xiaoxiang.xiong 20220404 end
 
     # create basic filesystem structure
     # We chown/chmod /mnt/vendor/nvdata again so because mount is run as root + defaults
@@ -236,16 +186,6 @@ on post-fs-data
     mkdir /data/vendor/flicker
     chown root system /data/vendor/flicker
     chmod 0771 /data/vendor/flicker
-
-#ITD:modify for cam SN bind by huihang.zhou 20230302 start
-#CAM OTP SN
-    chown root root /sys/class/sensordrv/tran_imgsensor/tran_imgsensor_sn
-    chmod 0666 /sys/class/sensordrv/tran_imgsensor/tran_imgsensor_sn
-#ITD:modify for cam SN bind by huihang.zhou 20230302 end
-
-#MD:add XLQYXLQS-5252 for tranfs by xiaoxiang.xiong 20220404 start
-    restorecon_recursive /tranfs
-#MD:add XLQYXLQS-5252 for tranfs by xiaoxiang.xiong 20220404 end
 
     # Set SELinux security contexts on upgrade or policy update.
     restorecon_recursive /mnt/vendor/nvdata
@@ -514,7 +454,6 @@ on post-fs-data
     chown media system /dev/hdmitx
     chmod 0664 /dev/hdmitx
 
-
     # JPEG
     chmod 0666 /proc/mtk_jpeg
 
@@ -563,30 +502,6 @@ on post-fs-data
     chmod 0660 /dev/vpu
     chmod 0660 /dev/apusys
     chmod 0660 /dev/mtk_ccd
-
-#ITD: Modify Camera By Yingji.Wang 220426 Start
-    #OIS
-    chmod 0660 /dev/dw9781_ois
-    #OIS
-    chown system camera /dev/dw9781_ois 
-    #DualCam
-    mkdir /data/vendor/arcsoft 0777 system system
-    #tranDualCam
-    mkdir /data/vendor/multicam  0777 system system
-    mkdir /data/vendor/multicam/dualcam  0777 system system
-    #tranSAT
-    mkdir /data/vendor/multicam/sat 0777 system system
-#ITD: Modify Camera By Yingji.Wang 220426 end
-
-#ITD:modify by camera driver junfeng.qin5 20220501 start
-    #MEG-fullHDR
-    mkdir /data/vendor/meg_working_dir 0777 system system
-    mkdir /data/vendor/meg_working_dir/anc_fullhdr 0777 system system
-    #MEG-HUMANEFFECT
-    mkdir /data/vendor/meghumaneffect 0777 system system
-    #watermark 2.0
-    mkdir /data/vendor/camera_watermark 0777 system system
-#ITD:modify by camera driver junfeng.qin5 20220501 end
 
     chown system camera /dev/camera-sysram
     chown system camera /dev/camera-isp
@@ -709,9 +624,9 @@ on post-fs-data
 
     chmod 0666 /dev/exm0
 
-	#Thermal
-	mkdir /data/vendor/.tp/ 0775 system system
-	mkdir /data/vendor/thermal/ 0775 system system
+    #Thermal
+    mkdir /data/vendor/.tp/ 0775 system system
+    mkdir /data/vendor/thermal/ 0775 system system
 
     #MCUPM log
     chmod 0620 /sys/class/misc/mcupm/mcupm_mobile_log
@@ -729,61 +644,19 @@ on post-fs-data
     chmod 0664 sys/kernel/debug/rt-regmap/mt6360_ldo.5-0064/reg_addr
     chmod 0664 sys/kernel/debug/rt-regmap/mt6360-4e/reg_addr
 
-	#widevine driver node
-	chmod 0660 /dev/drm_wv
-	chown media system /dev/drm_wv
+    #widevine driver node
+    chmod 0660 /dev/drm_wv
+    chown media system /dev/drm_wv
 	
 # End of adding by MTK drivers
 # -----------------------
-on zygote-start
-    write /proc/bootprof "INIT:zygote-start"
-
-on early-boot
-    write /proc/bootprof "INIT:early-boot"
-
 on boot
-    write /proc/bootprof "INIT:boot"
 
     write /proc/sys/vm/dirty_writeback_centisecs 300
     chmod 0660 /sys/power/autosleep
 
     chmod 0664 /sys/class/leds/lcd-backlight/brightness
-    chown system system /sys/class/leds/lcd-backlight/brightness
-
-    #BSP:add for charger&led midtest by lei.shi5 20220505 start
-    chmod 0666 /dev/MT_pmic_adc_cali
-    chmod 0666 /sys/class/leds/red/brightness
-    chmod 0666 /sys/class/leds/blue/brightness
-    chmod 0666 /sys/class/leds/green/brightness
-    chmod 0666 /sys/devices/platform/odm/odm:tran_battery/tran_bat_temp
-    chmod 0666 /sys/devices/platform/odm/odm:tran_battery/CHG_CAPACITY_TEST
-    chmod 0666 /sys/devices/platform/odm/odm:tran_battery/tran_set_current
-    chmod 0666 /sys/devices/platform/charger/Charger_Type
-	chown system system /sys/devices/platform/charger/tran_aichg_bigdata
-	chmod 0666 /sys/devices/platform/charger/tran_aichg_bigdata
-    #BSP:add for charger&led midtest by lei.shi5 20220505 end
-    #MG-CHG(Bypass):wireless function by yongqing 20221008 start
-    chmod 0666 /sys/wireless/wireless/Rx/brushFW
-    chmod 0666 /sys/wireless/wireless/Rx/reverse_charger
-    chmod 0666 /sys/wireless/wireless/Rx/rxdetect
-    chmod 0666 /sys/wireless/wireless/Rx/fake_rx_detect
-    #MG-CHG(Bypass):wireless function by yongqing 20221008 start
-
-
-    #MG-CHG(Bypass):bypass function by yongqing 20221008 start
-    chown system system /sys/devices/platform/charger/tran_aichg_disable_charger
-    chmod 0666 /sys/devices/platform/charger/tran_aichg_disable_charger
-    chown system system /sys/devices/platform/charger/bypass_charger
-    chmod 0666 /sys/devices/platform/charger/bypass_charger
-	chown system system /sys/devices/platform/odm/odm:smart_charging/smart_charging
-	chmod 0664 /sys/devices/platform/odm/odm:smart_charging/smart_charging
-    #MG-CHG(Bypass):bypass function by yongqing 20221008 end
-
-	chown system system /sys/led/led/tran_led_cmd
-	chmod 0666 /sys/led/led/tran_led_cmd
-
-	chown system system /sys/led/led/tran_led_check
-	chmod 0666 /sys/led/led/tran_led_check
+    chown system system /sys/class/leds/lcd-backlight/brightness$
 
     chown system system /sys/devices/system/cpu/cpufreq/hotplug/cpu_num_base
     chmod 0660 /sys/devices/system/cpu/cpufreq/hotplug/cpu_num_base
@@ -810,11 +683,6 @@ on boot
     chown system system /sys/class/leds/red/trigger
     chown system system /sys/class/leds/green/trigger
     chown system system /sys/class/leds/blue/trigger
-
-#ITD:add flashlight by isp team 20220412 start
-    chmod 0666 /sys/devices/virtual/torch/torch/torch_level
-    chmod 0666 /sys/devices/virtual/sub_torch/sub_torch/sub_torch_level
-#ITD:add flashlight by isp team 20220412 end
     # gauge symbolic
     symlink /sys/devices/platform/soc/10026000.pwrap/10026000.pwrap:mt6366/mt6358-gauge /dev/gauge
 
@@ -823,7 +691,6 @@ on boot
     chown radio system /sys/power/tuxonice/do_hibernate
     chmod 0770 /sys/power/tuxonice
     chmod 0220 /sys/power/tuxonice/do_hibernate
-
 
 # Smartbook Handler Framework
     chown system system /sys/power/sb_state
