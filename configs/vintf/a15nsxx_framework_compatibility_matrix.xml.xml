@@ -1,0 +1,60 @@
+<!--
+     SPDX-FileCopyrightText: 2024-2025 The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<compatibility-matrix version="2.0" type="framework">
+    <!-- Android RKP HAL -->
+    <hal format="aidl" optional="true">
+        <name>android.hardware.security.rkp</name>
+        <version>1</version>
+        <interface>
+            <name>IRemotelyProvisionedComponent</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <!-- Samsung Fingerprint HAL -->
+    <hal format="hidl" optional="true">
+        <name>vendor.samsung.hardware.biometrics.fingerprint</name>
+        <version>3.0</version>
+        <interface>
+            <name>ISehBiometricsFingerprint</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <!-- Samsung HyPer HAL -->
+    <hal format="hidl" optional="true">
+        <name>vendor.samsung.hardware.hyper</name>
+        <version>2.0</version>
+        <interface>
+            <name>ISehHyPer</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <!-- Samsung Hermes Security HAL -->
+    <hal format="hidl" optional="true">
+        <name>vendor.samsung.hardware.security.hermes</name>
+        <version>1.0</version>
+        <interface>
+            <name>ISehHermesCommand</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+<!-- Samsung HyPer HAL (AIDL) -->
+<hal format="aidl" optional="true">
+    <name>vendor.samsung.hardware.hyper</name>
+    <version>2</version>
+    <interface>
+        <name>ISehHyPer</name>
+        <instance>default</instance>
+    </interface>
+</hal>
+<!-- Samsung Hermes Security HAL (AIDL) -->
+<hal format="aidl" optional="true">
+    <name>vendor.samsung.hardware.security.hermes</name>
+    <version>1</version>
+    <interface>
+        <name>ISehHermesCommand</name>
+        <instance>default</instance>
+    </interface>
+</hal>
+</compatibility-matrix>
