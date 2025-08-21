@@ -414,17 +414,17 @@ PRODUCT_PACKAGES += \
 
 # Wi-Fi
 PRODUCT_PACKAGES += \
-    libwifi-hal-wrapper \
+    libwifi-hal-wrapper:64 \
+    android.hardware.wifi-service \
     wpa_supplicant \
     hostapd \
-    android.hardware.wifi-service \
     libkeystore-wifi-hidl:64 \
     libkeystore-engine-wifi-hidl:64
 
 PRODUCT_PACKAGES += \
-    android.hardware.tetheroffload.config@1.0.vendor \
-    android.hardware.tetheroffload.control@1.0.vendor \
-    android.hardware.tetheroffload.control@1.1.vendor
+    android.hardware.tetheroffload.config@1.0.vendor:64 \
+    android.hardware.tetheroffload.control@1.0.vendor:64 \
+    android.hardware.tetheroffload.control@1.1.vendor:64
 
 PRODUCT_COPY_FILES += \
     $(call find-copy-subdir-files,*,$(CONFIGS_PATH)/wifi/,$(TARGET_COPY_OUT_VENDOR)/etc/wifi)
