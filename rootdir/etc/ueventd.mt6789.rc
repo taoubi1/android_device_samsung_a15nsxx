@@ -57,10 +57,11 @@
 # WIFI
 /dev/wmtWifi              0660   wifi     wifi
 /dev/fw_log_wifi          0660   wifi     wifi
+/dev/fw_log_wifi_write_log_to_file     0660    wifi    wifi
+/dev/sa_log_wifi          0660   wifi     wifi
 
 # FMRadio
-# NFBD:modify  for dev/fm 0660->0666 by yuguo.zhang 20220406
-/dev/fm                   0666   media     media
+/dev/fm                   0660   system     audio
 
 # NFC
 /dev/st21nfc              0660   nfc        radio
@@ -105,6 +106,9 @@
 # MDDP node
 /dev/mddp                 0660   system     system
 
+#widevine driver node
+/dev/drm_wv               0660   media      system
+
 # add the read write right of ttyUSB*
 /dev/bus/usb/*     	  0660   root       usb
 /dev/ttyUSB0              0660   radio      radio
@@ -139,6 +143,15 @@
 /dev/pvrsrvkm             0666   root       root
 /dev/pvr_sync             0666   root       root
 
+# CIQ IQI node
+/dev/ccci_ciq             0660   system     system_ext_bridge_rw
+
+# S-RIL
+/dev/umts_*               0660   system      radio
+/dev/cdma_*               0660   system      radio
+
+# dev ril bridge
+/dev/drb                  0660   system      radio
 
 /sys/devices/platform/leds-mt65xx/leds/green   delay_on      0664  system   system
 /sys/devices/platform/leds-mt65xx/leds/green   delay_off      0664  system   system
@@ -152,6 +165,32 @@
 
 # Camera
 /dev/camera_eeprom*       0660   system     camera
+/dev/camera-sysram        0660   system     camera
+/dev/camera-isp           0660   system     camera
+/dev/camera-mem           0660   system     camera
+/dev/camera-dip           0660   system     camera
+/dev/camera-tsf           0660   system     camera
+/dev/camera-dpe           0660   system     camera
+/dev/camera-mfb           0660   system     camera
+/dev/camera-rsc           0660   system     camera
+/dev/camera-owe           0660   system     camera
+/dev/camera-fdvt          0660   system     camera
+/dev/camera-wpe           0660   system     camera
+/dev/camera-pipemgr       0660   system     camera
+/dev/kd_camera_hw         0660   system     camera
+/dev/seninf               0660   system     camera
+/dev/seninf_n3d           0660   system     camera
+/dev/flashlight           0660   system     camera
+/dev/kd_camera_hw_bus2    0660   system     camera
+/dev/FM50AF               0660   system     camera
+/dev/CAM_CAL_DRV          0660   system     camera
+/dev/MAINAF               0660   system     camera
+/dev/MAIN2AF              0660   system     camera
+/dev/MAIN3AF              0660   system     camera
+/dev/SUBAF                0660   system     camera
+/dev/vpu                  0660   system     camera
+/dev/apusys               0660   system     camera
+/dev/mtk_ccd              0660   system     camera
 
 #FOR VIA MODEM
 /dev/ttySDIO*             0660   radio      sdcard_rw
@@ -195,8 +234,37 @@
 #MTK In-House TEE
 /dev/ttyACM0              0660   radio      radio
 
-#BSP:modify ultrasound support ADYLHBSLA-4 by xinyu.zhao 20220629 start
-#elliptic sensor
-/dev/elliptic0            0644   system     system
-/dev/elliptic1            0644   system     system
-#BSP:modify ultrasound support ADYLHBSLA-4 by xinyu.zhao 20220629 end
+# Raw HID devices
+/dev/hidraw*     0660   system     system
+
+# Param
+/dev/block/by-name/param    0660    root    system
+
+# Google FRP solution
+/dev/block/by-name/persistent    0660    system    system
+
+# Reactivation lock
+/dev/block/by-name/steady    0660    system    system
+
+# Sensor Hub
+/dev/shub_sensorhub        0660   system     system
+/dev/shub_data_injection   0660   system     system
+/dev/batch_io              0660   system     system
+/dev/iio:device*           0660   system	 system
+/sys/devices/platform/shub/iio:device*    buffer/enable       0660    system    system
+/sys/devices/platform/shub/iio:device*    buffer/length       0660    system    system
+/sys/bus/iio/devices/iio:device*    0664   system     radio
+
+# grip sensor
+/dev/input/event*				0660	system	input
+/sys/devices/virtual/input/input*   enable      0660	system	input
+
+# PROCA dev config
+/dev/proca_config         0440   system     system
+
+# TEEGRIS
+/dev/tzdev		0666	system		system
+/dev/tziwsock		0666	system		system
+/dev/tziwshmem		0666	system		system
+/dev/tuihw		0660	system		system
+/dev/tzirs		0660	system		system
