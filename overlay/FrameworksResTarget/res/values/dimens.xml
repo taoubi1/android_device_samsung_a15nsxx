@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Height of the status bar -->
+    <dimen name="status_bar_camera_top_margin">8.0px</dimen>
+    <dimen name="status_bar_height_portrait">5.1099854mm</dimen>
+    <dimen name="status_bar_indicator_corner_padding">62.0px</dimen>
+</resources>

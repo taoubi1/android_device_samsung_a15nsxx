@@ -194,15 +194,6 @@ PRODUCT_PACKAGES += \
     init.audio.samsung.rc \
     ueventd.mt6789.rc
 
-# Overlays
-PRODUCT_ENFORCE_RRO_TARGETS := *
-PRODUCT_PACKAGES += \
-    FrameworkResOverlayRozen \
-    SettingsResOverlayRozen \
-    SystemUIResOverlayRozen \
-    TetheringResOverlayRozen \
-    WifiResOverlayRozen
-
 # Keylayout
 PRODUCT_COPY_FILES += \
     $(CONFIGS_PATH)/keylayout/mtk-tpd.kl:$(TARGET_COPY_OUT_VENDOR)/usr/keylayout/mtk-tpd.kl
@@ -248,6 +239,15 @@ PRODUCT_PACKAGES += \
     android.hardware.neuralnetworks@1.0.vendor \
     android.hardware.neuralnetworks@1.3.vendor \
     libtextclassifier_hash.vendor
+
+# Overlays
+PRODUCT_ENFORCE_RRO_TARGETS := *
+PRODUCT_PACKAGES += \
+    SettingsProviderResTarget \
+    FrameworksResTarget \
+    SettingsResTarget \
+    SystemUIResTarget \
+    WifiResTarget
 
 # Permissions
 PRODUCT_COPY_FILES += \
