@@ -185,7 +185,8 @@ ENABLE_VENDOR_RIL_SERVICE := true
 include device/mediatek/sepolicy_vndr/SEPolicy.mk
 
 # Vendor Security Patch
-VENDOR_SECURITY_PATCH := 2025-07-01
+BOOT_SECURITY_PATCH := 2025-07-01
+VENDOR_SECURITY_PATCH := $(BOOT_SECURITY_PATCH)
 
 # Android Verified Boot
 BOARD_AVB_ENABLE := true
