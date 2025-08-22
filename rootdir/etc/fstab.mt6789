@@ -37,63 +37,30 @@ vendor_dlkm /vendor_dlkm ext4 ro wait,logical,first_stage_mount
 /dev/block/by-name/nvram /nvram emmc defaults defaults
 /dev/block/by-name/proinfo /proinfo emmc defaults defaults
 /dev/block/by-name/lk1 /lk1 emmc defaults first_stage_mount,nofail
-/dev/block/by-name/bootloader2 /bootloader2 emmc defaults defaults
 /dev/block/by-name/para /para emmc defaults defaults
+
 /dev/block/by-name/misc /misc emmc defaults defaults,first_stage_mount
 
 /dev/block/by-name/boot /boot emmc defaults first_stage_mount,nofail
+/dev/block/by-name/vendor_boot /vendor_boot emmc defaults first_stage_mount,nofail
 /dev/block/by-name/recovery /recovery emmc defaults first_stage_mount,nofail
 
-/dev/block/by-name/logo /logo emmc defaults defaults
 /dev/block/by-name/expdb /expdb emmc defaults defaults
 /dev/block/by-name/seccfg /seccfg emmc defaults defaults
 
 /dev/block/by-name/tee1 /tee1 emmc defaults first_stage_mount,nofail
-/dev/block/by-name/tee2 /tee2 emmc defaults defaults
-
 
 /dev/block/by-name/tzar /tzar emmc defaults defaults
-
-
 /dev/block/by-name/scp1 /scp1 emmc defaults defaults
-/dev/block/by-name/scp2 /scp2 emmc defaults defaults
-
-
 /dev/block/by-name/sspm1 /sspm1 emmc defaults defaults
-/dev/block/by-name/sspm2 /sspm2 emmc defaults defaults
-
-
 /dev/block/by-name/dpm1 /dpm1 emmc defaults defaults
-/dev/block/by-name/dpm2 /dpm2 emmc defaults defaults
-
 /dev/block/by-name/mcupm1 /mcupm1 emmc defaults defaults
-/dev/block/by-name/mcupm2 /mcupm2 emmc defaults defaults
-
 /dev/block/by-name/md1img /md1img emmc defaults defaults
-/dev/block/by-name/md1dsp /md1dsp emmc defaults defaults
-/dev/block/by-name/md1arm7 /md1arm7 emmc defaults defaults
-/dev/block/by-name/md3img /md3img emmc defaults defaults
-
 /dev/block/by-name/gz1 /gz1 emmc defaults defaults
-/dev/block/by-name/gz2 /gz2 emmc defaults defaults
-/dev/block/by-name/ccu /ccu emmc defaults defaults
-/dev/block/by-name/vcp /vcp emmc defaults defaults
-/dev/block/by-name/gpueb /gpueb emmc defaults defaults
-/dev/block/by-name/mcf_ota /mcf_ota emmc defaults defaults
-/dev/block/by-name/vendor_boot /vendor_boot emmc defaults first_stage_mount,nofail
-/dev/block/by-name/mvpu_algo1 /mvpu_algo1 emmc defaults defaults
-/dev/block/by-name/mvpu_algo2 /mvpu_algo2 emmc defaults defaults
-/dev/block/by-name/apusys1 /apusys1 emmc defaults defaults
-/dev/block/by-name/apusys2 /apusys2 emmc defaults defaults
-
 /dev/block/by-name/spmfw /spmfw emmc defaults defaults
-
 /dev/block/by-name/pi_img /pi_img emmc defaults defaults
 /dev/block/by-name/boot_para /boot_para emmc defaults defaults
-/dev/block/by-name/odmdtbo /odmdtbo emmc defaults defaults
 /dev/block/by-name/dtbo /dtbo emmc defaults defaults
-
-/dev/block/by-name/otp /otp emmc defaults defaults
 
 /dev/block/by-name/vbmeta_vendor /vbmeta_vendor emmc defaults first_stage_mount,nofail
 /dev/block/by-name/vbmeta_system /vbmeta_system emmc defaults first_stage_mount,nofail
