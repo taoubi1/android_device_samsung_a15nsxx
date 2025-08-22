@@ -11,25 +11,15 @@
 /dev/block/sdc                                   0660    root    system
 
 # eMMC/UFS common
-/dev/block/by-name/misc2     0660    root    system
 /dev/block/by-name/boot      0640    root    system
 /dev/block/by-name/recovery  0640    root    system
-/dev/block/by-name/secro     0640    root    system
 /dev/block/by-name/seccfg    0660    root    system
 /dev/block/by-name/proinfo   0660    root    system
 /dev/block/by-name/nvram     0660    root    system
 /dev/block/by-name/para      0660    root    system
-/dev/block/by-name/logo      0660    root    system
 /dev/block/by-name/frp       0660    root    system
 /dev/block/by-name/md1img    0640    root    system
-/dev/block/by-name/md1img_a  0640    root    system
-/dev/block/by-name/md1img_b  0640    root    system
-/dev/block/by-name/md1dsp    0660    root    system
 /dev/block/by-name/boot_para 0640    root    system
-
-# OTP
-/dev/otp                  0660   system     system
-/dev/block/by-name/otp       0660    root    system
 
 # Connectivity
 /dev/stpwmt               0660   system     system
@@ -51,8 +41,6 @@
 /dev/gps2scp              0660   gps        gps
 /dev/gps_pwr              0660   gps        gps
 /dev/fw_log_gps           0660   gps        gps
-# ANT
-/dev/stpant               0660   system     system
 
 # WIFI
 /dev/wmtWifi              0660   wifi     wifi
@@ -63,10 +51,6 @@
 # FMRadio
 /dev/fm                   0660   system     audio
 
-# NFC
-/dev/st21nfc              0660   nfc        radio
-/dev/st54spi              0660   secure_element        secure_element
-
 # MTK BTIF driver
 /dev/btif                 0600   system     system
 
@@ -76,11 +60,6 @@
 
 # RPMB (for Trusty)
 /dev/block/mmcblk0rpmb    0660   root       system
-
-# TrustonicTEE driver
-/dev/mobicore             0600   system     system
-/dev/mobicore-user        0666   system     system
-/dev/t-base-tui           0666   system     system
 
 # teeperf driver
 /dev/teeperf              0666   system     system
@@ -152,13 +131,6 @@
 
 # dev ril bridge
 /dev/drb                  0660   system      radio
-
-/sys/devices/platform/leds-mt65xx/leds/green   delay_on      0664  system   system
-/sys/devices/platform/leds-mt65xx/leds/green   delay_off      0664  system   system
-/sys/devices/platform/leds-mt65xx/leds/red   delay_on      0664  system   system
-/sys/devices/platform/leds-mt65xx/leds/red   delay_off      0664  system   system
-/sys/devices/platform/leds-mt65xx/leds/blue   delay_on      0664  system   system
-/sys/devices/platform/leds-mt65xx/leds/blue   delay_off      0664  system   system
 
 #GPIO
 /dev/mtgpio               0600   radio      root
