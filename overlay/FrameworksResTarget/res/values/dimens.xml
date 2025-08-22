@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-     SPDX-License-Identifier: Apache-2.0
--->
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- Height of the status bar -->
+<resources>
+    <item type="dimen" name="config_letterboxHorizontalPositionMultiplier">0.5</item>
+    <item type="dimen" name="config_letterboxVerticalPositionMultiplier">0.5</item>
+    <item type="dimen" name="config_screenBrightnessDimFloat">0.047058824</item>
+    <item type="dimen" name="config_screenBrightnessSettingDefaultFloat">0.5019608</item>
+    <item type="dimen" name="config_screenBrightnessSettingMaximumFloat">1.0</item>
+    <item type="dimen" name="config_screenBrightnessSettingMinimumFloat">0.0</item>
+    <dimen name="rounded_corner_radius_bottom">40.0dip</dimen>
+    <dimen name="rounded_corner_radius_top">40.0dip</dimen>
     <dimen name="status_bar_camera_top_margin">8.0px</dimen>
     <dimen name="status_bar_height_portrait">5.1099854mm</dimen>
     <dimen name="status_bar_indicator_corner_padding">62.0px</dimen>
