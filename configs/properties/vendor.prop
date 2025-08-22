@@ -66,6 +66,7 @@ ro.vendor.composer_version=2.3
 ro.vendor.mtk_aal_support=1
 ro.vendor.mtk_ovl_bringup=0
 ro.vendor.mtk_pq_support=2
+
 # PQ
 ro.vendor.pq.mtk_caltm_support=1
 ro.vendor.pq.mtk_blulight_def_support=0
@@ -132,6 +133,7 @@ ro.lmk.swap_util_max=90
 ro.lmk.thrashing_limit_decay=50
 
 # Media
+debug.stagefright.c2inputsurface=-1
 media.c2.dmabuf.padding=3072
 ro.vendor.jpeg_decode_sw_opt=1
 ro.vendor.mtk_config_max_dram_size=0x800000000
