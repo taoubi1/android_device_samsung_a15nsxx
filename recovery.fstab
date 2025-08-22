@@ -1,15 +1,21 @@
 #<src>                                    <mnt_point>    <type>    <mnt_flags and options>    <fs_mgr_flags>
-system	/system	erofs	ro	avb=vbmeta,logical,first_stage_mount
+system	/system	erofs	ro	logical,first_stage_mount
+system	/system	f2fs	ro	logical,first_stage_mount
+system	/system	ext4	ro	logical,first_stage_mount
 
-system_ext	/system_ext	erofs	ro	avb,logical,first_stage_mount
+system_ext	/system_ext	erofs	ro	logical,first_stage_mount
+system_ext	/system_ext	ext4	ro	logical,first_stage_mount
 
-vendor	/vendor	erofs	ro	avb,logical,first_stage_mount
+vendor	/vendor	erofs	ro	logical,first_stage_mount
+vendor	/vendor	ext4	ro	logical,first_stage_mount
 
-product	/product	erofs	ro	avb,logical,first_stage_mount
+product	/product	erofs	ro	logical,first_stage_mount
+product	/product	ext4	ro	logical,first_stage_mount
 
-odm	/odm	erofs	ro	avb,logical,first_stage_mount
+odm	/odm	erofs	ro	logical,first_stage_mount
+odm	/odm	ext4	ro	logical,first_stage_mount
 
-vendor_dlkm	/vendor_dlkm	erofs	ro	avb,logical,first_stage_mount
+vendor_dlkm	/vendor_dlkm	erofs	ro	logical,first_stage_mount
 
 /dev/block/by-name/boot /boot emmc defaults recoveryonly
 /dev/block/by-name/recovery /recovery emmc defaults recoveryonly
