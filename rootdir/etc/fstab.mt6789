@@ -14,6 +14,7 @@ odm /odm erofs ro wait,logical,first_stage_mount
 odm /odm ext4 ro wait,logical,first_stage_mount
 
 vendor_dlkm /vendor_dlkm erofs ro wait,logical,first_stage_mount
+vendor_dlkm /vendor_dlkm ext4 ro wait,logical,first_stage_mount
 
 /dev/block/by-name/metadata /metadata ext4 noatime,nosuid,nodev,noauto_da_alloc,discard,journal_checksum,data=ordered,errors=panic,sync	wait,check,formattable,first_stage_mount
 
@@ -42,8 +43,6 @@ vendor_dlkm /vendor_dlkm erofs ro wait,logical,first_stage_mount
 
 /dev/block/by-name/boot /boot emmc defaults first_stage_mount,nofail
 /dev/block/by-name/recovery /recovery emmc defaults first_stage_mount,nofail
-/dev/block/by-name/vbmeta_vendor /vbmeta_vendor emmc defaults first_stage_mount,nofail
-/dev/block/by-name/vbmeta_system /vbmeta_system emmc defaults first_stage_mount,nofail
 
 /dev/block/by-name/logo /logo emmc defaults defaults
 /dev/block/by-name/expdb /expdb emmc defaults defaults
@@ -96,6 +95,8 @@ vendor_dlkm /vendor_dlkm erofs ro wait,logical,first_stage_mount
 
 /dev/block/by-name/otp /otp emmc defaults defaults
 
+/dev/block/by-name/vbmeta_vendor /vbmeta_vendor emmc defaults first_stage_mount,nofail
+/dev/block/by-name/vbmeta_system /vbmeta_system emmc defaults first_stage_mount,nofail
 
 /dev/block/by-name/vbmeta /vbmeta emmc defaults defaults
 
