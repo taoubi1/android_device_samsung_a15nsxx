@@ -69,6 +69,8 @@ def blob_fixup_return_1(
 
 
 blob_fixups: blob_fixups_user_type = {
+    'vendor/etc/init/android.hardware.security.keymint-service-mt6789.rc': blob_fixup()
+        .regex_replace('android.hardware.security.keymint-service', 'android.hardware.security.keymint-service.mt6789'),
 }  # fmt: skip
 
 module = ExtractUtilsModule(

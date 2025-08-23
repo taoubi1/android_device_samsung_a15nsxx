@@ -890,6 +890,8 @@ vendor/lib64/libskeymint10device.so
 vendor/lib64/libskeymint_cli.so
 vendor/lib64/vendor.samsung.hardware.keymint-V1-ndk_platform.so
 vendor/lib64/vendor.samsung.hardware.security.fkeymaster-V1-ndk_platform.so
+vendor/bin/hw/android.hardware.security.keymint-service:vendor/bin/hw/android.hardware.security.keymint-service.mt6789
+vendor/etc/init/android.hardware.security.keymint-service.rc:vendor/etc/init/android.hardware.security.keymint-service-mt6789.rc
 
 # libladder
 vendor/lib64/libladder.so
