@@ -995,15 +995,6 @@ vendor/lib64/vendor.mediatek.hardware.neuropilot.agent@1.0.so
 vendor/lib64/vendor.mediatek.hardware.neuropilot.agent@1.1.so
 vendor/lib64/vendor.mediatek.hardware.neuropilot.agent@1.2.so
 
-# NFC vendor/etc/init/nxp.android.hardware.nfc@1.2-service.rc
-vendor/bin/hw/nxp.android.hardware.nfc@1.2-service
-vendor/etc/init/init.nfc.samsung.rc
-vendor/etc/libnfc-nxp.conf
-vendor/etc/nfc/libnfc-nxp_RF.conf
-vendor/etc/vintf/manifest/nxp.android.hardware.nfc@1.2-service.xml
-vendor/lib64/nfc_nci_nxpsn.so
-vendor/lib64/vendor.samsung.hardware.nfc@2.0.so
-
 # NVRAM
 vendor/bin/hw/vendor.mediatek.hardware.nvram@1.1-service
 vendor/bin/nvram_daemon
@@ -1294,3 +1285,37 @@ vendor/lib64/libhwvault.so
 vendor/lib64/libisosechw.so
 vendor/lib64/libshctrl.so
 vendor/lib64/vendor.samsung.hardware.security.hermes-V1-ndk_platform.so
+
+# NFC (TODO:Build from source)
+odm/etc/permissions/sku_hce/android.hardware.nfc.hce.xml
+odm/etc/permissions/sku_hce/android.hardware.nfc.hcef.xml
+odm/etc/permissions/sku_hce/android.hardware.nfc.xml
+odm/etc/permissions/sku_hce/com.nxp.mifare.xml
+odm/etc/permissions/sku_hceese/android.hardware.nfc.ese.xml
+odm/etc/permissions/sku_hceese/android.hardware.nfc.hce.xml
+odm/etc/permissions/sku_hceese/android.hardware.nfc.hcef.xml
+odm/etc/permissions/sku_hceese/android.hardware.nfc.xml
+odm/etc/permissions/sku_hceese/com.nxp.mifare.xml
+odm/etc/permissions/sku_hcesim/android.hardware.nfc.hce.xml
+odm/etc/permissions/sku_hcesim/android.hardware.nfc.hcef.xml
+odm/etc/permissions/sku_hcesim/android.hardware.nfc.uicc.xml
+odm/etc/permissions/sku_hcesim/android.hardware.nfc.xml
+odm/etc/permissions/sku_hcesim/com.nxp.mifare.xml
+odm/etc/permissions/sku_hcesimese/android.hardware.nfc.ese.xml
+odm/etc/permissions/sku_hcesimese/android.hardware.nfc.hce.xml
+odm/etc/permissions/sku_hcesimese/android.hardware.nfc.hcef.xml
+odm/etc/permissions/sku_hcesimese/android.hardware.nfc.uicc.xml
+odm/etc/permissions/sku_hcesimese/android.hardware.nfc.xml
+odm/etc/permissions/sku_hcesimese/com.nxp.mifare.xml
+vendor/bin/hw/nxp.android.hardware.nfc@1.2-service
+vendor/etc/init/init.nfc.samsung.rc
+vendor/etc/init/nxp.android.hardware.nfc@1.2-service.rc
+vendor/etc/libnfc-nxp.conf
+vendor/etc/nfc/libnfc-nxp_RF.conf
+vendor/etc/vintf/manifest/nxp.android.hardware.nfc@1.2-service.xml
+vendor/lib64/android.hardware.nfc@1.0.so
+vendor/lib64/android.hardware.nfc@1.1.so
+vendor/lib64/android.hardware.nfc@1.2.so
+vendor/lib64/libnxp_extamp_intf.so
+vendor/lib64/nfc_nci_nxpsn.so
+vendor/lib64/vendor.samsung.hardware.nfc@2.0.so
