@@ -1,13 +1,15 @@
 # APK Verity
 ro.apk_verity.mode=2
 
+# ART
+
 # Audio
 aaudio.mmap_exclusive_policy=2
 aaudio.mmap_policy=2
-ro.vendor.mtk_hifiaudio_support=1
 persist.vendor.audiohal.aurisys.pcm_dump_on=0
 persist.vendor.audiohal.p2w_dump_on=0
 persist.vendor.audiohal.pcm_mixer_dump_on=0
+ro.vendor.mtk_hifiaudio_support=1
 vendor.usbsph.dl.pcm.dump=0
 vendor.usbsph.ul.pcm.dump=0
 vendor.usbsph.srcaws.pcm.dump=0
@@ -40,7 +42,7 @@ ro.vendor.mtk_camera_app_version=3
 vendor.camera.mdp.dre.enable=1
 vendor.mtk.camera.app.fd.video=1
 
-# Charger
+# Charging
 ro.vendor.mtk_fast_charging_support=1
 
 # Connsys
@@ -55,28 +57,101 @@ ro.vendor.mtk_tee_gp_support=1
 ro.vendor.mtk_widevine_drm_l1_support=1
 
 # Display
-debug.mediatek.appgamepq_compress=1
 debug.mediatek.disp_decompress=1
+debug.sf.enable_hwc_vds=0
+ro.surface_flinger.enable_frame_rate_override=false
+ro.surface_flinger.force_hwc_copy_for_virtual_displays=true
+ro.surface_flinger.max_frame_buffer_acquired_buffers=3
+ro.surface_flinger.primary_display_orientation=ORIENTATION_0
+ro.surface_flinger.protected_contents=true
+
+# Graphics
+debug.mediatek.appgamepq_compress=1
+graphics.gpu.profiler.support=true
 ro.hardware.egl=meow
 ro.hardware.gralloc=common
 ro.hardware.hwcomposer=mtk_common
 ro.hardware.vulkan=mali
 ro.opengles.version=196610
+ro.vendor.smvr.p2batch.vga=8
+ro.vendor.smvr.p2batch.hd=4
+
+# Gatekeeper
+
+# GNSS
+ro.vendor.gps.chrdev=gps_drv_stp
+ro.vendor.mtk_agps_app=1
+ro.vendor.mtk_gps_support=1
+
+# HWUI
+
+# HWComposer
 ro.vendor.composer_version=2.3
+ro.vendor.mml.mtk_mml_support=0
+
+# IncrementalFS
+ro.incremental.enable=yes
+
+# IMS
+persist.vendor.mdrsra_v2_support=1
+persist.vendor.mtk.volte.enable=1
+persist.vendor.mtk_ct_volte_support=3
+persist.vendor.mtk_dynamic_ims_switch=1
+persist.vendor.mtk_wfc_support=1
+persist.vendor.viwifi_support=1
+ro.vendor.md_auto_setup_ims=1
+ro.vendor.mtk_data_config=1
+
+# Keymaster
+ro.crypto.volume.filenames_mode=aes-256-cts
+
+# LMKD
+ro.lmk.thrashing_limit_decay=50
+
+# Media
+debug.stagefright.c2inputsurface=-1
+media.c2.dmabuf.padding=3072
+ro.vendor.mtk.c2.vdec.fmt.support.level=1
+ro.vendor.mtk_sec_video_path_support=1
+ro.vendor.mtk_video_hevc_enc_support=1
+vendor.media.heif.highThreshold=20
+vendor.mtk.vdec.waitkeyframeforplay=9
+vendor.media.omx=0
+
+# MediaTek
+ro.soc.manufacturer=Mediatek
+ro.vendor.mediatek.platform=MT6789
+ro.vendor.mgk_name=mgk_64_entry_level_k510
+
+# Misc
+ro.vendor.pref_scale_enable_cfg=1
+ro.vendor.rc=/vendor/etc/init/hw/
+
+# MTK Stuff
+ro.netflix.bsp_rev=MTK6789-35965-1
 ro.vendor.mtk_aal_support=1
+ro.vendor.mtk_mvpu_security_support=0
 ro.vendor.mtk_ovl_bringup=0
-ro.vendor.mtk_pq_support=2
+ro.vendor.mtk_wfd_support=1
+
+# MTE
+
+# Neural Networks
+debug.mtk_tflite.target_nnapi=29
+ro.vendor.mtk_nn_baseline_support=1
+ro.vendor.mtk_nn_quant_preferred=1
+ro.vendor.mtk_nn_support=1
+
+# Power
+ro.vendor.powerhal_fling_mode_support=1
 
 # PQ
-ro.vendor.pq.mtk_caltm_support=1
-ro.vendor.pq.mtk_blulight_def_support=0
-ro.vendor.pq.mtk_disp_ccorr_support=0
-ro.vendor.pq.mtk_disp_color_support=0
-ro.vendor.pq.mtk_disp_gamma_support=0
+ro.vendor.mtk_pq_support=2
 ro.vendor.pq.mtk_aal_support=1
 ro.vendor.pq.mtk_ai_scence_pq_support=0
 ro.vendor.pq.mtk_ai_sdr_to_hdr_support=0
 ro.vendor.pq.mtk_backlight_smooth_support=0
+ro.vendor.pq.mtk_caltm_support=1
 ro.vendor.pq.mtk_clearzoom_support=1
 ro.vendor.pq.mtk_dc_support=0
 ro.vendor.pq.mtk_disp_c3d_support=0
@@ -94,81 +169,6 @@ ro.vendor.pq.mtk_ultra_dimming_support=0
 ro.vendor.pq.mtk_ultra_resolution_support=0
 ro.vendor.pq.mtk_video_transition=0
 
-ro.vendor.smvr.p2batch.hd=4
-ro.vendor.smvr.p2batch.vga=8
-
-# FUSE passthrough
-
-# Gatekeeper
-
-# GNSS
-ro.vendor.gps.chrdev=gps_drv_stp
-ro.vendor.mtk_agps_app=1
-ro.vendor.mtk_gps_support=1
-
-# HWUI
-# IncrementalFS
-ro.incremental.enable=yes
-
-# IMS
-persist.vendor.mdrsra_v2_support=1
-persist.vendor.mtk.volte.enable=1
-persist.vendor.mtk_ct_volte_support=3
-persist.vendor.mtk_dynamic_ims_switch=1
-persist.vendor.mtk_wfc_support=1
-persist.vendor.viwifi_support=1
-ro.vendor.md_auto_setup_ims=1
-ro.vendor.mtk_data_config=1
-
-# Keymaster
-ro.crypto.volume.filenames_mode=aes-256-cts
-
-# Lights
-
-# LMK
-ro.lmk.kill_timeout_ms=100
-ro.lmk.psi_complete_stall_ms=150
-ro.lmk.swap_free_low_percentage=20
-ro.lmk.swap_util_max=90
-ro.lmk.thrashing_limit_decay=50
-
-# Media
-debug.stagefright.c2inputsurface=-1
-media.c2.dmabuf.padding=3072
-ro.vendor.jpeg_decode_sw_opt=1
-ro.vendor.mtk_config_max_dram_size=0x800000000
-ro.vendor.mtk_sec_video_path_support=1
-ro.vendor.mtk_video_hevc_enc_support=1
-vendor.media.omx=0
-vendor.mtk.vdec.waitkeyframeforplay=9
-
-# MediaTek
-ro.soc.manufacturer=Mediatek
-ro.vendor.mediatek.platform=MT6789
-ro.vendor.mgk_name=mgk_64_entry_level_k510
-ro.vendor.mtk_prefer_64bit_proc=0
-
-# Misc
-ro.vendor.pref_scale_enable_cfg=1
-ro.vendor.rc=/vendor/etc/init/hw/
-
-# MTE
-
-# MTK Stuff
-ro.netflix.bsp_rev=MTK6789-35965-1
-ro.vendor.mml.mtk_mml_support=0
-ro.vendor.mtk_mvpu_security_support=0
-ro.vendor.mtk_wfd_support=1
-
-# Neural Networks
-debug.mtk_tflite.target_nnapi=29
-ro.vendor.mtk_nn_baseline_support=1
-ro.vendor.mtk_nn_quant_preferred=1
-ro.vendor.mtk_nn_support=1
-
-# Power
-ro.vendor.powerhal_fling_mode_support=1
-
 # Radio
 persist.vendor.md_c2k_cap_dep_check=0
 persist.vendor.mims_support=2
@@ -180,10 +180,6 @@ persist.vendor.radio.fd.r8.counter=150
 persist.vendor.radio.mtk_dsbp_support=2
 persist.vendor.radio.mtk_ps2_rat=L/W/G
 persist.vendor.radio.smart.data.switch=1
-ro.vendor.sec.radio.def_network=9
-ro.radio.noril=no
-persist.vendor.radio.mtk_ps3_rat=G
-
 persist.vendor.xfrm_support=1
 ro.vendor.md_prop_ver=1
 ro.vendor.mtk_c2k_lte_mode=0
@@ -198,47 +194,46 @@ ro.vendor.mtk_single_bin_modem_support=1
 ro.vendor.mtk_world_phone_policy=0
 
 # RKPD
+remote_provisioning.enable_rkpd=true
+remote_provisioning.hostname=remoteprovisioning.googleapis.com
+remote_provisioning.connect_timeout_millis=2000
 
 # Sensors
 
 # SoC
 ro.soc.model=MT6789V/CD
 
-# SurfaceFlinger
-debug.sf.enable_hwc_vds=0
-ro.surface_flinger.enable_frame_rate_override=false
-ro.surface_flinger.force_hwc_copy_for_virtual_displays=true
-ro.surface_flinger.max_frame_buffer_acquired_buffers=3
-ro.surface_flinger.primary_display_orientation=ORIENTATION_0
-ro.surface_flinger.protected_contents=true
-
 # TEE
 ro.vendor.mtk_svp_on_mtee_support=2
-ro.vendor.mtk_teegris_tee_support=1
+
+# Thermal
+ro.vendor.mtk_thermal_2_0=1
 
 # Wi-Fi
 ro.vendor.wifi.sap.concurrent.iface=ap1
 ro.vendor.wlan.chrdev=wmt_chrdev_wifi
 ro.vendor.wlan.gen=gen4m_6789
+
+ro.vendor.pq.mtk_blulight_def_support=0
+ro.vendor.pq.mtk_disp_ccorr_support=0
+ro.vendor.pq.mtk_disp_color_support=0
+ro.vendor.pq.mtk_disp_gamma_support=0
+ro.lmk.kill_timeout_ms=100
+ro.lmk.psi_complete_stall_ms=150
+ro.lmk.swap_free_low_percentage=20
+ro.lmk.swap_util_max=90
+ro.vendor.jpeg_decode_sw_opt=1
+ro.vendor.mtk_config_max_dram_size=0x800000000
+ro.vendor.mtk_prefer_64bit_proc=0
+ro.vendor.sec.radio.def_network=9
+ro.radio.noril=no
+persist.vendor.radio.mtk_ps3_rat=G
+# SurfaceFlinger
+ro.vendor.mtk_teegris_tee_support=1
 ro.vendor.wifi.sap.interface=swlan0
-
-# ART
-
-# Graphics
-graphics.gpu.profiler.support=true
-
-# HWComposer
 persist.vendor.ims_support=1
 persist.vendor.vilte_support=1
 persist.vendor.volte_support=1
-
-# LMKD
-ro.vendor.mtk.c2.vdec.fmt.support.level=1
-vendor.media.heif.highThreshold=20
-
-# Thermal
-ro.vendor.mtk_thermal_2_0=1
-
 ro.vendor.nfc.feature.chipname=NXP_SN100U
 ro.vendor.nfc.info.antpos=16
 ro.vendor.nfc.info.antposX=24

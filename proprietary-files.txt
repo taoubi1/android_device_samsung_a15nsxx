@@ -932,7 +932,7 @@ vendor/lib64/libjpeg-alpha_vendor.so
 vendor/lib64/libmp3dec_mtk.so
 
 # VPU (Vision Processing Unit)
-vendor/bin/mt6789/v3avpud.mt6789
+vendor/bin/mt6789/v3avpud.mt6789;SYMLINK=vendor/bin/v3avpud
 vendor/etc/init/v3avpud.rc
 vendor/lib64/libmvpu_cic_ci_compiler.so
 vendor/lib64/libmvpu_clc_cl_compiler.so
@@ -1318,6 +1318,44 @@ vendor/etc/vintf/manifest/nxp.android.hardware.nfc@1.2-service.xml
 vendor/lib64/android.hardware.nfc@1.0.so
 vendor/lib64/android.hardware.nfc@1.1.so
 vendor/lib64/android.hardware.nfc@1.2.so
-vendor/lib64/libnxp_extamp_intf.so
 vendor/lib64/nfc_nci_nxpsn.so
 vendor/lib64/vendor.samsung.hardware.nfc@2.0.so
+
+#
+vendor/lib/egl/egl.cfg
+vendor/lib/mt6789/arm.graphics-V1-ndk_platform.so;SYMLINK=vendor/lib/arm.graphics-V1-ndk_platform.so
+vendor/lib64/mt6789/libgpudataproducer.so;SYMLINK=vendor/lib64/libgpudataproducer.so
+vendor/lib64/libmmprofile.so
+vendor/lib64/libVkLayer_mtk_rt_sdk.so
+# Media
+vendor/lib/mt6789/libvcodec_utility.so;SYMLINK=vendor/lib/libvcodec_utility.so
+vendor/lib/mt6789/libvcodec_utility_v3a.so;SYMLINK=vendor/lib/libvcodec_utility_v3a.so
+vendor/lib/mt6789/libvcodecdrv.so;SYMLINK=vendor/lib/libvcodecdrv.so
+vendor/lib/mt6789/libvcodecdrv_v3a.so;SYMLINK=vendor/lib/libvcodecdrv_v3a.so
+vendor/lib/libvcodecdrv_header_stub.so
+vendor/lib/libvcodec_oal.so
+vendor/lib/libvcodec_utility_plat.mt6789.so
+vendor/lib/AVCSecureVdecCA.so
+vendor/lib/HEVCSecureVdecCA.so
+vendor/lib/VP9SecureVdecCA.so
+vendor/lib/libAVCSecureVencCA.so
+vendor/lib/libHEVCdec_sa.ca7.android.so
+vendor/lib/libadpcmdec_mtk.so
+vendor/lib/libh264dec_customize.so
+vendor/lib/libh264dec_sa.ca7.so
+vendor/lib/libh264dec_sd.ca7.so
+vendor/lib/libh264dec_se.ca7.so
+vendor/lib/libh264enc_sa.ca7.so
+vendor/lib/libhevce_sb.ca7.android.so
+vendor/lib/libion_mtk.so
+vendor/lib/libion_ulit.so
+vendor/lib/libmp3dec_mtk.so
+vendor/lib/libmp4enc_sa.ca7.so
+vendor/lib/libmp4enc_xa.ca7.so
+vendor/lib/libvp8dec_sa.ca7.so
+vendor/lib/libvp8enc_sa.ca7.so
+vendor/lib/libvp9dec_sa.ca7.so
+# Radio (a15)
+vendor/etc/init/vendor.samsung.rild.rc
+# Audio Configs
+vendor/etc/AudioLog_dynamic.xml
